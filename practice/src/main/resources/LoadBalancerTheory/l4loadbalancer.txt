@@ -1,0 +1,171 @@
+L4 working
+
+Step 1: Client sends request
+Client → Load Balancer
+
+Example:
+10.1.1.1:5000 → 52.10.10.10:80
+
+
+10.1.1.1 = Client IP
+5000 = Client temporary port
+52.10.10.10 = Load Balancer IP
+80 = HTTP port
+
+👉 ✅ Client always talks to Load Balancer (not server)
+
+✅ Step 2: Load Balancer receives request
+Load balancer reads:
+
+Source IP → 10.1.1.1
+Source Port → 5000
+Destination Port → 80
+
+
+✅ Step 3: Load Balancer chooses server
+Using algorithm:
+
+Round Robin
+Least Connections
+IP Hash
+
+👉 Example decision:
+Send to Server-2
+
+
+✅ Step 4: Forward request to backend server
+Load Balancer → Server
+
+Example:
+10.1.1.1:5000 → 20.1.1.2:80
+
+
+20.1.1.2 = Backend server IP
+
+👉 This routing is handled internally (using NAT / proxy)
+
+✅ Step 5: Server processes request
+
+Executes logic (API, DB call, etc.)
+Generates response
+
+
+✅ Step 6: Response goes back to Load Balancer
+Server → Load Balancer
+
+
+✅ Step 7: Load Balancer returns response to client
+Load Balancer → Client
+
+
+🔷 Full Flow Diagram
+Client (10.1.1.1)
+        ↓
+Load Balancer (52.10.10.10)
+        ↓
+Server (20.1.1.2)
+        ↓
+Load Balancer
+        ↓
+Client
+
+“The client sends a request to the load balancer’s IP. 
+The load balancer selects a backend server using algorithms
+ like round robin or least connections, forwards the request, 
+ receives the response from the server, and sends it back to the client. 
+ In L4, routing is based on IP and port, while in L7, routing is based on application-level data 
+ like URL or headers.”
+ 
+ 
+ 
+ 
+ What do we need to use L4 in Microservices?
+To use L4 load balancing in microservices, you mainly need infrastructure setup, not application logic.
+
+✅ ✅ 1. Multiple Instances of Same Service (MANDATORY)
+👉 L4 works only when you have multiple instances
+Microservice-1 →
+   a1
+   a2
+   a3
+
+✅ Why?
+
+L4 distributes traffic between instances, not between services
+
+
+✅ ✅ 2. Same Port / Service Exposure
+All instances typically run on same port:
+a1 → 10.0.0.1:8080  
+a2 → 10.0.0.2:8080  
+a3 → 10.0.0.3:8080
+
+👉 L4 routes based on:
+
+IP
+Port (8080)
+
+
+✅ ✅ 3. Load Balancer Setup (Core Requirement)
+You configure L4 LB with:
+Backend Pool:
+- 10.0.0.1:8080
+- 10.0.0.2:8080
+- 10.0.0.3:8080
+
+✅ And choose algorithm:
+
+Round Robin
+Least Connections
+IP Hash
+
+
+✅ ✅ 4. Health Checks ⚠️ (Very Important)
+👉 LB must check if instances are alive:
+
+If a2 crashes ❌
+LB stops sending traffic to it ✅
+
+
+✅ ✅ 5. Service Discovery (Advanced but Common)
+Instead of hardcoding IPs:
+👉 Use:
+
+Kubernetes Service
+Consul / Eureka
+
+Example:
+service-name → dynamic list of instances
+
+
+✅ ✅ 6. Stateless Services (IMPORTANT 🔥)
+👉 Each instance should be stateless
+✅ Why?
+
+Requests can go to any instance
+No dependency on previous requests
+
+
+✅ ✅ 7. Network Connectivity
+
+LB must be able to reach all instances
+Proper VPC / subnet / firewall rules
+
+
+🔷 Complete Flow (With L4)
+Client
+   ↓
+L4 Load Balancer
+   ↓
+Instance (a1 / a2 / a3)
+   ↓
+DB / internal services
+
+
+
+✅ Interview Answer (Perfect)
+
+“To use an L4 load balancer in a microservices environment, 
+we need multiple instances of the same service exposed on similar ports. 
+The load balancer is configured with these instances and distributes traffic based on algorithms like round robin or least connections. Health checks ensure traffic is only sent to healthy instances, and services should be stateless so any instance can handle a request.”
+

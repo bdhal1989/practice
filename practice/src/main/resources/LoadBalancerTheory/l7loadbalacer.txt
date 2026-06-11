@@ -1,0 +1,97 @@
+How L7 Load Balancer Works (Step-by-Step)
+🔷 Step 1: Client sends request
+Client → Load Balancer
+
+Example:
+GET /orders HTTP/1.1
+Host: amazon.com
+
+
+🔷 Step 2: L7 reads the request
+Unlike L4, L7 opens the request and inspects it
+It checks:
+
+URL (/orders)
+Headers
+Cookies
+Query params
+
+
+🔷 Step 3: Smart routing decision
+Based on rules:
+/users   → User Service
+/orders  → Order Service
+/images  → Image Server/CDN
+
+👉 Example:
+
+Request = /orders
+L7 decides → send to Order Service
+
+
+🔷 Step 4: Forward to correct server
+Load Balancer → Specific backend service
+
+
+🔷 Step 5: Response returns
+Server → Load Balancer → Client
+
+
+🔷 Full Flow (L7)
+Client
+   ↓
+L7 Load Balancer (reads request)
+   ↓
+Correct Service (based on URL)
+   ↓
+Response back
+
+
+✅ Key Features of L7
+✅ Understands HTTP/HTTPS
+✅ Routes based on:
+
+URL
+Headers
+Cookies
+
+✅ Supports microservices
+✅ Can do authentication, logging, etc.
+
+🔥 Example (Real System)
+E-commerce App
+Request:
+GET /cart
+
+Routing:
+/cart → Cart Service
+/payment → Payment Service
+
+👉 One LB handles multiple services intelligently
+
+🔷 L7 vs L4 Quick Reminder
+
+
+
+
+🔷 Simple Analogy 🧠
+✅ L4 → Post office sorting by PIN code (doesn’t read letter)
+✅ L7 → Receptionist reading your request and directing properly
+
+✅ Interview Answer (Perfect)
+If asked “What is L7 load balancer?”, say:
+
+“An L7 load balancer operates at the application layer and can inspect HTTP/HTTPS requests.
+ It routes traffic based on application-level data like URLs, headers, and cookies, 
+ making it suitable for microservices 
+ and API-based architectures.”
+ 
+ 
+ 
+Feature				L4							L7		
+Layer				Transport					Application
+Reads request❌ 	No✅ 						aYes
+Routing based 		IP + PortURL, 				headers
+Speed				FasterSlightly 				slower
+Intelligence		Basic						Smart
+

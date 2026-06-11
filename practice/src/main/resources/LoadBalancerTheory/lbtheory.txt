@@ -1,0 +1,56 @@
+“A load balancer sits in front of application servers and distributes incoming requests to multiple servers using strategies like round robin, 
+least connections, or IP hashing. There are mainly two types of load balancers: L4 and L7. 
+L4 operates at the transport layer of the OSI model and routes traffic based on IP and port, 
+while L7 operates at the application layer and can make routing decisions based on HTTP data 
+like URLs or headers.”
+
+Client
+   ↓
+Load Balancer
+   ↓
+App Servers
+
+Type   Layer                How it works 
+L4	  Transport				IP + Port
+L7	  Application           URL, headers
+
+================================================================================================
+👤 User (Browser / Mobile)
+   → User enters URL and sends request
+                    ↓
+🌐 www.myapp.com
+   → Friendly domain name used by user
+                    ↓
+🧭 DNS (Route53 / Cloudflare)
+   → Converts domain → Load Balancer DNS
+   → CNAME: www → abc-123.elb.amazonaws.com
+                    ↓
+🌍 abc-123.elb.amazonaws.com
+   → Public DNS of AWS Load Balancer
+   → Entry point to system
+                    ↓
+⚖️ Load Balancer (L4)
+   → Receives request from internet
+   → Routes based on IP + Port
+   → Uses Round Robin / Least Conn
+                    ↓
+🖥️ Kubernetes Node (NodeIP:NodePort)
+   → Physical/VM machine in cluster
+   → NodePort allows external traffic inside
+                    ↓
+🔀 Kubernetes Service (user-service)
+   → Internal L4 load balancer
+   → Selects a pod based on load balancing
+                    ↓
+📦 Pods (a1, a2, a3)
+   → Instances of your application
+   → Any pod can handle the request
+                    ↓
+⚙️ Application Code
+   → Executes business logic
+   → Calls database / other services
+                    ↓
+🔁 Response Flow
+   → Pod → Service → Node → LB → User
+   → Same path in reverse
+=====================================================================================================
