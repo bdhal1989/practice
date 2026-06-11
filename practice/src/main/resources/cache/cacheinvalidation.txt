@@ -1,0 +1,165 @@
+What is Cache Invalidation?
+👉 Cache invalidation = removing or updating stale data from cache when the original data (DB) changes
+
+✅ Simple Idea
+DB updated ❌ → Cache still has old data ❌
+→ Need to invalidate/update cache ✅
+
+
+✅ 🔷 Why is it Important?
+👉 Biggest problem with cache:
+
+“Cache can become stale (outdated)”
+
+
+✅ Example
+User name = "Bikash" (cached)
+
+User updates name → "Bikash D"
+
+DB updated ✅
+Cache still has old value ❌
+
+👉 Wrong response if not invalidated ❌
+
+🔥 ✅ Types of Cache Invalidation (IMPORTANT)
+
+✅ 1. Write-Through Invalidation
+💡 Idea
+👉 Update cache + DB together
+
+✅ Flow
+Update → DB + Cache both updated
+
+
+✅ Example
+updateUser(101, "Bikash D")
+→ DB updated
+→ Cache updated
+
+
+✅ Use case
+
+Strong consistency systems (banking)
+
+
+
+✅ 2. Cache-Aside (Lazy Invalidation) ⭐ Most Common
+💡 Idea
+👉 On update → remove cache
+👉 Next read → fetch fresh data
+
+✅ Flow
+Update → delete cache
+
+Next read:
+→ cache miss
+→ fetch from DB
+→ update cache
+
+
+✅ Example
+updateUser(101)
+→ cache.delete(101)
+
+getUser(101)
+→ cache miss
+→ DB → cache.set()
+
+
+✅ Why most used?
+✅ Simple
+✅ Efficient
+✅ Used in real systems (Redis)
+
+
+✅ 3. TTL-based Invalidation
+💡 Idea
+👉 Cache expires automatically after time
+
+✅ Example
+Cache TTL = 10 minutes
+
+After 10 min → removed automatically
+
+
+✅ Use case
+
+Session data
+Temporary data
+
+
+✅ Limitation
+
+Data may be stale until expiry ❌
+
+
+
+✅ 4. Write-Back (Delayed Invalidation)
+💡 Idea
+👉 Cache updated first, DB later
+
+✅ Risk
+
+Cache and DB can go out of sync
+
+
+
+🔥 ✅ Comparison (Easy to Remember)
+Cache-Aside → delete cache on update (most common ✅)
+Write-Through → update both cache + DB
+TTL → expiry-based invalidation
+Write-Back → async (risk)
+
+
+✅ 🔷 Real Example (Amazon Product)
+✅ Scenario
+User views product → cached ✅
+
+Seller updates price
+
+✅ What to do?
+👉 Cache-Aside pattern:
+Update DB
+Delete cache
+Next request → DB → fresh data
+
+
+
+✅ ✅ Interview Answer (Perfect)
+
+“Cache invalidation ensures that stale data is removed or updated in cache when the underlying data changes. 
+The most common strategy is cache-aside, where cache entries are deleted on updates and refreshed on 
+the next read. Other approaches include write-through for strong consistency and TTL-based expiration.”
+
+
+🔥 🔷 Trick Question (Interview GOLD)
+❓ “What is the hardest problem in computer science?”
+👉 Answer:
+
+“Cache invalidation and naming things”
+
+✅ Famous answer recruiters LOVE
+
+✅ 🔷 Common Mistakes
+❌ Forgetting to invalidate cache
+❌ Relying only on TTL
+❌ Not handling cache consistency
+
+✅ 🔷 When to Use What
+
+Situation					Strategy
+Generalapps					Cache-Aside 
+✅Strong consistency			Write-Through
+Temporary data				TTL
+High performance writes		Write-Back
+
+✅ 🔷 Real System Insight
+👉 Most systems use:
+Cache-Aside + TTL ✅
+
+
+✅ 🔥 Final Takeaway
+✅ Cache invalidation = keep data fresh
+✅ Cache-Aside = most common
+✅ Always handle stale data

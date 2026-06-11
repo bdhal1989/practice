@@ -1,0 +1,133 @@
+ 1. Read-Through Cache
+💡 Idea
+👉 Application always reads from cache first
+
+✅ Flow
+User → App → Cache
+             ↓
+         Hit ✅ → return
+             ↓
+         Miss ❌ → DB → store in cache → return
+
+
+✅ Example: User Profile
+🔸 First request (Cache Miss)
+getUser(101)
+→ Cache (not found ❌)
+→ DB → fetch user data
+→ Store in cache
+→ Return response
+
+
+🔸 Second request (Cache Hit)
+getUser(101)
+→ Cache ✅ (fast)
+→ Return directly
+
+
+✅ Code-style example
+function getUser(id) {
+    data = cache.get(id)
+    
+    if (data == null) {
+        data = db.get(id)
+        cache.set(id, data)
+    }
+    
+    return data
+}
+
+
+✅ Use case
+
+Most common ✅
+Read-heavy systems
+
+
+✅ 🔷 2. Write-Through Cache
+💡 Idea
+👉 Whenever you update data → update both Cache + DB together
+
+✅ Flow
+User → App → Cache (update)
+               ↓
+            DB (update)
+
+
+✅ Example: Update User Name
+updateUser(101, "Bikash")
+→ Update Cache ✅
+→ Update DB ✅
+
+
+✅ Code-style example
+function updateUser(id, data) {
+    db.update(id, data)
+    cache.set(id, data)
+}
+
+
+✅ Benefit
+✅ Cache always stays consistent with DB
+
+❌ Downside
+
+Slightly slower writes
+More operations
+
+
+✅ 🔷 3. Write-Back (Write-Behind)
+💡 Idea
+👉 Write to cache first → DB updated later (async)
+
+✅ Flow
+User → App → Cache (update)
+               ↓
+        Queue / Worker
+               ↓
+             DB (later)
+
+
+✅ Example: Like Button (Instagram)
+likePost(101)
+→ Cache increment ✅ (fast)
+→ Queue event
+→ DB updated later (async)
+
+
+✅ Code-style concept
+function likePost(id) {
+    cache.increment(id)
+    queue.push(id)   // async DB update later
+}
+
+
+✅ Benefit
+✅ Extremely fast writes
+✅ Good for high traffic
+
+❌ Risk
+
+Data mismatch if crash
+DB delay
+
+
+🔥 🔷 Comparison (Interview Gold)
+
+Read-Through: Cache-first read, DB on miss, fast reads, medium consistency
+Write-Through: Update cache + DB together, safe, strong consistency
+Write-Back: Write to cache first, DB async, very fast, risk of inconsistency
+
+🔷 Real-Life Mapping
+Use Case			Strategy
+User profile		Read-Through
+Banking data		Write-Through
+Likes / counters	Write-Back
+
+
+✅ ✅ Interview Answer (Perfect)
+
+“In read-through caching, the application first checks the cache and fetches from 
+the database on a miss. In write-through, updates are written to both cache and database simultaneously
+ to maintain consistency. In write-back, data is written to cache first and asynchronously persisted 
+ to the database, improving performance but introducing eventual consistency.”

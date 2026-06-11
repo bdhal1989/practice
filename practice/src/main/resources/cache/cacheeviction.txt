@@ -1,0 +1,113 @@
+ache Eviction (Final Interview Version)
+✅ What is Cache Eviction?
+Cache eviction is the process of removing data from the cache when it becomes full or when data is no longer valid, so that new data can be stored.
+👉 Think of cache like a small bookshelf — when it’s full, you must decide which book to remove.
+
+✅ 🔷 Types of Cache Eviction
+
+✅ 1. LRU (Least Recently Used) ⭐ Most Important
+👉 Removes the item that has not been used for the longest time
+✅ Example
+Cache Size = 3
+
+Access: A, B, C
+Cache: [A, B, C]
+
+Access A again
+Cache: [B, C, A]
+
+Add D → remove B
+Cache: [C, A, D]
+
+✅ Used in: Redis, OS, Java caches
+✅ Key idea: Old unused data is removed
+
+✅ 2. LFU (Least Frequently Used)
+👉 Removes the item with the lowest access frequency
+✅ Example
+A → used 10 times
+B → used 2 times
+C → used 1 time
+
+Add D → remove C
+
+✅ Use case: Hot/frequently accessed data
+
+✅ 3. FIFO (First In First Out)
+👉 Removes the oldest inserted item
+✅ Example
+Insert: A, B, C
+Cache: [A, B, C]
+
+Add D → remove A
+Cache: [B, C, D]
+
+✅ Simple but not smart
+
+✅ 4. Random Eviction
+👉 Removes a random item
+✅ Advantage: Fast
+❌ Disadvantage: May remove useful data
+
+✅ 5. TTL (Time-To-Live / Expiry)**
+👉 Each entry has a time limit
+✅ Example
+User Data TTL = 10 minutes
+
+After 10 mins → removed automatically
+
+✅ Used for: sessions, API responses
+
+✅ 6. MRU (Most Recently Used)
+👉 Removes the most recently accessed item
+✅ Example
+Access: A, B, C
+Access C (most recent)
+
+Add D → remove C
+
+✅ Rare use case
+
+✅ 🔷 Easy Memory Trick 🧠
+FIFO → First in, first out
+LRU → Least recently used leaves
+LFU → Least frequently used leaves
+MRU → Most recently used leaves
+TTL → Leaves after time expires
+Random → Anyone can leave
+
+
+✅ 🔷 What Interviewers Expect
+You must know:
+✅ LRU (MOST IMPORTANT)
+✅ LFU
+✅ TTL
+✅ When to use each
+
+✅ 🔷 Java / Real Systems Context
+In real systems (Redis, Caffeine, etc.), we configure:
+- Max cache size
+- Expire after write (TTL)
+- Expire after access
+- Eviction policy (LRU / LFU)
+
+
+✅ 🔷 Perfect Interview Answer
+
+“Cache eviction is the process of removing entries from cache when it becomes full or data expires.
+ Common strategies include LRU, which removes least recently used items; LFU, which removes
+  least frequently used items;
+  FIFO, which removes oldest entries; and TTL-based eviction, 
+  where data is automatically removed 
+after a fixed duration.”
+
+
+
+Imagine a library with only 3 seats:
+
+FIFO → "First person who came leaves first."
+LRU → "Person who hasn't read for the longest time leaves."
+LFU → "Person who reads the least leaves."
+MRU → "Person who just sat down leaves."
+TTL → "Everyone has a timer; when it ends, they must leave."
+Random → "The librarian picks someone randomly."

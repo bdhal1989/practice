@@ -1,0 +1,137 @@
+When to Use What? (Decision Guide)
+
+✅ 1. LRU (Least Recently Used) ⭐
+✅ Use when:
+
+You want to keep recently accessed data
+Access pattern is temporal (recent = important)
+General-purpose systems
+
+
+✅ Real Examples:
+
+Web apps (user profile, product pages)
+OS page replacement
+Redis default
+
+
+✅ Why?
+👉 Recently used data is likely to be used again
+
+✅ Rule:
+👉 If unsure → use LRU
+
+✅ 2. LFU (Least Frequently Used)
+✅ Use when:
+
+Some data is accessed very frequently
+You want to keep hot data
+
+
+✅ Real Examples:
+
+Trending products
+Popular videos
+Frequently accessed configs
+
+
+✅ Why?
+👉 High-frequency data should stay longer
+
+✅ Rule:
+👉 Use LFU when access pattern = frequency-based
+
+✅ 3. FIFO (First In First Out)
+✅ Use when:
+
+Simple system
+Order matters more than access pattern
+
+
+✅ Real Examples:
+
+Queue-like systems
+Logs (oldest removed first)
+
+
+❌ Avoid when:
+
+Access pattern matters
+
+
+✅ Rule:
+👉 Use FIFO for simple, predictable systems
+
+✅ 4. TTL (Time-To-Live) ⭐ MUST KNOW
+✅ Use when:
+
+Data becomes stale after time
+Need automatic expiry
+
+
+✅ Real Examples:
+
+Sessions (login tokens)
+API responses
+Cache with freshness requirement
+
+
+✅ Why?
+👉 Ensures data is always fresh
+
+✅ Rule:
+👉 Use TTL for time-sensitive data
+
+✅ 5. MRU (Most Recently Used)
+✅ Use when:
+
+Recently used data is less likely to be reused
+
+
+✅ Rare Example:
+
+Sequential data access patterns
+
+
+❌ Not common in real systems
+
+✅ Rule:
+👉 Rarely used — only for special workloads
+
+✅ 6. Random Eviction
+✅ Use when:
+
+Need very fast eviction
+Complexity should be minimal
+
+
+✅ Real Examples:
+
+Some distributed systems
+When performance > accuracy
+
+
+❌ Risk:
+
+May remove important data
+
+
+✅ Rule:
+👉 Use when speed matters more than precision
+
+🔥 ✅ Quick Decision Cheat Sheet
+General use → LRU ✅
+Hot data (frequently used) → LFU ✅
+Time-based expiry → TTL ✅
+Simple system → FIFO
+Very fast + simple → Random
+Rare special case → MRU
+
+
+✅ ✅ Interview Answer (Perfect)
+
+“LRU is used for general-purpose caching where recent data is more valuable. 
+LFU is used when frequently 
+accessed data needs to be retained. TTL-based eviction is used for time-sensitive data 
+to ensure freshness. FIFO is used in simpler systems, while MRU and random 
+eviction are used in specific or performance-critical scenarios.”

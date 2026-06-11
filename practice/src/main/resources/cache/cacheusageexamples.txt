@@ -1,0 +1,219 @@
+✅ 🔷 1. Amazon (E-commerce System with Caching)
+🎯 Goal
+
+Fast product page loading
+Handle millions of users
+
+
+✅ 🔷 Where Caching is Used
+✅ 1. Product Details Cache (LRU + TTL)
+🔹 Flow
+User → Product Page (/product/123)
+        ↓
+App → Cache (Redis)
+        ↓
+Hit ✅ → return fast
+Miss ❌ → DB → store in cache → return
+
+
+✅ Example
+User opens iPhone product page
+→ Cache has data ✅
+→ Response in milliseconds
+
+
+✅ Strategy Used
+
+LRU → remove old products
+TTL → refresh prices periodically
+
+
+✅ 2. Search Results Cache
+🔹 Flow
+User → searches "iPhone"
+        ↓
+Cache → hit ✅ → return results
+
+
+✅ Why?
+
+Many users search same items
+Avoid hitting DB repeatedly
+
+
+✅ 3. Cart / Session Cache (TTL)
+🔹 Flow
+User adds item to cart
+→ Cache stores cart (TTL = 30 mins)
+
+
+✅ Why TTL?
+
+Cart expires if inactive
+
+
+✅ 4. Recommendation System (LFU)
+🔹 Example
+"Trending Products"
+
+👉 Frequently accessed → stay longer
+
+
+✅ 🔥 Summary (Amazon)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FeatureCache TypeStrategyProduct pageRedisLRU + TTLSearchCacheLRUCartCacheTTLTrending itemsCacheLFU
+
+
+✅ 🔷 2. Netflix (Streaming System with Caching)
+🎯 Goal
+
+Fast video loading
+Reduce latency globally
+
+
+✅ 🔷 Where Caching is Used
+
+✅ 1. Content Delivery (CDN Cache) ⭐
+🔹 Flow
+User → Netflix
+        ↓
+CDN (nearest server)
+        ↓
+Video served directly ✅
+
+
+✅ Example
+User in India → gets video from Indian CDN
+
+
+✅ Strategy
+
+TTL (content refresh)
+CDN caching
+
+
+✅ 2. Metadata Cache (LRU)
+👉 Data like:
+
+Movie title
+Description
+Thumbnails
+
+
+🔹 Flow
+User → opens homepage
+→ Metadata from cache ✅
+
+
+✅ Why?
+
+Same data used by many users
+
+
+
+✅ 3. Trending / Recommendations (LFU)
+👉 “Top 10 Movies”
+✅ Why LFU?
+
+Frequently accessed stays longer
+
+
+
+✅ 4. User Session Cache (TTL)
+👉 Login sessions
+User logs in
+→ Session stored in cache
+→ expires after some time
+
+
+
+✅ 🔥 Summary (Netflix)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FeatureCache TypeStrategyVideo contentCDNTTLMetadataRedisLRUTrendingCacheLFUSessionsCacheTTL
+
+
+✅ 🔷 End-to-End Example (Netflix Flow)
+User → Netflix App
+        ↓
+Metadata Cache (LRU)
+        ↓
+CDN (video cache)
+        ↓
+Playback starts fast ✅
+
+
+
+✅ 🔥 Interview Gold Insight
+👉 Real systems use combination of strategies:
+LRU + TTL → most common ✅
+LFU → for hot/trending data ✅
+CDN → for large static content ✅
+
+
+✅ ✅ Final Interview Answer
+
+“In systems like Amazon, caching is used for product data, search results, and user sessions using strategies like LRU and TTL to improve performance and reduce database load. In Netflix, caching is heavily used with CDNs for video delivery, metadata caching using LRU, and LFU for trending content. These systems combine multiple caching strategies to optimize performance at scale.”
+
+
+🔥 Final Takeaway
+✅ Amazon → API + DB heavy → Redis caching
+✅ Netflix → Content heavy → CDN + metadata caching
+✅ Both → Combine LRU + TTL + LFU

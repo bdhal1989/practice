@@ -1,0 +1,152 @@
+🔷 Top Cache Interview Questions (with Answers)
+
+✅ 1. What is caching?
+✅ Answer:
+
+“Caching is a technique used to store frequently accessed data in a fast storage layer like memory (Redis), to reduce database load and improve response time.”
+
+
+✅ 2. Why do we use caching?
+✅ Key Points:
+
+Improve performance ✅
+Reduce DB load ✅
+Reduce latency ✅
+
+
+✅ Answer:
+
+“Caching is used to improve performance and scalability by reducing the number of direct database calls and serving frequently used data faster.”
+
+
+✅ 3. Where do you place cache in system design?
+✅ Expected Answer:
+Client → App → Cache → DB
+
+
+✅ Say:
+
+“Cache is typically placed between application and database so that frequently accessed data can be served without hitting the database.”
+
+
+✅ 4. What is Cache Hit and Cache Miss?
+✅ Answer:
+
+Cache Hit → Data found in cache ✅
+Cache Miss → Data not found, fetch from DB ❌
+
+
+✅ Say:
+
+“A cache hit occurs when data is found in cache, leading to fast response, while a cache miss requires fetching data from the database.”
+
+
+✅ 5. What are cache eviction policies?
+✅ Expected:
+
+LRU ✅ (most important)
+LFU
+TTL
+
+
+✅ Answer:
+
+“Cache eviction policies define how data is removed when cache is full, such as LRU, LFU, TTL-based expiration.”
+
+
+✅ 6. Difference between LRU and LFU?
+✅ Answer:
+
+“LRU removes least recently used data, while LFU removes least frequently used data. LRU focuses on recency, while LFU focuses on access frequency.”
+
+
+✅ 7. What is cache invalidation? (VERY IMPORTANT 🔥)
+👉 This is most critical question
+✅ Answer:
+
+“Cache invalidation ensures that stale or outdated data is removed or updated in cache when the underlying database changes.”
+
+
+✅ Example:
+
+User updates profile → cache must update
+
+
+✅ 8. What are cache strategies?
+✅ Answer:
+
+“Common caching strategies include read-through, write-through, and write-back, depending on how cache and database interactions are handled.”
+
+
+✅ 9. What is TTL?
+✅ Answer:
+
+“TTL (Time-To-Live) defines how long data stays in cache before expiring automatically.”
+
+
+✅ 10. When would you use cache?
+✅ Answer:
+Use caching when:
+
+Data is frequently accessed ✅
+Data doesn’t change frequently ✅
+Read-heavy workloads ✅
+
+
+
+✅ 🔥 Practical Scenario Questions
+
+✅ 11. How would you use cache in a system design?
+✅ Answer (structure):
+
+“I would add Redis as a caching layer between the application and database. Frequently accessed data like user profiles or product details would be cached to reduce database load and improve response time.”
+
+
+
+✅ 12. What happens if cache goes down?
+✅ Answer:
+
+“If cache fails, the system falls back to the database, which increases latency but ensures correctness. Systems often use failover strategies and cache rebuilding.”
+
+
+
+✅ 13. What are challenges with caching?
+✅ Answer:
+
+Cache invalidation ✅
+Stale data ✅
+Memory limits ✅
+Consistency issues ✅
+
+
+
+✅ 🔥 Must-Know Trick Question
+
+❓ “Is cache always good?”
+✅ Answer:
+
+“No, caching is beneficial for read-heavy systems, but it introduces complexity like cache invalidation and consistency issues, so it must be used carefully.”
+
+
+
+✅ ✅ Mini Cheat Sheet (Revision)
+Cache = fast memory storage
+Hit = data found
+Miss = data not found
+LRU = most common eviction
+TTL = expiry-based removal
+Use when = read-heavy system
+Risk = stale data, invalidation
+
+
+✅ ✅ Perfect 30-sec Answer (Confidence Booster)
+
+“Caching is used to improve system performance by storing frequently accessed data in memory. It reduces database load and improves response time. Common strategies include read-through caching, and data is evicted using policies like LRU or TTL. However, proper cache invalidation is important to avoid stale data.”
+
+
+🔥 Final Advice
+👉 In interview:
+
+Always mention Redis ✅
+Say LRU + TTL ✅
+Talk about cache invalidation ✅

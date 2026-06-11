@@ -1,0 +1,114 @@
+ What is Caching?
+👉 Caching = storing frequently used data in fast storage (memory)
+so we don’t fetch it from slow systems (like database) again.
+
+🔷 Why do we need caching?
+Without cache:
+User → Server → DB → Response (slow ❌)
+
+With cache:
+User → Server → Cache → Response (fast ✅)
+
+
+✅ 🔥 Benefits
+✅ Faster response time
+✅ Reduces database load
+✅ Improves scalability
+
+✅ 🔷 Where Cache Sits (In Architecture)
+Client
+   ↓
+Load Balancer
+   ↓
+Application Server
+   ↓
+Cache (Redis)
+   ↓
+Database
+
+
+✅ ✅ How Caching Works (Step-by-Step)
+🔷 Step 1: First Request (Cache Miss)
+User → Server
+Server → Cache → Not found ❌
+Server → DB → fetch data ✅
+Server → Cache (store data)
+Server → User (response)
+
+
+🔷 Step 2: Next Request (Cache Hit)
+User → Server
+Server → Cache → Found ✅
+Server → User (fast response)
+
+
+🔷 Simple Diagram
+Request
+   ↓
+Check Cache
+   ↓         ↓
+Hit ✅      Miss ❌
+ |            |
+Return     DB Call
+ |            |
+        Store in Cache
+             |
+         Return Response
+
+
+✅ 🔷 Types of Cache
+✅ 1. In-Memory Cache
+
+Redis ✅
+Memcached
+
+👉 Fastest (microseconds)
+
+✅ 2. CDN Cache
+
+Stores:
+
+Images
+Videos
+
+
+
+👉 Used in:
+
+Netflix
+YouTube
+
+
+✅ 3. Application Cache
+
+Stored inside app memory
+
+
+✅ 🔷 Cache Strategies (Important)
+✅ 1. Read-Through
+👉 App always reads from cache
+✅ 2. Write-Through
+👉 Update cache + DB together
+✅ 3. Write-Back (Advanced)
+👉 Update cache first, DB later
+
+✅ 🔷 Cache Eviction Policies
+When cache is full:
+
+LRU → Least Recently Used ✅
+LFU → Least Frequently Used
+TTL → Expiry time
+
+
+✅ 🔷 Interview Example
+👉 Example: User profile
+Without cache:
+User → DB every time ❌
+
+With cache:
+User → Cache → Fast ✅
+
+
+✅ ✅ Interview Answer (Perfect)
+
+“Caching is used to store frequently accessed data in fast storage like Redis to reduce database load and improve response time. On a cache miss, data is fetched from the database and stored in cache for future requests.”
