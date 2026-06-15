@@ -1,4 +1,4 @@
-ache Eviction (Final Interview Version)
+Cache Eviction (Final Interview Version)
 ✅ What is Cache Eviction?
 Cache eviction is the process of removing data from the cache when it becomes full or when data is no longer valid, so that new data can be stored.
 👉 Think of cache like a small bookshelf — when it’s full, you must decide which book to remove.

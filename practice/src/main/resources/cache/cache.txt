@@ -111,4 +111,6 @@ User → Cache → Fast ✅
 
 ✅ ✅ Interview Answer (Perfect)
 
-“Caching is used to store frequently accessed data in fast storage like Redis to reduce database load and improve response time. On a cache miss, data is fetched from the database and stored in cache for future requests.”
+“Caching is used to store frequently accessed data in fast storage like Redis to reduce database load
+ and improve response time. On a cache miss, data is fetched from the database and 
+ stored in cache for future requests.”
