@@ -1,0 +1,302 @@
+✅ What is Sharding?
+Sharding = splitting a large database into smaller pieces (shards) across multiple servers.
+
+Each shard stores a subset of the data
+Helps with:
+
+Scalability (handle big data)
+Performance (faster queries)
+Availability (failures isolated)
+
+
+
+👉 Example:
+Instead of 1 DB with 100M users → split into 10 DBs each storing 10M users.
+
+✅ When to Use Sharding?
+Use sharding when:
+
+Single DB is too slow or large
+Read/Write load is high
+Vertical scaling (bigger server) is expensive
+
+
+✅ Basic Architecture (HLD)
+Client
+   ↓
+API / App Server
+   ↓
+Shard Router / Logic
+   ↓
+ +--------+  +--------+  +--------+
+ |Shard-1 |  |Shard-2 |  |Shard-3 |
+ +--------+  +--------+  +--------+
+
+
+✅ Core Components
+1. Shards (Databases)
+
+Each shard = independent DB
+Stores part of the data
+
+
+2. Sharding Key
+
+Key used to decide which shard data goes to
+
+👉 Example:
+
+user_id
+email hash
+region
+
+
+3. Shard Router / Logic
+
+Determines:
+
+Which shard to write/read
+
+
+Can be:
+
+In application code ✅ (common)
+Middleware layer (proxy)
+
+
+
+
+✅ Types of Sharding Strategies
+1. 🔢 Range-based Sharding
+Split by value range
+Shard-1 → user_id 1–1000
+Shard-2 → user_id 1001–2000
+
+✅ Simple
+❌ Hotspot risk (if new IDs go to one shard)
+
+2. 🧮 Hash-based Sharding
+Use hash function:
+shard = hash(user_id) % N
+
+✅ Even distribution
+❌ Hard to rebalance
+
+3. 🌍 Geo-based Sharding
+Shard-1 → India users
+Shard-2 → US users
+
+✅ Low latency
+❌ Uneven load possible
+
+4. 📂 Directory-based Sharding
+Maintain lookup table:
+user_id → shard mapping
+
+✅ Flexible
+❌ Extra lookup overhead
+
+✅ Example Flow
+Write Request:
+Create User (user_id = 12345)
+→ shard = hash(12345) % 3 = 2
+→ store in Shard-2
+
+
+Read Request:
+Get User (user_id = 12345)
+→ shard = hash(12345) % 3 = 2
+→ read from Shard-2
+
+
+✅ Important Design Considerations
+1. 🔥 Hotspot Problem
+
+Too many requests hitting one shard
+Fix:
+
+Better shard key
+Hash-based distribution
+
+
+
+
+2. 🔄 Resharding
+
+Adding new shards is hard
+Requires:
+
+Data migration
+Rebalancing
+
+
+
+
+3. 🔗 Cross-shard Queries
+
+Joining across shards = expensive
+Solution:
+
+Avoid joins
+Denormalize data
+
+
+
+
+4. 🛠️ Transactions
+
+ACID across shards is difficult
+Use:
+
+Eventual consistency
+Saga pattern
+
+
+
+
+5. 🧾 Backup & Monitoring
+
+Each shard handled separately
+Need centralized monitoring
+
+
+✅ Common Technologies
+
+MySQL / PostgreSQL sharding
+MongoDB (built-in sharding)
+Cassandra / DynamoDB (auto-sharded)
+
+
+✅ Simple HLD Example (User Service)
+User Service
+   ↓
+Shard Logic (hash(user_id))
+   ↓
++-----------+   +-----------+   +-----------+
+| UserDB-1  |   | UserDB-2  |   | UserDB-3  |
++-----------+   +-----------+   +-----------+
+
+
+✅ Interview Tips
+When explaining sharding HLD:
+
+Start with problem (scaling DB)
+Explain sharding concept
+Draw architecture
+Discuss:
+
+Shard key
+Strategy
+Challenges
+
+
+Add trade-offs
+
+
+
+suppose a db has 3 tables , if sharding and 3 shards are fixed will those 3 table will be located in different shards
+
+Good question — this is a very common beginner confusion in sharding. Let’s clarify it clearly.
+
+✅ Short Answer
+❌ No, tables are NOT automatically placed in different shards.
+
+👉 In most cases:
+
+All 3 tables exist in EVERY shard, but each shard contains only part of the data.
+
+✅ How Sharding Actually Works
+Suppose you have 3 tables:
+
+Users
+Orders
+Payments
+And 3 shards:
+
+Shard-1
+Shard-2
+Shard-3
+✅ Common Design (Most Used)
+👉 Each shard contains ALL tables, but only subset of rows
+
+Shard-1:
+  Users (user_id 1–1000)
+  Orders (orders of those users)
+  Payments
+
+Shard-2:
+  Users (1001–2000)
+  Orders
+  Payments
+
+Shard-3:
+  Users (2001–3000)
+  Orders
+  Payments
+✅ This is called horizontal sharding (row-based splitting)
+
+✅ Why We Do This
+Because:
+
+Tables are usually related (joins)
+We want:
+User + Orders together in same shard
+👉 This avoids:
+
+Cross-shard joins (very slow ❌)
+✅ When Tables Go to Different Shards?
+👉 That’s a different approach called:
+
+🔹 Vertical Sharding
+Example:
+
+Shard-1 → Users table
+Shard-2 → Orders table
+Shard-3 → Payments table
+✅ Used when:
+
+Tables are independent
+Different workloads (e.g., analytics vs transactions)
+❌ But:
+
+Requires cross-shard joins frequently
+Complex queries
+✅ Key Concept
+👉 Sharding is usually:
+
+Type	What is split
+Horizontal (most common)	Rows
+Vertical	Tables
+✅ Real-World Practice
+Most systems use:
+
+✅ Horizontal sharding:
+
+Each shard = full schema
+Data split by shard key (e.g., user_id)
+❌ NOT:
+
+One table per shard (rare)
+✅ Simple Analogy
+Think of it like:
+
+📚 Library (database with 3 shelves/tables)
+
+Instead of:
+
+Shelf-1 in Room-1
+Shelf-2 in Room-2 ❌ (vertical)
+We do:
+
+Split books across rooms, but each room has all shelves ✅
+✅ Final Takeaway
+👉 For your question:
+
+If DB has 3 tables and 3 shards, will each table go to a different shard?
+
+❌ No
+
+✅ Instead:
+
+Each shard has all 3 tables
+But with different portions of data

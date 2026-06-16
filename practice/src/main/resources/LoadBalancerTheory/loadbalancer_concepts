@@ -1,0 +1,151 @@
+1. Reverse Proxy
+2. Sticky Sessions
+3. SSL Termination
+4. HA / Failover
+5. Global LB
+6. Advanced Algorithms
+7. Health Checks (deep)
+8. Rate Limiting
+
+📘 Load Balancer Advanced Concepts — Quick Notes
+1️⃣ Reverse Proxy
+✅ Definition
+A reverse proxy sits in front of backend servers and forwards requests.
+
+Client → Reverse Proxy → Server
+✅ Key Points
+Client never sees actual servers
+Improves security + performance
+Used by Load Balancers (L7)
+✅ Use Cases
+Routing
+Caching
+Authentication
+🧠 Analogy: Receptionist directing visitors
+
+2️⃣ Sticky Sessions (Session Affinity)
+✅ Definition
+Ensures a user always hits the same server
+
+User → Server A → Server A → Server A
+✅ How
+Cookie-based
+IP-based
+✅ Problem it solves
+Keeps session data consistent
+⚠️ Drawbacks
+Poor load balancing
+Hard to scale
+✅ Better:
+
+Use Redis / DB session store
+3️⃣ SSL Termination
+✅ Definition
+Load Balancer handles HTTPS encryption/decryption
+
+Client (HTTPS)
+    ↓
+LB (decrypt)
+    ↓
+Server (HTTP)
+✅ Benefits
+Faster backend
+Easy certificate management
+Centralized security
+✅ Types
+Termination ✅ (common)
+Passthrough
+End-to-end SSL
+4️⃣ HA / Failover (High Availability)
+✅ Goal
+Avoid downtime if LB/server fails
+
+✅ Approaches
+🔹 Active-Passive
+Primary LB → Backup LB (standby)
+🔹 Active-Active
+LB1 + LB2 both serving traffic
+✅ Tools
+DNS failover
+Cloud LB (AWS ELB)
+5️⃣ Global Load Balancing
+✅ Definition
+Routes users to nearest/geographically optimal region
+
+India → Mumbai region  
+US → Virginia region
+✅ Techniques
+Geo-based routing
+Latency-based routing
+Failover routing
+✅ Tools
+Route53
+Cloudflare
+6️⃣ Advanced Algorithms
+✅ Basic
+Round Robin
+Least Connections
+Text type
+l4loadbalancer
+✅ Advanced
+🔹 Weighted Round Robin
+Different traffic weights
+🔹 Least Response Time
+Fastest server wins
+🔹 Consistent Hashing
+Same user → same server
+🔹 IP Hash
+Based on client IP
+Text type
+l4loadbalancer
+7️⃣ Health Checks (Deep)
+✅ Purpose
+Ensure traffic goes only to healthy servers
+Text type
+l4loadbalancer
+
+✅ Types
+🔹 L4 Health Check
+TCP connection test
+🔹 L7 Health Check
+HTTP endpoint:
+GET /health → 200 OK
+✅ Advanced Settings
+Retry count (e.g., 3 failures)
+Timeout
+Interval
+✅ Behavior
+Server fails 3 times → marked unhealthy
+8️⃣ Rate Limiting
+✅ Definition
+Limits number of requests per user/IP
+
+100 requests/minute/user
+✅ Why
+Prevent abuse (DDoS)
+Protect backend
+Fair usage
+✅ Algorithms
+🔹 Token Bucket
+Tokens refill over time
+🔹 Leaky Bucket
+Fixed output rate
+🔹 Sliding Window
+Time-based counting
+✅ Applied At
+API Gateway
+L7 Load Balancer
+🧠 Final Cheat Sheet (1-Min Revision)
+Reverse Proxy → Entry layer, hides servers
+Sticky Session → Same user → same server
+SSL Termination → LB handles HTTPS
+HA/Failover → Multiple LBs avoid downtime
+Global LB → Route by region/latency
+Algorithms → RR, Least Conn, Hashing
+Health Checks → Remove unhealthy servers
+Rate Limiting → Control request volume
+✅ Interview Power Line
+“In modern systems, the load balancer acts as a reverse proxy and provides advanced capabilities like SSL 
+termination, sticky sessions, health checks, and rate limiting. It ensures high availability through
+ failover strategies and supports global load balancing. Intelligent routing is achieved using advanced
+  algorithms, making the system scalable, resilient, and efficient.”

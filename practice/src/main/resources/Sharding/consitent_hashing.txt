@@ -1,0 +1,462 @@
+Consistent hashing is a technique used to distribute data across multiple nodes (servers/shards) such that when nodes are added or removed, only a small portion of the data needs to be remapped.
+
+
+✅ ✅ Why Consistent Hashing Arose (Very Important 🔥)
+🔴 Problem Before (Traditional Hashing)
+Earlier systems used:
+shard = hash(key) % N
+
+
+🔴 What Was the Issue?
+👉 When system grows:
+✅ Case: Add a new shard
+Before:
+N = 3 → hash(key) % 3
+
+After:
+N = 4 → hash(key) % 4
+
+
+❌ Result:
+
+Almost ALL keys change their shard
+Huge data movement
+System instability
+Downtime risk
+
+
+✅ Example
+Key = 123
+
+Before:
+123 % 3 = 0 → Shard-0
+
+After:
+123 % 4 = 3 → Shard-3 ❌
+
+👉 ❗ Every key moves → not scalable ❌
+
+✅ ✅ Real-World Problems Caused
+Because of this issue:
+
+❌ Adding servers became expensive
+❌ Rebalancing took time
+❌ System performance dropped
+❌ Possible data inconsistency
+
+
+✅ ✅ Solution: Consistent Hashing
+👉 Engineers needed:
+
+✅ A way to scale easily
+✅ Avoid massive data reshuffling
+✅ Keep system stable
+
+
+
+✅ Diagram 1: Hash Ring Setup
+        0
+     /     \
+  90         10
+  |           |
+  |           |
+ 80           20
+  |           |
+  |           |
+ 70           30
+     \     /
+        50
+
+
+✅ Diagram 2: Place Shards
+        (0)
+         |
+         |
+   Shard-3 (80)
+         |
+         |
+   Shard-2 (50)
+         |
+         |
+   Shard-1 (20)
+
+
+✅ Diagram 3: Place Data (Keys)
+userA → 25
+userB → 60
+userC → 10
+
+
+✅ Diagram 4: Assignment (Clockwise Rule)
+userA (25) → Shard-2 (50)
+userB (60) → Shard-3 (80)
+userC (10) → Shard-1 (20)
+
+👉 Rule:
+Move clockwise → nearest shard
+
+
+✅ Diagram 5: Add New Shard
+Before:
+Shard-1(20) ------ Shard-2(50)
+
+After adding Shard-4:
+Shard-1(20) -- Shard-4(30) -- Shard-2(50)
+
+
+✅ What Changes?
+ONLY this range moves:
+20 → 30
+
+👉 Example:
+userA (25) moved from Shard-2 → Shard-4
+
+✅ Everything else remains SAME ✅
+
+
+Hash key → position
+Compare with shard positions
+Pick nearest clockwise shard
+
+
+✅ ✅ 3. INTERVIEW Q&A PRACTICE
+
+✅ Q1: Why not use simple hashing?
+Answer:
+
+In modulo-based hashing, adding or removing a shard causes massive data reshuffling. Consistent hashing avoids this by mapping data and shards on a hash ring, ensuring minimal data movement.
+
+
+✅ Q2: How does consistent hashing work?
+Answer:
+
+It places both shards and data on a circular hash ring. Each key is assigned to the nearest shard in a clockwise direction.
+
+
+✅ Q3: What happens when a shard is added?
+Answer:
+
+Only the data between the new shard and its previous shard moves. The rest of the data remains unchanged.
+
+
+✅ Q4: What problem does it solve?
+
+Reduces data movement
+Makes scaling easier
+Improves system stability
+
+
+✅ Q5: What is a drawback?
+
+Uneven distribution of keys across shards.
+
+
+✅ Q6: Solution to uneven distribution?
+
+Use virtual nodes where each shard is placed multiple times on the ring.
+
+
+✅ ✅ 4. CLEAN COPY NOTES (REVISION READY)
+
+✅ Consistent Hashing Notes
+Problem with Modulo Hashing:
+- shard = hash(key) % N
+- Adding/removing shard → all data moves
+
+Solution: Consistent Hashing
+
+Concept:
+- Use a circular hash ring
+- Place both shards and keys on ring
+- Assign key → nearest shard (clockwise)
+
+Steps:
+1. Hash shards → positions on ring
+2. Hash keys → positions
+3. Move clockwise → find shard
+
+Advantages:
+- Minimal data movement
+- Easy scaling
+- Better stability
+
+Disadvantage:
+- Uneven distribution
+
+Solution:
+- Virtual nodes (multiple positions per shard)
+
+Real-world usage:
+- Cassandra
+- DynamoDB
+- Kafka
+- CDN systems
+
+
+Code
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
+
+public class ConsistentHashing {
+
+    // TreeMap to store hash ring (sorted)
+    private final TreeMap<Integer, String> ring = new TreeMap<>();
+
+    // Add shard
+    public void addShard(String shard) {
+        int hash = hash(shard);
+        ring.put(hash, shard);
+    }
+
+    // Remove shard
+    public void removeShard(String shard) {
+        int hash = hash(shard);
+        ring.remove(hash);
+    }
+
+    // Find shard for a key
+    public String getShard(String key) {
+        if (ring.isEmpty()) return null;
+
+        int hash = hash(key);
+
+        // Find first shard >= hash
+        Map.Entry<Integer, String> entry = ring.ceilingEntry(hash);
+
+        // If not found, wrap to first shard
+        if (entry == null) {
+            entry = ring.firstEntry();
+        }
+
+        return entry.getValue();
+    }
+
+    // Hash function using MD5
+    private int hash(String key) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] digest = md.digest(key.getBytes());
+
+            int hash = 0;
+            for (int i = 0; i < 4; i++) {
+                hash = (hash << 8) + (digest[i] & 0xFF);
+            }
+
+            return hash & 0x7fffffff; // positive integer
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Test main method
+    public static void main(String[] args) {
+        ConsistentHashing ch = new ConsistentHashing();
+
+        // Add shards
+        ch.addShard("Shard-1");
+        ch.addShard("Shard-2");
+        ch.addShard("Shard-3");
+
+        // Test keys
+        String[] keys = {"user123", "user456", "user789"};
+
+        for (String key : keys) {
+            System.out.println(key + " → " + ch.getShard(key));
+        }
+
+        // Add new shard
+        System.out.println("\nAdding Shard-4...\n");
+        ch.addShard("Shard-4");
+
+        for (String key : keys) {
+            System.out.println(key + " → " + ch.getShard(key));
+        }
+    }
+}
+
+
+Problem (Modulo Hashing):
+- shard = hash(key) % N
+- Adding/removing shard → all data moves ❌
+
+Consistent Hashing Solution:
+- Use circular hash ring
+- Place shards and keys on ring
+- Assign key → nearest shard (clockwise)
+
+Steps:
+1. Hash shards → positions on ring
+2. Hash keys → positions
+3. Move clockwise to find shard
+
+Key Property:
+- Minimal data movement when adding/removing shards
+
+Example:
+Before:
+Shard-1 → Shard-2 → Shard-3
+
+After adding Shard-4:
+Shard-1 → Shard-4 → Shard-2 → Shard-3
+
+Only data between:
+Shard-1 → Shard-4 moves ✅
+
+Advantages:
+- Scalable
+- Fault-tolerant
+- Minimal reshuffling
+
+Problem:
+- Uneven distribution
+
+Solution:
+- Virtual Nodes (multiple positions per shard)
+
+Virtual Nodes:
+Shard-1 → multiple hashes
+Shard-2 → multiple hashes
+Improves load balance
+
+Real-world usage:
+- DynamoDB
+- Cassandra
+- Kafka
+- CDN systems
+
+
+
+
+
+
+
+Problem of consitent Hashing 
+
+
+What is “Uneven Distribution”?
+👉 It means:
+
+Some shards get more data, others get very little
+
+1. Uneven Distribution (CLEAR DIAGRAM)
+🔴 Shards on Ring (Bad Case)
+                 0
+               /   \
+              /     \
+             /       \
+      (90) S3         10 (S1)
+             \       /
+              \     /
+               \   /
+                20 (S2)
+
+
+🔴 Range Owned by Each Shard
+👉 Rule:
+Each shard owns data from previous shard → itself (clockwise)
+S1 (10) → owns data from (90 → 10)  ✅ LARGE range
+S2 (20) → owns data from (10 → 20)  ✅ VERY SMALL
+S3 (90) → owns data from (20 → 90)  ✅ VERY LARGE
+
+
+🔴 Proper Load Visualization
+Range sizes:
+
+S1:  (90 → 10)  = LARGE
+S2:  (10 → 20)  = SMALL
+S3:  (20 → 90)  = VERY LARGE
+
+
+🔴 Final Effect
+S3 → 🔥 Heavy Load
+S1 → ⚠️ Medium Load
+S2 → ❄️ Almost Idle
+
+👉 ❗ This is UNEQUAL DISTRIBUTION
+
+✅ ✅ 2. With Virtual Nodes (FIXED)
+
+🟢 Shards with Multiple Positions
+S1 → 10, 40, 70
+S2 → 20, 60, 90
+S3 → 30, 50, 80
+
+
+🟢 Proper Ring Diagram
+                      0
+                    /   \
+         (90) S2          S1 (10)
+               |          |
+             S3 (80)    S2 (20)
+               |          |
+             S1 (70)    S3 (30)
+               |          |
+             S2 (60)    S1 (40)
+                    \   /
+                     S3 (50)
+
+
+🟢 Now Distribution Looks Like This
+👉 Small, balanced segments:
+[S1] [S2] [S3] [S1] [S3] [S2] [S1] [S3] [S2]
+
+
+✅ Range Ownership Now
+Each shard owns multiple SMALL ranges instead of one BIG range
+
+
+✅ Final Load
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ShardLoadS1✅ BalancedS2✅ BalancedS3✅ Balanced
+
+✅ ✅ 3. BEFORE vs AFTER (BEST VISUAL)
+
+❌ BEFORE (Uneven)
+|-------------------- S3 --------------------|
+|---- S1 ----|
+|- S2 -|
+
+
+✅ AFTER (Balanced)
+| S1 | S2 | S3 | S1 | S3 | S2 | S1 | S3 | S2 |
+
+
+✅ ✅ 4. Key Understanding
+👉 Why uneven happens:
+Few shard positions → large gaps → imbalance
+
+👉 Why virtual nodes help:
+Many shard positions → small gaps → balance ✅
+
+
+✅ ✅ Final Memory Trick
+1 node per shard  → ❌ uneven  
+many nodes/shard → ✅ balanced
+
+
+✅ ✅ Interview One-Liner
+
+“Uneven distribution occurs when shards are unevenly spaced on the hash ring, leading to unequal load. Virtual nodes fix this by distributing each shard across multiple points, ensuring balanced data distribution.”

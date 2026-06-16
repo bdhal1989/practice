@@ -95,3 +95,14 @@ Routing based 		IP + PortURL, 				headers
 Speed				FasterSlightly 				slower
 Intelligence		Basic						Smart
 
+Topic left 
+
+
+1. Reverse Proxy
+2. Sticky Sessions
+3. SSL Termination
+4. HA / Failover
+5. Global LB
+6. Advanced Algorithms
+7. Health Checks (deep)
+8. Rate Limiting

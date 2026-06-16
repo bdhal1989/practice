@@ -1,0 +1,217 @@
+ 1. Instagram (Classic Example of User-based Sharding)
+🎯 Goal
+Handle billions of users, posts, likes, comments
+
+✅ Strategy Used:
+👉 Horizontal sharding using user_id
+
+✅ High-Level Design
+Client
+   ↓
+App Servers
+   ↓
+Shard Router (hash(user_id))
+   ↓
++------------+   +------------+   +------------+
+| DB Shard 1 |   | DB Shard 2 |   | DB Shard 3 |
++------------+   +------------+   +------------+
+   (Users)          (Users)          (Users)
+   (Posts)          (Posts)          (Posts)
+   (Likes)          (Likes)          (Likes)
+
+
+✅ Key Idea
+👉 Each shard stores:
+
+Users
+Posts
+Likes
+
+BUT only for some users
+
+✅ Example
+Let’s say:
+shard = hash(user_id) % 3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+user_idShard101Shard-1202Shard-2303Shard-3
+
+✅ Data Distribution
+Shard-1
+Users: 101, 104, 107
+Posts: posts of those users
+Likes: by those users
+
+Shard-2
+Users: 202, 205, 208
+Posts: their posts
+Likes
+
+
+✅ Why Instagram Does This
+✅ Keep related data together:
+
+User + Posts + Likes in same shard
+
+✅ Avoid:
+
+Cross-shard joins ❌
+
+✅ Faster:
+
+Fetch user profile + posts from one shard
+
+
+⚠️ Challenge
+👉 What about:
+User A follows User B (different shard)
+
+Solution:
+
+Store relationships loosely
+Use caching / denormalization
+Fetch across shards when needed
+
+
+✅ 2. Amazon (E-commerce Sharding Example)
+Amazon uses multiple sharding strategies depending on data type
+
+🛒 Example: Orders System
+✅ Strategy:
+👉 Shard by customer_id
+
+✅ HLD
+Order Service
+   ↓
+Shard Logic (customer_id)
+   ↓
++-------------+   +-------------+   +-------------+
+| Orders DB-1 |   | Orders DB-2 |   | Orders DB-3 |
++-------------+   +-------------+   +-------------+
+
+
+✅ Inside Each Shard
+Each shard has:
+Orders
+Order_Items
+Payments
+Shipments
+
+
+✅ Example
+customer_id = 123 → shard = hash(123) % 3 = 1
+
+👉 All orders of that customer go to Shard-1
+
+✅ Why?
+✅ Most queries are:
+
+“Get all orders for a user”
+
+👉 So data is co-located
+
+⚠️ Problem
+👉 What about:
+Get ALL orders today (global report)
+
+❌ Requires querying all shards
+✅ Solution:
+
+Analytics DB (separate system like Redshift)
+Data pipeline (ETL)
+
+
+✅ Amazon Also Uses Mixed Sharding
+Not everything is same strategy:
+
+
+
+
+Data Type     | Strategy
+--------------|-------------------------
+Users         | user_id
+Orders        | customer_id
+Products      | category_id / product_id
+Inventory     | warehouse / region
+
+
+
+✅ Key Insight
+👉 Different tables may use different shard keys, BUT:
+✅ Still:
+
+Each shard contains related tables
+Not one table per shard
+
+
+✅ 3. Hybrid Architecture (Advanced but Real)
+Large companies combine:
+✅ Sharding + Replication + Caching
+            +------------------+
+            |   Load Balancer  |
+            +------------------+
+                     ↓
+               App Servers
+                     ↓
+         +----------------------+
+         |   Shard Router       |
+         +----------------------+
+            ↓        ↓       ↓
+        Shard1    Shard2   Shard3
+           ↓          ↓        ↓
+        Replica   Replica   Replica
+
+
+✅ Practical Rules from Real Systems
+✅ Rule 1
+👉 Shard by access pattern, not randomly
+
+✅ Rule 2
+👉 Keep related data together
+
+✅ Rule 3
+👉 Avoid cross-shard joins
+
+✅ Rule 4
+👉 Use caching heavily (Redis, Memcached)
+
+✅ Final Comparison
+
+
+Feature            | Instagram        | Amazon
+-------------------|------------------|------------------------
+Shard Key          | user_id          | customer_id
+Strategy           | Hash-based       | Mixed strategies
+Tables per shard   | All related      | All related
+Focus              | Social graph     | Transactions
+
+
+
+✅ Interview Takeaway Answer
+If asked:
+
+"How do companies like Instagram shard data?"
+
+✅ You say:
+
+“They use horizontal sharding based on a key like user_id. Each shard contains all related tables (users, posts, likes), but only a subset of rows. This ensures related data is co-located and avoids cross-shard joins, improving performance and scalability.”
