@@ -1,0 +1,393 @@
+ Q1: What is sharding?
+Expected Answer:
+
+Sharding is a technique to horizontally partition data across multiple databases (shards), where each shard contains a subset of the data.
+
+
+✅ Q2: Why do we use sharding?
+Answer:
+
+Scalability
+Performance improvement
+Avoid single DB bottleneck
+
+
+✅ Q3: What is a shard key?
+Answer:
+
+A shard key is a column used to determine which shard the data should go to (e.g., user_id).
+
+
+✅ ✅ 🟡 MEDIUM QUESTIONS (MOST IMPORTANT 🔥)
+
+✅ Q4: How do you choose a good shard key?
+Answer:
+
+High cardinality
+Even distribution
+Frequently used in queries
+
+
+✅ Q5: Difference between horizontal and vertical sharding?
+Answer:
+Horizontal:
+- Split rows
+- Same tables on each shard
+
+Vertical:
+- Split tables
+- Different tables on different shards
+
+
+✅ Q6: What is the problem with sharding?
+Answer:
+
+Cross-shard queries
+Resharding difficulty
+Data consistency
+Hotspots
+
+
+✅ Q7: How do you handle cross-shard queries?
+Answer:
+
+Avoid joins
+Denormalize data
+Use aggregation layer
+Query all shards (scatter-gather)
+
+
+✅ Q8: What happens when you add a new shard?
+Answer:
+
+Data needs redistribution
+Use consistent hashing to reduce movement
+
+
+✅ ✅ 🔴 ADVANCED QUESTIONS (INTERVIEW GOLD 🔥)
+
+✅ Q9: Why is consistent hashing used?
+Answer:
+
+It minimizes data movement when shards are added or removed by mapping data and nodes on a hash ring.
+
+
+
+✅ Q10: Explain hotspot problem and solution
+Answer:
+
+Hotspot occurs when one shard gets too much traffic due to poor shard key selection.
+Solutions:
+
+
+Better shard key
+Hash-based sharding
+Virtual nodes
+
+
+
+✅ Q11: How do you combine sharding with replication?
+Answer:
+Each shard:
+Primary → Replicas
+
+Sharding → distributes data  
+Replication → ensures availability & read scaling
+
+
+
+✅ Q12: How do you handle transactions across shards?
+Answer:
+
+Use eventual consistency
+Saga pattern
+Avoid distributed transactions if possible
+
+
+
+✅ Q13: How would you design sharding for Instagram?
+Expected Answer:
+
+Shard by user_id
+Store user + posts + likes together
+Avoid cross-shard joins
+Use caching + replication
+
+
+
+✅ Q14: What is resharding and its challenges?
+Answer:
+
+Re-sharding means redistributing data when new shards are added.
+
+Challenges:
+
+Data migration
+Downtime risk
+Consistency
+
+
+
+✅ Q15: How do you avoid uneven distribution in consistent hashing?
+Answer:
+
+Use virtual nodes to distribute load evenly across shards.
+
+
+✅ ✅ 🧠 REAL SYSTEM QUESTION (VERY IMPORTANT)
+
+✅ Q16: Design a system for 100M users — how will you shard DB?
+👉 Expected approach:
+1. Identify shard key → user_id
+2. Use hash-based or consistent hashing
+3. Keep related data together
+4. Add replication for reliability
+5. Use caching for performance
+
+
+✅ ✅ ✅ MINI MOCK INTERVIEW
+👉 I ask, you answer:
+Q: “User posts are slow. What will you do?”
+✅ Expected ideas:
+
+Add caching
+Optimize shard key
+Add replicas
+Reduce cross-shard queries
+
+
+“A good shard key should have high cardinality, ensure even data distribution, and match the application’s query patterns. It should avoid hotspots and allow efficient routing of queries.”
+
+To choose a good shard key:
+
+1. High cardinality
+   - Many unique values (e.g., user_id)
+
+2. Even distribution
+   - Data should spread evenly across shards
+
+3. Query pattern alignment
+   - Frequent queries should include shard key
+
+4. Avoid hotspots
+   - No single shard should get overloaded
+   
+   
+   
+  Q1: What happens if your shard key is part of UPDATE?
+👉 Example:
+user changes region (if region is shard key)
+
+✅ Expected Answer:
+
+Data must move to another shard
+Expensive operation ❌
+Avoid mutable shard keys
+
+
+🔴 Q2: Can you change shard key later?
+✅ Answer:
+
+Very difficult
+Requires full data re-sharding
+Avoid by choosing key carefully at start
+
+
+🔴 Q3: What is re-sharding?
+✅ Answer:
+
+Redistributing data when new shards are added or key changes.
+
+👉 Challenges:
+
+Data migration
+Downtime risk
+Consistency issues
+
+
+🔴 Q4: How do you route requests to correct shard?
+✅ Answer:
+
+Application-level logic
+Shard mapping table
+Hash function
+
+
+🔴 Q5: What is directory-based sharding?
+✅ Answer:
+
+A lookup table stores mapping: key → shard
+
+✅ Flexible
+❌ Additional lookup overhead
+
+🔥 ✅ SCENARIO-BASED QUESTIONS
+
+🔴 Q6: If one shard fails, what happens?
+✅ Answer:
+
+That shard’s data becomes unavailable ❌
+Use:
+
+Replication ✅
+Failover ✅
+
+
+
+
+
+🔴 Q7: How do you handle global queries?
+👉 Example:
+Top 10 users overall
+Total revenue today
+
+✅ Answer:
+
+Query all shards (scatter-gather)
+Use analytics DB (ETL pipeline)
+
+
+
+🔴 Q8: How do you handle pagination across shards?
+✅ Answer:
+
+Query each shard separately
+Merge results at application layer
+
+
+
+🔴 Q9: How do you maintain uniqueness (e.g., unique username)?
+✅ Answer:
+
+Central service for validation
+Lookup table
+Use distributed ID generators
+
+
+
+🔴 Q10: How do you generate unique IDs across shards?
+✅ Answer:
+
+UUID
+Snowflake ID (used by Twitter)
+Central ID service
+
+
+🔥 ✅ PERFORMANCE + DESIGN QUESTIONS
+
+🔴 Q11: Can joins work in sharded DB?
+✅ Answer:
+
+Cross-shard joins ❌ expensive
+Prefer:
+
+Denormalization
+Precomputed data
+
+
+
+
+
+🔴 Q12: Where do you keep shard logic?
+✅ Answer:
+
+Application layer ✅ (most common)
+Middleware proxy
+
+
+
+🔴 Q13: How does sharding affect transactions?
+✅ Answer:
+
+Hard to maintain ACID across shards
+Use:
+
+Eventual consistency
+Saga pattern
+
+
+
+
+
+🔴 Q14: When NOT to use sharding?
+✅ Answer:
+
+Small dataset
+Low traffic system
+Complexity not justified
+
+
+
+🔴 Q15: Difference between partitioning and sharding?
+✅ Answer:
+Partitioning → inside single DB  
+Sharding → across multiple DB servers
+
+
+🔥 ✅ TRICKY QUESTIONS (INTERVIEW FAVORITE)
+
+🔴 Q16: Can we shard on multiple keys?
+✅ Answer:
+
+Possible (composite keys)
+But increases complexity
+
+
+
+🔴 Q17: What if access pattern changes?
+✅ Answer:
+
+Hard problem
+May require re-sharding
+
+
+
+🔴 Q18: How does caching help sharding?
+✅ Answer:
+
+Reduces DB load
+Handles hot data
+Avoids hitting shards frequently
+
+
+
+🔴 Q19: What is scatter-gather?
+✅ Answer:
+Query all shards → collect results → merge
+
+
+
+🔴 Q20: What if data is skewed over time?
+✅ Answer:
+
+Use dynamic rebalancing
+Consistent hashing
+Better shard key
+
+
+🔥 ✅ SUPER ADVANCED (Only if asked)
+
+🔴 Q21: How do you shard graph data (like social network)?
+👉 Very difficult
+✅ Answer:
+
+Try to colocate related nodes
+Use heuristics
+Accept cross-shard queries
+
+
+
+🔴 Q22: Difference between Cassandra and MySQL sharding?
+✅ Answer:
+
+Cassandra → auto-sharding
+MySQL → manual sharding logic
+
+
+✅ ✅ HOW TO PRACTICE
+👉 Practice in this order:
+1. Basics (definition, shard key)
+2. Problems (hotspot, cross-shard)
+3. Advanced (consistent hashing, replication)
+4. Scenarios (failures, scaling)
+
