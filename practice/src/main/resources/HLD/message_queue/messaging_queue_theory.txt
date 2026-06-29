@@ -230,17 +230,6 @@ Consumer Group
 💬 “We use at-least-once delivery for reliability.”
 
 
-
-
-
-
-
-
-
-
-
-
-
  What is Offset?
 👉 Offset = position (index) of a message in a queue/partition
 Think of it like a line number in a file 📄
@@ -457,5 +446,6 @@ Chef cooking slow (Consumer)
 
 🎤 Interview One-liner
 💬
-“Consumer lag occurs when message production rate exceeds consumption rate, causing a backlog of unprocessed messages.”
+“Consumer lag occurs when message production rate exceeds consumption rate, causing a backlog of 
+unprocessed messages.”
  
