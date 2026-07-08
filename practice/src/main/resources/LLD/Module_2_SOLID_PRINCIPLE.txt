@@ -1,0 +1,205 @@
+📘 MODULE 2 - SOL (SRP + OCP + LSP) FULL PRACTICE NOTES 🚀
+
+=================================================
+📌 S - SINGLE RESPONSIBILITY PRINCIPLE (SRP)
+=================================================
+Definition:
+A class should have only ONE reason to change.
+
+---------------------------------
+❌ EXAMPLE 1
+---------------------------------
+class UserService {
+    void registerUser() {}
+    void sendEmail() {}
+}
+✅ FIX
+class UserService { void registerUser() {} }
+class EmailService { void sendEmail() {} }
+
+---------------------------------
+❌ EXAMPLE 2
+---------------------------------
+class Report {
+    void generate() {}
+    void print() {}
+}
+✅ FIX
+class ReportGenerator {}
+class ReportPrinter {}
+
+---------------------------------
+❌ EXAMPLE 3
+---------------------------------
+class Order {
+    void calculate() {}
+    void saveDB() {}
+}
+✅ FIX
+class Order {}
+class OrderRepository {}
+
+---------------------------------
+❌ EXAMPLE 4
+---------------------------------
+class Employee {
+    void calculateSalary() {}
+    void generatePayslip() {}
+}
+✅ FIX
+class SalaryCalculator {}
+class PayslipGenerator {}
+
+---------------------------------
+❌ EXAMPLE 5
+---------------------------------
+class Logger {
+    void logToFile() {}
+    void logToDB() {}
+}
+✅ FIX
+class FileLogger {}
+class DBLogger {}
+
+✅ KEY IDEA: Split by responsibility
+
+=================================================
+📌 O - OPEN CLOSED PRINCIPLE (OCP)
+=================================================
+Definition:
+Open for extension, closed for modification
+
+---------------------------------
+❌ EXAMPLE 1
+---------------------------------
+class PaymentService {
+    void pay(String type) {
+        if(type.equals("CARD")) {}
+        else if(type.equals("UPI")) {}
+    }
+}
+✅ FIX
+interface PaymentMethod { void pay(); }
+class CardPayment implements PaymentMethod {}
+class UpiPayment implements PaymentMethod {}
+
+---------------------------------
+❌ EXAMPLE 2
+---------------------------------
+class Discount {
+    double calc(String type) {
+        if(type.equals("NEW")) return 10;
+        return 0;
+    }
+}
+✅ FIX
+interface DiscountStrategy { double calc(); }
+class NewDiscount implements DiscountStrategy {}
+
+---------------------------------
+❌ EXAMPLE 3
+---------------------------------
+class Notification {
+    void send(String t) {}
+}
+✅ FIX
+interface NotificationType { void send(); }
+class Email implements NotificationType {}
+class SMS implements NotificationType {}
+
+---------------------------------
+❌ EXAMPLE 4
+---------------------------------
+class Shape {
+    double area(String type) {}
+}
+✅ FIX
+interface Shape { double area(); }
+class Circle implements Shape {}
+class Rectangle implements Shape {}
+
+---------------------------------
+❌ EXAMPLE 5
+---------------------------------
+class Transport {
+    void book(String type) {}
+}
+✅ FIX
+interface TransportMode { void book(); }
+class Cab implements TransportMode {}
+class Bus implements TransportMode {}
+
+✅ KEY IDEA: Use interfaces + polymorphism
+
+=================================================
+📌 L - LISKOV SUBSTITUTION PRINCIPLE (LSP)
+=================================================
+Definition:
+Child should replace parent without breaking behavior
+
+---------------------------------
+❌ EXAMPLE 1
+---------------------------------
+class Bird { void fly() {} }
+class Penguin extends Bird {
+    void fly() { throw new UnsupportedOperationException(); }
+}
+✅ FIX
+class Bird {}
+interface Flyable { void fly(); }
+class Sparrow extends Bird implements Flyable {}
+class Penguin extends Bird {}
+
+---------------------------------
+❌ EXAMPLE 2
+---------------------------------
+class Vehicle { void startEngine() {} }
+class Bicycle extends Vehicle {
+    void startEngine() { throw new UnsupportedOperationException(); }
+}
+✅ FIX
+class Vehicle {}
+interface EngineVehicle { void startEngine(); }
+class Car extends Vehicle implements EngineVehicle {}
+class Bicycle extends Vehicle {}
+
+---------------------------------
+❌ EXAMPLE 3
+---------------------------------
+class File { void read() {} void write() {} }
+class ReadOnlyFile extends File {
+    void write() { throw new UnsupportedOperationException(); }
+}
+✅ FIX
+interface Readable {}
+interface Writable {}
+
+---------------------------------
+❌ EXAMPLE 4
+---------------------------------
+class Payment { void refund() {} }
+class CashPayment extends Payment {
+    void refund() { throw new UnsupportedOperationException(); }
+}
+✅ FIX
+interface Payment {}
+interface Refundable {}
+
+---------------------------------
+❌ EXAMPLE 5
+---------------------------------
+class Rectangle { int w,h; }
+class Square extends Rectangle {}
+✅ FIX
+interface Shape {}
+class RectangleShape implements Shape {}
+class SquareShape implements Shape {}
+
+✅ KEY IDEA: Child should not break behavior
+
+=================================================
+🔥 FINAL SHORTCUT
+=================================================
+SRP → Split responsibilities
+OCP → Avoid if-else
+LSP → Don't break parent behavior

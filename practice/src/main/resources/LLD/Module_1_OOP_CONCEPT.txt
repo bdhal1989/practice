@@ -1,0 +1,85 @@
+📘 MODULE 1 - OOP (RELATIONSHIPS + IMMUTABILITY) 🚀
+
+---------------------------------
+📌 CORE CONCEPTS
+---------------------------------
+- Class 🏗️
+- Object 🚗
+- Encapsulation 🧦
+- Abstraction 🎭
+- Inheritance 🌳
+- Polymorphism 🔁
+- Composition ❤️
+- Aggregation 💛
+- Association 🔗
+- Dependency ⚡
+- Immutability 🔒
+
+---------------------------------
+1️⃣ Association 🔗
+---------------------------------
+✔ General relationship between objects
+✔ Weak connection
+✔ Objects exist independently
+
+Example:
+Doctor -------- Patient
+
+---------------------------------
+2️⃣ Aggregation 💛 (HAS-A)
+---------------------------------
+✔ Weak ownership
+✔ Child can exist independently
+
+Diagram:
+Department ◇── Employees
+
+---------------------------------
+3️⃣ Composition ❤️ (STRONG HAS-A)
+---------------------------------
+✔ Strong ownership
+✔ Lifecycle dependent
+
+Diagram:
+Car ◆── Engine
+
+✔ If Car is destroyed → Engine is destroyed
+
+---------------------------------
+4️⃣ Dependency ⚡ (USES)
+---------------------------------
+✔ Temporary relationship
+✔ Method-level usage
+
+Example:
+OrderService → PaymentService
+
+✔ Weakest relationship
+
+---------------------------------
+📊 RELATIONSHIP SUMMARY
+---------------------------------
+Association   → Uses / knows
+Aggregation   → Has-a (weak)
+Composition   → Has-a (strong)
+Dependency    → Uses temporarily
+
+---------------------------------
+5️⃣ Immutability 🔒
+---------------------------------
+✔ Object cannot change after creation
+
+Example:
+```java
+final class User {
+    private final String name;
+}
+
+✔ Thread-safe
+✔ Predictable
+✔ Safe for caching
+✔ No side effects
+
+🔥 INTERVIEW SHORTCUT
+Composition > Aggregation > Association > Dependency
+(Preferred order in design)
