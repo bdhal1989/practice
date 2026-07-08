@@ -203,3 +203,496 @@ class SquareShape implements Shape {}
 SRP → Split responsibilities
 OCP → Avoid if-else
 LSP → Don't break parent behavior
+
+
+=================================================
+📘 I - INTERFACE SEGREGATION PRINCIPLE (ISP)
+=================================================
+
+📌 Definition
+Clients should not be forced to depend on methods they do not use.
+
+📌 Simple Definition
+Use many small interfaces instead of one large interface.
+
+📌 Memory Trick
+Fat Interface ❌
+Small Focused Interfaces ✅
+
+=================================================
+❌ EXAMPLE 1 - WORKER
+=================================================
+
+interface Worker {
+    void work();
+    void eat();
+}
+
+class Robot implements Worker {
+
+    public void work() {}
+
+    public void eat() {
+        throw new UnsupportedOperationException();
+    }
+}
+
+🚨 Problem
+Robot does not eat but is forced to implement eat().
+
+✅ FIX
+
+interface Workable {
+    void work();
+}
+
+interface Eatable {
+    void eat();
+}
+
+class Human implements Workable, Eatable {
+
+    public void work() {}
+
+    public void eat() {}
+}
+
+class Robot implements Workable {
+
+    public void work() {}
+}
+
+=================================================
+❌ EXAMPLE 2 - PRINTER
+=================================================
+
+interface Printer {
+    void print();
+    void scan();
+    void fax();
+}
+
+class BasicPrinter implements Printer {
+
+    public void print() {}
+
+    public void scan() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void fax() {
+        throw new UnsupportedOperationException();
+    }
+}
+
+✅ FIX
+
+interface Printable {
+    void print();
+}
+
+interface Scannable {
+    void scan();
+}
+
+interface Faxable {
+    void fax();
+}
+
+class BasicPrinter implements Printable {}
+
+class AdvancedPrinter
+implements Printable, Scannable, Faxable {}
+
+=================================================
+❌ EXAMPLE 3 - PAYMENT
+=================================================
+
+interface Payment {
+    void pay();
+    void refund();
+}
+
+class CashPayment implements Payment {
+
+    public void pay() {}
+
+    public void refund() {
+        throw new UnsupportedOperationException();
+    }
+}
+
+✅ FIX
+
+interface Payment {
+    void pay();
+}
+
+interface Refundable {
+    void refund();
+}
+
+class CardPayment
+implements Payment, Refundable {}
+
+class CashPayment
+implements Payment {}
+
+=================================================
+❌ EXAMPLE 4 - FILE SYSTEM
+=================================================
+
+interface FileOperation {
+    void read();
+    void write();
+}
+
+class ReadOnlyFile
+implements FileOperation {
+
+    public void read() {}
+
+    public void write() {
+        throw new UnsupportedOperationException();
+    }
+}
+
+✅ FIX
+
+interface Readable {
+    void read();
+}
+
+interface Writable {
+    void write();
+}
+
+class File
+implements Readable, Writable {}
+
+class ReadOnlyFile
+implements Readable {}
+
+=================================================
+❌ EXAMPLE 5 - VEHICLE
+=================================================
+
+interface Vehicle {
+    void drive();
+    void fly();
+}
+
+class Car implements Vehicle {
+
+    public void drive() {}
+
+    public void fly() {
+        throw new UnsupportedOperationException();
+    }
+}
+
+✅ FIX
+
+interface Drivable {
+    void drive();
+}
+
+interface Flyable {
+    void fly();
+}
+
+class Car implements Drivable {}
+
+class Airplane
+implements Drivable, Flyable {}
+
+=================================================
+✅ ISP BENEFITS
+=================================================
+
+✔ Small Interfaces
+✔ No Forced Implementations
+✔ Loose Coupling
+✔ Easy Maintenance
+✔ Easy Testing
+
+=================================================
+🔥 ISP SHORTCUT
+=================================================
+
+Big Interface ❌
+
+Small Interfaces ✅
+
+
+
+=================================================
+📘 D - DEPENDENCY INVERSION PRINCIPLE (DIP)
+=================================================
+
+📌 Definition
+
+High-level modules should not depend on low-level modules.
+Both should depend on abstractions.
+
+Abstractions should not depend on details.
+Details should depend on abstractions.
+
+📌 Simple Definition
+
+Depend on Interfaces, Not Implementations.
+
+📌 Memory Trick
+
+Concrete Class ❌
+
+Interface ✅
+
+=================================================
+❌ EXAMPLE 1 - NOTIFICATION
+=================================================
+
+class NotificationService {
+
+    private EmailNotification email =
+        new EmailNotification();
+
+    void send() {
+        email.send();
+    }
+}
+
+🚨 Problem
+NotificationService is tightly coupled to EmailNotification.
+
+✅ FIX
+
+interface Notification {
+    void send();
+}
+
+class EmailNotification
+implements Notification {
+
+    public void send() {}
+}
+
+class SMSNotification
+implements Notification {
+
+    public void send() {}
+}
+
+class NotificationService {
+
+    private Notification notification;
+
+    NotificationService(
+        Notification notification) {
+
+        this.notification = notification;
+    }
+
+    void send() {
+        notification.send();
+    }
+}
+
+=================================================
+❌ EXAMPLE 2 - PAYMENT
+=================================================
+
+class PaymentService {
+
+    private CreditCardPayment payment =
+        new CreditCardPayment();
+}
+
+✅ FIX
+
+interface PaymentMethod {
+    void pay();
+}
+
+class CreditCardPayment
+implements PaymentMethod {}
+
+class UpiPayment
+implements PaymentMethod {}
+
+class PaymentService {
+
+    private PaymentMethod payment;
+
+    PaymentService(
+        PaymentMethod payment) {
+
+        this.payment = payment;
+    }
+}
+
+=================================================
+❌ EXAMPLE 3 - DATABASE
+=================================================
+
+class UserService {
+
+    private MySQLDatabase db =
+        new MySQLDatabase();
+}
+
+✅ FIX
+
+interface Database {
+    void save();
+}
+
+class MySQLDatabase
+implements Database {}
+
+class MongoDatabase
+implements Database {}
+
+class UserService {
+
+    private Database database;
+
+    UserService(
+        Database database) {
+
+        this.database = database;
+    }
+}
+
+=================================================
+❌ EXAMPLE 4 - REPORT GENERATOR
+=================================================
+
+class ReportService {
+
+    private PDFGenerator pdf =
+        new PDFGenerator();
+}
+
+✅ FIX
+
+interface ReportGenerator {
+    void generate();
+}
+
+class PDFGenerator
+implements ReportGenerator {}
+
+class ExcelGenerator
+implements ReportGenerator {}
+
+class ReportService {
+
+    private ReportGenerator generator;
+
+    ReportService(
+        ReportGenerator generator) {
+
+        this.generator = generator;
+    }
+}
+
+=================================================
+❌ EXAMPLE 5 - ENGINE
+=================================================
+
+class Car {
+
+    private DieselEngine engine =
+        new DieselEngine();
+}
+
+✅ FIX
+
+interface Engine {
+    void start();
+}
+
+class DieselEngine
+implements Engine {}
+
+class PetrolEngine
+implements Engine {}
+
+class ElectricMotor
+implements Engine {}
+
+class Car {
+
+    private Engine engine;
+
+    Car(Engine engine) {
+        this.engine = engine;
+    }
+}
+
+=================================================
+✅ DIP BENEFITS
+=================================================
+
+✔ Loose Coupling
+✔ Easy Testing
+✔ Easy Extension
+✔ Easy Maintenance
+✔ Supports Dependency Injection
+
+=================================================
+📊 DIP RULE
+=================================================
+
+❌ BAD
+
+Business Logic
+      ↓
+Concrete Class
+
+Example
+
+PaymentService
+      ↓
+CreditCardPayment
+
+-----------------------------
+
+✅ GOOD
+
+Business Logic
+      ↓
+Interface
+   ↙      ↘
+Card      UPI
+
+=================================================
+🔥 DIP SHORTCUT
+=================================================
+
+new EmailService() ❌
+
+Notification Interface ✅
+
+new MySQLDatabase() ❌
+
+Database Interface ✅
+
+new CreditCardPayment() ❌
+
+PaymentMethod Interface ✅
+
+=================================================
+🎯 FINAL REVISION
+=================================================
+
+SRP = One Responsibility
+
+OCP = Extend Without Modifying
+
+LSP = Child Should Replace Parent
+
+ISP = Small Focused Interfaces
+
+DIP = Depend On Interfaces
