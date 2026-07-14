@@ -14,7 +14,7 @@ public class PracticeCheckedExceptionExecute {
 		}
 	}
 
-	//declaration of throws for checked excetion (complie time exception)
+	//declaration of throws for checked exception (Otherwise complie time exception)
 	private void getException() throws PracticeCheckedException {
 		throw new PracticeCheckedException("INVALID_WORKFLOW", Map.of("workflow", "ActionId required"));
 	}

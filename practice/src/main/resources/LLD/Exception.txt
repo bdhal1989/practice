@@ -1,0 +1,322 @@
+
+#################################################
+📌 CHECKED vs UNCHECKED EXCEPTIONS
+#################################################
+
+📖 WHY DO WE NEED EXCEPTIONS?
+
+Exceptions help us handle unexpected situations:
+
+✔ File not found
+✔ Database failure
+✔ Network issues
+✔ Invalid input
+✔ Payment failure
+
+Java divides exceptions into:
+
+1. Checked Exceptions
+2. Unchecked Exceptions
+
+=================================================
+📌 CHECKED EXCEPTIONS
+=================================================
+
+Definition:
+
+Checked exceptions are checked by the compiler.
+
+Java forces us to either:
+
+✔ Handle the exception (try-catch)
+
+OR
+
+✔ Declare it using throws
+
+-------------------------------------------------
+✅ EXAMPLE
+-------------------------------------------------
+
+public void readFile()
+throws IOException {
+
+}
+
+OR
+
+try {
+
+    readFile();
+
+} catch(IOException e) {
+
+}
+
+-------------------------------------------------
+COMMON CHECKED EXCEPTIONS
+-------------------------------------------------
+
+IOException
+
+SQLException
+
+FileNotFoundException
+
+ParseException
+
+ClassNotFoundException
+
+-------------------------------------------------
+REAL LIFE EXAMPLE
+-------------------------------------------------
+
+Reading a file:
+
+File may exist ✅
+File may not exist ❌
+
+Java forces you to handle this possibility.
+
+=================================================
+📌 UNCHECKED EXCEPTIONS
+=================================================
+
+Definition:
+
+Unchecked exceptions are NOT checked by compiler.
+
+Java does NOT force handling.
+
+They occur mostly because of:
+
+✔ Programming mistakes
+✔ Invalid state
+✔ Invalid arguments
+
+-------------------------------------------------
+✅ EXAMPLE
+-------------------------------------------------
+
+String name = null;
+
+name.length();
+
+Throws:
+
+NullPointerException
+
+Compiler does not complain.
+
+-------------------------------------------------
+COMMON UNCHECKED EXCEPTIONS
+-------------------------------------------------
+
+NullPointerException
+
+IllegalArgumentException
+
+IllegalStateException
+
+ArithmeticException
+
+IndexOutOfBoundsException
+
+-------------------------------------------------
+REAL LIFE EXAMPLE
+-------------------------------------------------
+
+Customer age = -5
+
+This is bad application logic.
+
+Compiler cannot predict this.
+
+=================================================
+📌 CODE EXAMPLE COMPARISON
+=================================================
+
+CHECKED ✅
+
+public void loadFile()
+throws IOException {
+
+}
+
+Compiler forces handling.
+
+-----------------------------------------
+
+UNCHECKED ✅
+
+public void calculateAge(int age) {
+
+    if(age < 0) {
+
+        throw new IllegalArgumentException(
+            "Age cannot be negative"
+        );
+    }
+}
+
+Compiler does NOT force handling.
+
+=================================================
+📌 CUSTOM EXCEPTIONS
+=================================================
+
+Most business exceptions should extend:
+
+RuntimeException
+
+Example:
+
+class UserNotFoundException
+extends RuntimeException {
+
+    public UserNotFoundException(
+        String message) {
+
+        super(message);
+    }
+}
+
+-----------------------------------------
+
+Usage
+
+if(user == null) {
+
+    throw new UserNotFoundException(
+        "User not found"
+    );
+}
+
+=================================================
+📌 EXCEPTION HIERARCHY
+=================================================
+
+Throwable
+   |
+   +-- Error
+   |
+   +-- Exception
+          |
+          +-- Checked Exceptions
+          |
+          +-- RuntimeException
+                   |
+                   +-- Unchecked Exceptions
+
+=================================================
+📌 INTERVIEW QUESTION
+=================================================
+
+Q. Difference between Checked and Unchecked Exception?
+
+✅ Answer:
+
+Checked Exceptions are verified by the compiler
+and must be handled or declared.
+
+Unchecked Exceptions are Runtime Exceptions and
+are not checked by the compiler.
+
+=================================================
+📌 WHEN TO USE WHICH?
+=================================================
+
+Use Checked Exception ✅
+
+When failure is external and recoverable.
+
+Examples:
+
+✔ File Reading
+✔ Database Connection
+✔ Network Calls
+
+-----------------------------------------
+
+Use Unchecked Exception ✅
+
+When failure is due to programming/business logic.
+
+Examples:
+
+✔ Invalid Input
+✔ User Not Found
+✔ Insufficient Balance
+✔ Invalid State
+
+=================================================
+📌 INTERVIEW BEST PRACTICE
+=================================================
+
+For modern Java applications:
+
+✔ Business Exceptions →
+  RuntimeException
+
+✔ Technical Exceptions →
+  Checked Exceptions
+
+Examples:
+
+UserNotFoundException
+PaymentFailedException
+InvalidOrderException
+
+→ RuntimeException ✅
+
+IOException
+SQLException
+
+→ Checked Exception ✅
+
+=================================================
+🧠 MEMORY TRICK
+=================================================
+
+Checked Exception
+
+"Something outside my control failed."
+
+Examples:
+File
+Database
+Network
+
+-----------------------------------------
+
+Unchecked Exception
+
+"My code or business logic is wrong."
+
+Examples:
+Null
+Invalid Input
+Wrong State
+
+=================================================
+🔥 SHORTCUT
+=================================================
+
+Checked
+
+Compiler forces handling ✅
+
+Examples:
+IOException
+SQLException
+
+-----------------------------------------
+
+Unchecked
+
+Compiler does not force handling ✅
+
+Examples:
+NullPointerException
+IllegalArgumentException
+RuntimeException

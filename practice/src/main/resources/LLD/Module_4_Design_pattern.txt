@@ -1,0 +1,3537 @@
+LEVEL 1 (Foundation)
+
+✓ What is a Design Pattern?
+✓ SOLID Revision
+✓ Why patterns exist
+
+LEVEL 2 (Creational)
+
+1. Singleton
+2. Factory Method
+3. Abstract Factory
+4. Builder
+5. Prototype
+
+LEVEL 3 (Structural)
+
+6. Adapter
+7. Bridge
+8. Composite
+9. Decorator
+10. Facade
+11. Flyweight
+12. Proxy
+
+LEVEL 4 (Behavioral)
+
+13. Strategy
+14. Observer
+15. Command
+16. State
+17. Template Method
+18. Chain of Responsibility
+19. Iterator
+20. Mediator
+21. Memento
+22. Visitor
+23. Interpreter
+
+LEVEL 5
+
+Real-world examples from Spring Boot
+
+Spring Beans
+RestTemplate
+Security
+Hibernate
+Kafka
+Redis
+
+
+
+=================================================
+📘 DESIGN PATTERNS - INTRODUCTION
+=================================================
+
+📌 What is a Design Pattern?
+
+A Design Pattern is a reusable solution
+to a commonly occurring software design problem.
+
+Pattern ≠ Code
+
+Pattern = Solution Idea
+
+-------------------------------------------------
+📌 WHY DESIGN PATTERNS EXIST
+-------------------------------------------------
+
+Software developers face the same problems repeatedly:
+
+✔ Object Creation
+
+✔ Object Communication
+
+✔ Object Structure
+
+Design Patterns provide proven solutions.
+
+-------------------------------------------------
+📌 BENEFITS
+-------------------------------------------------
+
+✔ Reusable Solutions
+
+✔ Better Design
+
+✔ Loose Coupling
+
+✔ Maintainable Code
+
+✔ Interview Friendly
+
+-------------------------------------------------
+📌 CATEGORIES
+-------------------------------------------------
+
+1. Creational
+
+Problem:
+How objects are created?
+
+Patterns:
+
+Singleton
+Factory
+Abstract Factory
+Builder
+Prototype
+
+-------------------------------------------------
+
+2. Structural
+
+Problem:
+How objects are connected?
+
+Patterns:
+
+Adapter
+Bridge
+Composite
+Decorator
+Facade
+Proxy
+Flyweight
+
+-------------------------------------------------
+
+3. Behavioral
+
+Problem:
+How objects communicate?
+
+Patterns:
+
+Strategy
+Observer
+Command
+State
+Template Method
+Chain Of Responsibility
+Iterator
+Mediator
+Visitor
+Memento
+Interpreter
+
+-------------------------------------------------
+🧠 MEMORY TRICK
+-------------------------------------------------
+
+Create Objects
+→ Creational
+
+Connect Objects
+→ Structural
+
+Communicate Objects
+→ Behavioral
+
+-------------------------------------------------
+🔥 INTERVIEW ANSWER
+-------------------------------------------------
+
+A Design Pattern is a proven reusable solution
+to a commonly occurring software design problem.
+It provides guidance for solving design challenges
+but is not a complete implementation.
+
+
+
+=================================================
+📘 SINGLETON PATTERN
+=================================================
+
+📌 Intent
+
+Ensure only ONE instance of a class exists
+and provide a global access point to it.
+
+-------------------------------------------------
+🏦 REAL WORLD PROBLEM
+-------------------------------------------------
+
+Banking Application
+
+Services:
+
+✔ AccountService
+✔ PaymentService
+✔ LoanService
+
+All need DatabaseConnection.
+
+Without Singleton:
+
+new DatabaseConnection();
+new DatabaseConnection();
+new DatabaseConnection();
+
+Many unnecessary objects created.
+
+-------------------------------------------------
+✅ SOLUTION
+-------------------------------------------------
+
+Allow only ONE object.
+
+-------------------------------------------------
+📌 EAGER INITIALIZATION
+-------------------------------------------------
+
+Definition:
+
+Object is created immediately when
+class is loaded.
+
+✅ Complete Example
+
+class DatabaseConnection {
+
+    private static final DatabaseConnection INSTANCE =
+            new DatabaseConnection();
+
+    private DatabaseConnection() {
+    }
+
+    public static DatabaseConnection getInstance() {
+        return INSTANCE;
+    }
+}
+
+-------------------------------------------------
+USAGE
+-------------------------------------------------
+
+DatabaseConnection db1 =
+    DatabaseConnection.getInstance();
+
+DatabaseConnection db2 =
+    DatabaseConnection.getInstance();
+
+System.out.println(db1 == db2);
+
+Output:
+
+true
+
+-------------------------------------------------
+ADVANTAGES
+-------------------------------------------------
+
+✔ Simple
+
+✔ Thread Safe
+
+✔ Easy Implementation
+
+-------------------------------------------------
+DISADVANTAGES
+-------------------------------------------------
+
+❌ Object created even if never used
+
+❌ Memory may be wasted
+
+-------------------------------------------------
+📌 LAZY INITIALIZATION
+-------------------------------------------------
+
+Definition:
+
+Object is created only when needed.
+
+✅ Complete Example
+
+class DatabaseConnection {
+
+    private static DatabaseConnection instance;
+
+    private DatabaseConnection() {
+    }
+
+    public static DatabaseConnection getInstance() {
+
+        if(instance == null) {
+            instance =
+                new DatabaseConnection();
+        }
+
+        return instance;
+    }
+}
+
+-------------------------------------------------
+USAGE
+-------------------------------------------------
+
+DatabaseConnection db1 =
+    DatabaseConnection.getInstance();
+
+DatabaseConnection db2 =
+    DatabaseConnection.getInstance();
+
+System.out.println(db1 == db2);
+
+Output:
+
+true
+
+-------------------------------------------------
+ADVANTAGES
+-------------------------------------------------
+
+✔ Memory Efficient
+
+✔ Object created on demand
+
+-------------------------------------------------
+DISADVANTAGES
+-------------------------------------------------
+
+❌ Not Thread Safe
+
+-------------------------------------------------
+📌 THREAD SAFETY PROBLEM
+-------------------------------------------------
+
+Thread 1 calls getInstance()
+
+Thread 2 calls getInstance()
+
+At same time
+
+Possible:
+
+Thread 1 → creates Object A
+
+Thread 2 → creates Object B
+
+❌ Singleton broken
+
+-------------------------------------------------
+✅ THREAD SAFE VERSION
+-------------------------------------------------
+
+class DatabaseConnection {
+
+    private static DatabaseConnection instance;
+
+    private DatabaseConnection() {
+    }
+
+    public static synchronized
+    DatabaseConnection getInstance() {
+
+        if(instance == null) {
+            instance =
+                new DatabaseConnection();
+        }
+
+        return instance;
+    }
+}
+
+-------------------------------------------------
+ADVANTAGES
+-------------------------------------------------
+
+✔ Thread Safe
+
+✔ Single Object Guaranteed
+
+-------------------------------------------------
+DISADVANTAGES
+-------------------------------------------------
+
+❌ Slight performance overhead
+
+-------------------------------------------------
+📌 REAL WORLD EXAMPLES
+-------------------------------------------------
+
+✔ Spring Beans (default singleton scope)
+
+✔ Logger
+
+✔ Configuration Manager
+
+✔ Cache Manager
+
+✔ Printer Manager
+
+-------------------------------------------------
+📌 WHEN TO USE
+-------------------------------------------------
+
+Use when only ONE object is needed.
+
+Examples:
+
+DatabaseConnection
+
+Logger
+
+CacheManager
+
+ConfigurationManager
+
+-------------------------------------------------
+📌 WHEN NOT TO USE
+-------------------------------------------------
+
+Customer
+
+Order
+
+Book
+
+Employee
+
+Transaction
+
+These require multiple objects.
+
+-------------------------------------------------
+🧠 MEMORY TRICK
+-------------------------------------------------
+
+One Country
+→ One Prime Minister
+
+One Company
+→ One CEO
+
+One Application
+→ One Configuration Manager
+
+-------------------------------------------------
+🎯 INTERVIEW ANSWER
+-------------------------------------------------
+
+Singleton is a creational design pattern
+that ensures only one instance of a class
+exists and provides a global access point
+to that instance.
+
+
+
+
+
+
+
+=================================================
+📘 FACTORY METHOD PATTERN
+=================================================
+
+📌 Story
+
+Swiggy Application
+
+Customer orders:
+
+Pizza
+Burger
+Pasta
+
+-------------------------------------------------
+📌 Problem
+-------------------------------------------------
+
+Client creates objects directly.
+
+Food food;
+
+if(type.equals("PIZZA")) {
+    food = new Pizza();
+}
+else if(type.equals("BURGER")) {
+    food = new Burger();
+}
+
+Problems:
+
+❌ Tight Coupling
+❌ Huge if-else chains
+❌ Difficult to add new types
+❌ Violates OCP
+
+-------------------------------------------------
+📌 Pattern Intent
+-------------------------------------------------
+
+Encapsulate object creation logic into
+a dedicated Factory class.
+
+Client requests objects from Factory
+instead of creating them directly.
+
+-------------------------------------------------
+📌 Complete Example
+-------------------------------------------------
+
+interface Food {
+
+    void prepare();
+}
+
+class Pizza implements Food {
+
+    public void prepare() {
+        System.out.println("Preparing Pizza");
+    }
+}
+
+class Burger implements Food {
+
+    public void prepare() {
+        System.out.println("Preparing Burger");
+    }
+}
+
+class Pasta implements Food {
+
+    public void prepare() {
+        System.out.println("Preparing Pasta");
+    }
+}
+
+class FoodFactory {
+
+    public static Food getFood(
+            String type) {
+
+        if(type.equals("PIZZA")) {
+            return new Pizza();
+        }
+
+        if(type.equals("BURGER")) {
+            return new Burger();
+        }
+
+        if(type.equals("PASTA")) {
+            return new Pasta();
+        }
+
+        throw new IllegalArgumentException(
+            "Invalid Food Type"
+        );
+    }
+}
+
+-------------------------------------------------
+📌 Usage
+-------------------------------------------------
+
+Food food =
+    FoodFactory.getFood("PIZZA");
+
+food.prepare();
+
+Output:
+
+Preparing Pizza
+
+-------------------------------------------------
+📌 Visualization
+-------------------------------------------------
+
+Without Factory
+
+Client
+ ├── new Pizza()
+ ├── new Burger()
+ └── new Pasta()
+
+-----------------------------------
+
+With Factory
+
+Client
+   |
+   v
+FoodFactory
+   |
+   +---- Pizza
+   |
+   +---- Burger
+   |
+   +---- Pasta
+
+-------------------------------------------------
+📌 Real World Examples
+-------------------------------------------------
+
+✔ Spring ApplicationContext
+
+✔ LoggerFactory
+
+✔ DriverManager
+
+✔ Payment Gateway
+
+✔ Vehicle Factory
+
+-------------------------------------------------
+📌 Advantages
+-------------------------------------------------
+
+✔ Loose Coupling
+
+✔ Centralized Creation Logic
+
+✔ Better Maintainability
+
+✔ Supports OCP
+
+✔ Easier Testing
+
+-------------------------------------------------
+📌 Disadvantages
+-------------------------------------------------
+
+❌ More Classes
+
+❌ Factory Can Become Large
+
+-------------------------------------------------
+📌 When To Use
+-------------------------------------------------
+
+✔ Multiple object types exist
+
+✔ Complex creation logic
+
+✔ Client should not know creation details
+
+Examples:
+
+Payment System
+
+Notification System
+
+Vehicle System
+
+Food Ordering System
+
+-------------------------------------------------
+📌 When Not To Use
+-------------------------------------------------
+
+Simple object creation.
+
+Example:
+
+User user = new User();
+
+No Factory needed.
+
+-------------------------------------------------
+📌 SOLID Principles Used
+-------------------------------------------------
+
+✅ OCP
+
+New products added without changing
+client logic.
+
+✅ DIP
+
+Client depends on abstraction
+(Food interface).
+
+-------------------------------------------------
+📌 Interview Questions
+-------------------------------------------------
+
+Q. What problem does Factory solve?
+
+Object creation complexity and
+tight coupling.
+
+-----------------------------------
+
+Q. Difference between Factory and Singleton?
+
+Singleton:
+Controls number of objects.
+
+Factory:
+Controls object creation.
+
+-------------------------------------------------
+🧠 Memory Trick
+-------------------------------------------------
+
+Customer Orders Food
+
+Kitchen Decides What To Create
+
+Kitchen = Factory
+
+-------------------------------------------------
+🔥 Interview Answer
+-------------------------------------------------
+
+Factory Method Pattern provides a way
+to create objects without exposing
+creation logic to the client. It
+centralizes object creation and
+reduces coupling between client code
+and concrete implementations.
+
+
+
+=================================================
+📘 ABSTRACT FACTORY PATTERN
+=================================================
+
+📌 DEFINITION
+
+Abstract Factory is a Creational Design Pattern
+that provides an interface for creating FAMILIES
+of related objects without specifying their
+concrete classes.
+
+-------------------------------------------------
+📌 SIMPLE UNDERSTANDING
+-------------------------------------------------
+
+Factory Pattern
+
+Creates ONE object.
+
+Example:
+
+FoodFactory
+    |
+    └── Pizza
+
+-----------------------------------
+
+Abstract Factory Pattern
+
+Creates a FAMILY of related objects.
+
+Example:
+
+AppleFactory
+    |
+    ├── iPhone
+    └── MacBook
+
+-------------------------------------------------
+📌 WHEN TO USE
+-------------------------------------------------
+
+Use when:
+
+✔ Multiple related objects must be created together
+
+✔ Product families exist
+
+✔ Client should not know object creation details
+
+-------------------------------------------------
+📌 STORY 1 - PAYMENT SYSTEM
+-------------------------------------------------
+
+Suppose our application supports:
+
+1. Razorpay
+2. Paypal
+
+Each provider offers multiple payment types.
+
+Razorpay Family
+
+✔ Razorpay UPI
+✔ Razorpay Card
+
+Paypal Family
+
+✔ Paypal Wallet
+✔ Paypal Card
+
+We want the client to select a provider and
+get all related payment products.
+
+-------------------------------------------------
+❌ WITHOUT ABSTRACT FACTORY
+-------------------------------------------------
+
+if(provider.equals("RAZORPAY")) {
+
+    upi = new RazorpayUpiPayment();
+
+    card = new RazorpayCardPayment();
+}
+else if(provider.equals("PAYPAL")) {
+
+    upi = new PaypalWalletPayment();
+
+    card = new PaypalCardPayment();
+}
+
+Problems:
+
+❌ Huge if-else
+
+❌ Tight Coupling
+
+❌ Difficult to add new provider
+
+❌ Violates OCP
+
+-------------------------------------------------
+✅ SOLUTION
+-------------------------------------------------
+
+STEP 1 - Product Interfaces
+
+interface UpiPayment {
+
+    void pay();
+}
+
+interface CardPayment {
+
+    void pay();
+}
+
+-------------------------------------------------
+STEP 2 - Razorpay Products
+-------------------------------------------------
+
+class RazorpayUpiPayment
+implements UpiPayment {
+
+    public void pay() {
+
+        System.out.println(
+            "Razorpay UPI Payment"
+        );
+    }
+}
+
+class RazorpayCardPayment
+implements CardPayment {
+
+    public void pay() {
+
+        System.out.println(
+            "Razorpay Card Payment"
+        );
+    }
+}
+
+-------------------------------------------------
+STEP 3 - Paypal Products
+-------------------------------------------------
+
+class PaypalWalletPayment
+implements UpiPayment {
+
+    public void pay() {
+
+        System.out.println(
+            "Paypal Wallet Payment"
+        );
+    }
+}
+
+class PaypalCardPayment
+implements CardPayment {
+
+    public void pay() {
+
+        System.out.println(
+            "Paypal Card Payment"
+        );
+    }
+}
+
+-------------------------------------------------
+STEP 4 - Abstract Factory
+-------------------------------------------------
+
+interface PaymentFactory {
+
+    UpiPayment createUpiPayment();
+
+    CardPayment createCardPayment();
+}
+
+-------------------------------------------------
+STEP 5 - Concrete Factories
+-------------------------------------------------
+
+class RazorpayFactory
+implements PaymentFactory {
+
+    public UpiPayment createUpiPayment() {
+
+        return new RazorpayUpiPayment();
+    }
+
+    public CardPayment createCardPayment() {
+
+        return new RazorpayCardPayment();
+    }
+}
+
+-----------------------------------
+
+class PaypalFactory
+implements PaymentFactory {
+
+    public UpiPayment createUpiPayment() {
+
+        return new PaypalWalletPayment();
+    }
+
+    public CardPayment createCardPayment() {
+
+        return new PaypalCardPayment();
+    }
+}
+
+-------------------------------------------------
+STEP 6 - Client Usage
+-------------------------------------------------
+
+PaymentFactory factory =
+        new RazorpayFactory();
+
+UpiPayment upi =
+        factory.createUpiPayment();
+
+CardPayment card =
+        factory.createCardPayment();
+
+upi.pay();
+
+card.pay();
+
+-------------------------------------------------
+VISUALIZATION
+-------------------------------------------------
+
+            PaymentFactory
+                   |
+      ---------------------------
+      |                         |
+      |                         |
+ RazorpayFactory         PaypalFactory
+      |                         |
+  ----------               ----------
+  |        |               |        |
+UPI      Card           Wallet    Card
+
+-------------------------------------------------
+📌 STORY 2 - FOOD RESTAURANT
+-------------------------------------------------
+
+Restaurant supports:
+
+1. Indian Menu
+2. Italian Menu
+
+Indian Family
+
+✔ Biryani
+✔ Naan
+
+Italian Family
+
+✔ Pizza
+✔ Pasta
+
+Each menu should provide related dishes.
+
+-------------------------------------------------
+❌ WITHOUT ABSTRACT FACTORY
+-------------------------------------------------
+
+if(menu.equals("INDIAN")) {
+
+    food1 = new Biryani();
+
+    food2 = new Naan();
+}
+else if(menu.equals("ITALIAN")) {
+
+    food1 = new Pizza();
+
+    food2 = new Pasta();
+}
+
+Problems:
+
+❌ Tight Coupling
+
+❌ Difficult to add Chinese Menu
+
+❌ Large if-else blocks
+
+-------------------------------------------------
+✅ SOLUTION
+-------------------------------------------------
+
+STEP 1 - Product Interfaces
+
+interface MainCourse {
+
+    void prepare();
+}
+
+interface SideDish {
+
+    void prepare();
+}
+
+-------------------------------------------------
+STEP 2 - Indian Products
+-------------------------------------------------
+
+class Biryani
+implements MainCourse {
+
+    public void prepare() {
+
+        System.out.println(
+            "Preparing Biryani"
+        );
+    }
+}
+
+class Naan
+implements SideDish {
+
+    public void prepare() {
+
+        System.out.println(
+            "Preparing Naan"
+        );
+    }
+}
+
+-------------------------------------------------
+STEP 3 - Italian Products
+-------------------------------------------------
+
+class Pizza
+implements MainCourse {
+
+    public void prepare() {
+
+        System.out.println(
+            "Preparing Pizza"
+        );
+    }
+}
+
+class Pasta
+implements SideDish {
+
+    public void prepare() {
+
+        System.out.println(
+            "Preparing Pasta"
+        );
+    }
+}
+
+-------------------------------------------------
+STEP 4 - Abstract Factory
+-------------------------------------------------
+
+interface FoodFactory {
+
+    MainCourse createMainCourse();
+
+    SideDish createSideDish();
+}
+
+-------------------------------------------------
+STEP 5 - Concrete Factories
+-------------------------------------------------
+
+class IndianFoodFactory
+implements FoodFactory {
+
+    public MainCourse createMainCourse() {
+
+        return new Biryani();
+    }
+
+    public SideDish createSideDish() {
+
+        return new Naan();
+    }
+}
+
+-----------------------------------
+
+class ItalianFoodFactory
+implements FoodFactory {
+
+    public MainCourse createMainCourse() {
+
+        return new Pizza();
+    }
+
+    public SideDish createSideDish() {
+
+        return new Pasta();
+    }
+}
+
+-------------------------------------------------
+STEP 6 - Client Usage
+-------------------------------------------------
+
+FoodFactory factory =
+        new IndianFoodFactory();
+
+MainCourse main =
+        factory.createMainCourse();
+
+SideDish side =
+        factory.createSideDish();
+
+main.prepare();
+
+side.prepare();
+
+-------------------------------------------------
+VISUALIZATION
+-------------------------------------------------
+
+               FoodFactory
+                    |
+       ----------------------------
+       |                          |
+       |                          |
+IndianFoodFactory      ItalianFoodFactory
+       |                          |
+  ------------               ------------
+  |          |               |          |
+Biryani    Naan           Pizza      Pasta
+
+-------------------------------------------------
+📌 ADVANTAGES
+-------------------------------------------------
+
+✔ Groups related objects
+
+✔ Loose Coupling
+
+✔ Easy to add new families
+
+✔ Supports OCP
+
+✔ Keeps client code clean
+
+-------------------------------------------------
+📌 DISADVANTAGES
+-------------------------------------------------
+
+❌ More classes
+
+❌ More complexity
+
+❌ Harder to understand initially
+
+-------------------------------------------------
+📌 FACTORY vs ABSTRACT FACTORY
+-------------------------------------------------
+
+Factory Method
+
+Creates ONE object.
+
+Example:
+
+FoodFactory
+    |
+    └── Pizza
+
+-----------------------------------
+
+Abstract Factory
+
+Creates MULTIPLE RELATED OBJECTS.
+
+Example:
+
+IndianFoodFactory
+    |
+    ├── Biryani
+    └── Naan
+
+-------------------------------------------------
+📌 SOLID PRINCIPLES USED
+-------------------------------------------------
+
+✅ OCP
+
+New family can be added without
+changing existing client code.
+
+Example:
+
+ChineseFoodFactory
+
+GooglePayFactory
+
+-----------------------------------
+
+✅ DIP
+
+Client depends on:
+
+FoodFactory
+
+PaymentFactory
+
+Not on concrete classes.
+
+-------------------------------------------------
+🧠 MEMORY TRICK
+-------------------------------------------------
+
+Factory
+
+One Product
+
+Example:
+
+Pizza Factory
+    |
+    └── Pizza
+
+-----------------------------------
+
+Abstract Factory
+
+Product Family
+
+Example:
+
+Indian Menu
+    |
+    ├── Biryani
+    └── Naan
+
+Paypal Family
+    |
+    ├── Wallet
+    └── Card
+
+Family Of Products
+= Abstract Factory
+
+-------------------------------------------------
+🎯 INTERVIEW ANSWER
+-------------------------------------------------
+
+Abstract Factory is a Creational Design Pattern
+used to create families of related objects
+without exposing their concrete implementations.
+It helps maintain consistency among related
+products while keeping client code loosely coupled.
+
+
+
+
+
+
+
+
+
+
+=================================================
+📘 BUILDER PATTERN
+=================================================
+
+📌 DEFINITION
+
+Builder Pattern is a Creational Design Pattern
+used to create complex objects step-by-step.
+
+It is useful when an object has:
+
+✔ Many fields
+✔ Optional fields
+✔ Large constructors
+
+-------------------------------------------------
+📌 PROBLEM
+-------------------------------------------------
+
+Suppose we have an Employee class.
+
+Fields:
+
+name
+email
+department
+salary
+phone
+address
+manager
+
+-------------------------------------------------
+❌ WITHOUT BUILDER
+-------------------------------------------------
+
+class Employee {
+
+    private String name;
+    private String email;
+    private String department;
+    private double salary;
+    private String phone;
+    private String address;
+    private String manager;
+
+    public Employee(
+        String name,
+        String email,
+        String department,
+        double salary,
+        String phone,
+        String address,
+        String manager) {
+
+        this.name = name;
+        this.email = email;
+        this.department = department;
+        this.salary = salary;
+        this.phone = phone;
+        this.address = address;
+        this.manager = manager;
+    }
+}
+
+Usage:
+
+Employee employee =
+    new Employee(
+        "Bikash",
+        "bikash@gmail.com",
+        "Technology",
+        100000,
+        "9999999999",
+        "Kolkata",
+        "Suyash"
+    );
+
+-------------------------------------------------
+🚨 PROBLEMS
+-------------------------------------------------
+
+❌ Constructor becomes huge
+
+❌ Hard to remember parameter order
+
+❌ Difficult to read
+
+❌ Difficult to maintain
+
+❌ Adding new field requires new constructor
+
+-------------------------------------------------
+✅ BUILDER SOLUTION
+-------------------------------------------------
+
+class Employee {
+
+    private String name;
+    private String email;
+    private String department;
+    private double salary;
+    private String phone;
+    private String address;
+    private String manager;
+
+    private Employee(Builder builder) {
+
+        this.name = builder.name;
+        this.email = builder.email;
+        this.department = builder.department;
+        this.salary = builder.salary;
+        this.phone = builder.phone;
+        this.address = builder.address;
+        this.manager = builder.manager;
+    }
+
+    public static class Builder {
+
+        private String name;
+        private String email;
+        private String department;
+        private double salary;
+        private String phone;
+        private String address;
+        private String manager;
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder department(
+                String department) {
+
+            this.department = department;
+            return this;
+        }
+
+        public Builder salary(double salary) {
+
+            this.salary = salary;
+            return this;
+        }
+
+        public Builder phone(String phone) {
+
+            this.phone = phone;
+            return this;
+        }
+
+        public Builder address(String address) {
+
+            this.address = address;
+            return this;
+        }
+
+        public Builder manager(String manager) {
+
+            this.manager = manager;
+            return this;
+        }
+
+        public Employee build() {
+
+            return new Employee(this);
+        }
+    }
+}
+
+-------------------------------------------------
+✅ USAGE
+-------------------------------------------------
+
+Employee employee =
+    new Employee.Builder()
+        .name("Bikash")
+        .email("bikash@gmail.com")
+        .department("Technology")
+        .salary(100000)
+        .phone("9999999999")
+        .address("Kolkata")
+        .manager("Suyash")
+        .build();
+
+-------------------------------------------------
+📊 VISUALIZATION
+-------------------------------------------------
+
+Without Builder
+
+Client
+  |
+Huge Constructor
+  |
+Employee
+
+---------------------------------
+
+With Builder
+
+Client
+  |
+Builder
+  |
+Add Fields One By One
+  |
+build()
+  |
+Employee
+
+-------------------------------------------------
+📌 REAL WORLD EXAMPLE 1
+-------------------------------------------------
+
+Food Order
+
+Customer selects:
+
+✔ Burger
+✔ Extra Cheese
+✔ Coke
+✔ French Fries
+
+Builder creates final order.
+
+FoodOrder order =
+    new FoodOrderBuilder()
+        .addBurger()
+        .addCheese()
+        .addCoke()
+        .build();
+
+-------------------------------------------------
+📌 REAL WORLD EXAMPLE 2
+-------------------------------------------------
+
+House Construction
+
+House house =
+    new HouseBuilder()
+        .addBedroom()
+        .addKitchen()
+        .addParking()
+        .build();
+
+Not every house has all features.
+
+-------------------------------------------------
+📌 REAL WORLD EXAMPLE 3
+-------------------------------------------------
+
+Lombok Builder
+
+@Builder
+public class Employee {}
+
+Usage:
+
+Employee employee =
+    Employee.builder()
+        .name("Bikash")
+        .email("bikash@gmail.com")
+        .build();
+
+-------------------------------------------------
+📌 FACTORY vs BUILDER
+-------------------------------------------------
+
+Factory
+
+Creates Object In One Step.
+
+Example:
+
+Vehicle vehicle =
+    VehicleFactory.getVehicle(
+        "CAR"
+    );
+
+---------------------------------
+
+Builder
+
+Creates Object Step By Step.
+
+Example:
+
+Employee employee =
+    new Employee.Builder()
+        .name("Bikash")
+        .email("bikash@gmail.com")
+        .salary(100000)
+        .build();
+
+-------------------------------------------------
+📌 ADVANTAGES
+-------------------------------------------------
+
+✔ Readable Code
+
+✔ No Huge Constructors
+
+✔ Supports Optional Fields
+
+✔ Easy Maintenance
+
+✔ Better Object Creation
+
+-------------------------------------------------
+📌 DISADVANTAGES
+-------------------------------------------------
+
+❌ Extra Builder Class
+
+❌ More Code
+
+❌ Overkill For Small Objects
+
+-------------------------------------------------
+📌 WHEN TO USE
+-------------------------------------------------
+
+Use Builder When:
+
+✔ Object has many fields
+
+✔ Many optional parameters exist
+
+✔ Constructor becomes too large
+
+Examples:
+
+Employee
+
+User
+
+Order
+
+API Request
+
+Configuration Object
+
+-------------------------------------------------
+🧠 MEMORY TRICK
+-------------------------------------------------
+
+Factory
+
+Order Pizza
+
+Receive Pizza
+
+One Step
+
+---------------------------------
+
+Builder
+
+Build Your Burger
+
+Cheese ✅
+
+Sauce ✅
+
+Fries ✅
+
+Drink ✅
+
+Build Step By Step
+
+-------------------------------------------------
+🎯 INTERVIEW ANSWER
+-------------------------------------------------
+
+Builder Pattern is a Creational Design Pattern
+used to construct complex objects step-by-step.
+It improves readability, handles optional
+parameters effectively, and avoids large
+constructors.
+
+
+
+=================================================
+📘 FACTORY vs BUILDER PATTERN
+=================================================
+
+Many people get confused between:
+
+✔ Factory Pattern
+✔ Builder Pattern
+
+The easiest way to understand:
+
+Factory = WHAT object to create
+
+Builder = HOW to create complex object
+
+=================================================
+📌 FACTORY PATTERN
+=================================================
+
+Purpose:
+
+Create different types of objects.
+
+Factory decides WHICH object to create.
+
+-------------------------------------------------
+EXAMPLE
+-------------------------------------------------
+
+Vehicle vehicle =
+    VehicleFactory.getVehicle("CAR");
+
+Factory internally decides:
+
+if(type.equals("CAR")) {
+    return new Car();
+}
+
+if(type.equals("BIKE")) {
+    return new Bike();
+}
+
+-------------------------------------------------
+KEY IDEA
+-------------------------------------------------
+
+One request
+
+→ One object returned
+
+Client does not care how object is created.
+
+=================================================
+📌 BUILDER PATTERN
+=================================================
+
+Purpose:
+
+Create a complex object step-by-step.
+
+Builder decides HOW object is constructed.
+
+-------------------------------------------------
+EXAMPLE
+-------------------------------------------------
+
+Employee employee =
+    new Employee.Builder()
+        .name("Bikash")
+        .email("bikash@gmail.com")
+        .salary(100000)
+        .department("Technology")
+        .build();
+
+-------------------------------------------------
+KEY IDEA
+-------------------------------------------------
+
+Object is built gradually.
+
+Field by field.
+
+=================================================
+📌 REAL WORLD ANALOGY
+=================================================
+
+FACTORY
+
+You enter a car showroom.
+
+You say:
+
+"Give me a BMW."
+
+Showroom gives BMW.
+
+You don't care how it was made.
+
+-----------------------------------------
+
+BUILDER
+
+You order a burger.
+
+Choose:
+
+✔ Cheese
+
+✔ Sauce
+
+✔ Fries
+
+✔ Coke
+
+Burger is assembled step-by-step.
+
+=================================================
+📌 FACTORY EXAMPLE
+=================================================
+
+interface Vehicle {}
+
+class Car implements Vehicle {}
+
+class Bike implements Vehicle {}
+
+class VehicleFactory {
+
+    static Vehicle getVehicle(
+            String type) {
+
+        if(type.equals("CAR")) {
+            return new Car();
+        }
+
+        return new Bike();
+    }
+}
+
+Usage:
+
+Vehicle vehicle =
+    VehicleFactory.getVehicle(
+        "CAR"
+    );
+
+=================================================
+📌 BUILDER EXAMPLE
+=================================================
+
+Employee employee =
+    new Employee.Builder()
+        .name("Bikash")
+        .email("bikash@gmail.com")
+        .salary(100000)
+        .build();
+
+=================================================
+📌 DIFFERENCES
+=================================================
+
+Factory Pattern
+
+✔ Creates different object types
+
+✔ Object created in one step
+
+✔ Focus on object selection
+
+✔ Returns ready-made object
+
+Example:
+Car or Bike
+
+-----------------------------------------
+
+Builder Pattern
+
+✔ Creates complex object
+
+✔ Object created step-by-step
+
+✔ Focus on object construction
+
+✔ Useful for many optional fields
+
+Example:
+Employee, Order, Request
+
+=================================================
+📌 INTERVIEW EXAMPLE
+=================================================
+
+Factory
+
+Question:
+
+Which payment type?
+
+Answer:
+
+✔ UPI
+✔ Card
+✔ Wallet
+
+Factory chooses object.
+
+-----------------------------------------
+
+Builder
+
+Question:
+
+How should Employee be created?
+
+Name?
+Email?
+Salary?
+Department?
+
+Builder constructs object.
+
+=================================================
+📌 WHEN TO USE FACTORY
+=================================================
+
+✔ Multiple object types exist
+
+✔ Client should not know creation logic
+
+Examples:
+
+Vehicle
+
+Payment
+
+Notification
+
+Food
+
+=================================================
+📌 WHEN TO USE BUILDER
+=================================================
+
+✔ Object has many fields
+
+✔ Many optional fields
+
+✔ Constructor becomes huge
+
+Examples:
+
+Employee
+
+User
+
+Order
+
+House
+
+API Request
+
+=================================================
+🧠 MEMORY TRICK
+=================================================
+
+Factory
+
+"Which object?"
+
+CAR or BIKE
+
+-----------------------------------------
+
+Builder
+
+"Build the object"
+
+Name ✅
+
+Email ✅
+
+Salary ✅
+
+Department ✅
+
+build()
+
+=================================================
+🎯 INTERVIEW ANSWER
+=================================================
+
+Factory Pattern is used to create and return
+different types of objects while hiding creation
+logic.
+
+Builder Pattern is used to construct a complex
+object step-by-step, especially when the object
+contains many fields or optional parameters.
+
+
+=================================================
+📘 PROTOTYPE PATTERN
+=================================================
+
+📌 DEFINITION
+
+Prototype Pattern is a Creational Design Pattern
+used to create new objects by copying (cloning)
+an existing object instead of creating it from scratch.
+
+Simple Rule:
+
+Prototype = Copy Existing Object
+
+-------------------------------------------------
+📌 WHY DO WE NEED IT?
+-------------------------------------------------
+
+Sometimes object creation is:
+
+✔ Expensive
+✔ Time Consuming
+✔ Repetitive
+
+Instead of creating the same object again
+and again using new(),
+
+we create one object and make copies of it.
+
+-------------------------------------------------
+📌 SIMPLE REAL-LIFE EXAMPLE
+-------------------------------------------------
+
+Teacher creates:
+
+1 Question Paper
+
+Need:
+
+100 Copies
+
+Options:
+
+❌ Write the same paper 100 times
+
+OR
+
+✅ Photocopy the original paper 100 times
+
+Prototype Pattern = Photocopy Machine
+
+-------------------------------------------------
+📌 STORY
+-------------------------------------------------
+
+Suppose we are building a game.
+
+Need:
+
+1000 Soldiers
+
+Every Soldier has:
+
+✔ Gun
+✔ Health = 100
+✔ Power = 50
+✔ Armor = Level 5
+
+Creating each soldier from scratch is expensive.
+
+-------------------------------------------------
+❌ WITHOUT PROTOTYPE
+-------------------------------------------------
+
+Soldier s1 = new Soldier();
+
+Soldier s2 = new Soldier();
+
+Soldier s3 = new Soldier();
+
+...
+
+1000 times
+
+Problems:
+
+❌ Expensive Initialization
+
+❌ Repeated Configuration
+
+❌ Poor Performance
+
+-------------------------------------------------
+✅ WITH PROTOTYPE
+-------------------------------------------------
+
+Create one Soldier.
+
+Soldier original =
+    new Soldier();
+
+Create copies.
+
+Soldier s2 =
+    original.clone();
+
+Soldier s3 =
+    original.clone();
+
+Soldier s4 =
+
+
+
+====================================================================================-------------------------
+📌 INTENT
+-------------------------------------------------
+
+Convert the interface of an existing class
+into another interface expected by the client.
+
+-------------------------------------------------
+📌 PROBLEM
+-------------------------------------------------
+
+Application expects:
+
+pay()
+
+But Third Party Library provides:
+
+makePayment()
+
+Interfaces don't match.
+
+Application and Library cannot work together.
+
+-------------------------------------------------
+✅ SOLUTION
+-------------------------------------------------
+
+Create an Adapter.
+
+Application
+      |
+      v
+Adapter
+      |
+      v
+Third Party Library
+
+Adapter converts:
+
+pay()
+
+to
+
+makePayment()
+
+-------------------------------------------------
+📌 COMPONENTS
+-------------------------------------------------
+
+1. Client
+
+Uses a target interface.
+
+-----------------------------
+
+2. Target
+
+Expected interface.
+
+Example:
+
+interface PaymentProcessor {
+
+    void pay();
+}
+
+-----------------------------
+
+3. Adaptee
+
+Existing class with incompatible interface.
+
+Example:
+
+class RazorpayGateway {
+
+    void makePayment();
+}
+
+-----------------------------
+
+4. Adapter
+
+Converts one interface into another.
+
+-------------------------------------------------
+📌 COMPLETE EXAMPLE
+-------------------------------------------------
+
+STEP 1
+
+Target Interface
+
+interface PaymentProcessor {
+
+    void pay();
+}
+
+-----------------------------
+
+STEP 2
+
+Existing Third Party Class
+
+class RazorpayGateway {
+
+    public void makePayment() {
+
+        System.out.println(
+            "Payment Successful"
+        );
+    }
+}
+
+-----------------------------
+
+STEP 3
+
+Adapter
+
+class RazorpayAdapter
+implements PaymentProcessor {
+
+    private RazorpayGateway gateway =
+            new RazorpayGateway();
+
+    public void pay() {
+
+        gateway.makePayment();
+    }
+}
+
+-----------------------------
+
+STEP 4
+
+Usage
+
+PaymentProcessor processor =
+        new RazorpayAdapter();
+
+processor.pay();
+
+Output:
+
+Payment Successful
+
+-------------------------------------------------
+📊 VISUALIZATION
+-------------------------------------------------
+
+Application
+      |
+      v
+PaymentProcessor
+      |
+      v
+RazorpayAdapter
+      |
+      v
+RazorpayGateway
+
+-------------------------------------------------
+📌 EXAMPLE 1 - MOBILE CHARGER
+-------------------------------------------------
+
+US Charger
+
+2 Pin
+
+Indian Socket
+
+3 Pin
+
+Problem:
+
+Cannot connect directly.
+
+-----------------------------
+
+Solution:
+
+US Charger
+      |
+   Adapter
+      |
+Indian Socket
+
+Adapter converts connection type.
+
+-------------------------------------------------
+📌 EXAMPLE 2 - PAYMENT GATEWAY
+-------------------------------------------------
+
+Application expects:
+
+pay()
+
+-----------------------------
+
+Razorpay SDK provides:
+
+makePayment()
+
+-----------------------------
+
+Adapter:
+
+pay()
+  |
+  v
+makePayment()
+
+Now application works without changes.
+
+-------------------------------------------------
+📌 EXAMPLE 3 - FOOD DELIVERY
+-------------------------------------------------
+
+Application expects:
+
+deliver()
+
+-----------------------------
+
+Swiggy API provides:
+
+shipFood()
+
+-----------------------------
+
+Adapter:
+
+deliver()
+   |
+   v
+shipFood()
+
+-------------------------------------------------
+📌 EXAMPLE 4 - XML TO JSON
+-------------------------------------------------
+
+Application understands:
+
+JSON
+
+-----------------------------
+
+Legacy System sends:
+
+XML
+
+-----------------------------
+
+Adapter:
+
+XML
+ |
+XMLToJsonAdapter
+ |
+JSON
+
+Very common in enterprise systems.
+
+-------------------------------------------------
+📌 EXAMPLE 5 - OLD PRINTER SYSTEM
+-------------------------------------------------
+
+New Application expects:
+
+print()
+
+-----------------------------
+
+Legacy Printer provides:
+
+printOld()
+
+-----------------------------
+
+Adapter:
+
+print()
+   |
+   v
+printOld()
+
+Old printer works with new system.
+
+-------------------------------------------------
+📌 EXAMPLE 6 - EMAIL NOTIFICATION
+-------------------------------------------------
+
+Application expects:
+
+sendNotification()
+
+-----------------------------
+
+Third Party Service provides:
+
+sendEmail()
+
+-----------------------------
+
+Adapter:
+
+sendNotification()
+         |
+         v
+sendEmail()
+
+-------------------------------------------------
+📌 EXAMPLE 7 - PAYMENT PROVIDER SWITCH
+-------------------------------------------------
+
+Current Provider
+
+Razorpay
+
+makePayment()
+
+-----------------------------
+
+New Provider
+
+Stripe
+
+processPayment()
+
+-----------------------------
+
+Adapter hides provider differences.
+
+Application always calls:
+
+pay()
+
+-------------------------------------------------
+📌 REAL WORLD EXAMPLES
+-------------------------------------------------
+
+✔ Mobile Charger Adapter
+
+✔ Payment Gateway Integration
+
+✔ XML To JSON Conversion
+
+✔ Legacy System Integration
+
+✔ Email Providers
+
+✔ Third Party SDK Integration
+
+✔ Printer Drivers
+
+-------------------------------------------------
+📌 ADVANTAGES
+-------------------------------------------------
+
+✔ Reuses Existing Code
+
+✔ No Changes To Legacy Code
+
+✔ Loose Coupling
+
+✔ Easy Third Party Integration
+
+✔ Supports OCP
+
+✔ Cleaner Code
+
+-------------------------------------------------
+📌 DISADVANTAGES
+-------------------------------------------------
+
+❌ Extra Classes
+
+❌ Additional Layer
+
+❌ Slight Increase In Complexity
+
+-------------------------------------------------
+📌 WHEN TO USE
+-------------------------------------------------
+
+Use Adapter When:
+
+✔ Two interfaces are incompatible
+
+✔ Legacy code must be reused
+
+✔ Third-party APIs are integrated
+
+✔ Data format conversion needed
+
+Examples:
+
+Payment Gateway
+
+Food Delivery API
+
+XML To JSON
+
+Printer Drivers
+
+-------------------------------------------------
+📌 WHEN NOT TO USE
+-------------------------------------------------
+
+Interfaces already match.
+
+Example:
+
+interface PaymentProcessor
+
+class StripePayment
+implements PaymentProcessor
+
+No adapter required.
+
+-------------------------------------------------
+📌 SOLID PRINCIPLES USED
+-------------------------------------------------
+
+✅ OCP
+
+Add new adapters without changing
+existing client code.
+
+Example:
+
+RazorpayAdapter
+
+PaypalAdapter
+
+StripeAdapter
+
+-----------------------------
+
+✅ DIP
+
+Client depends on abstraction.
+
+PaymentProcessor
+
+Instead of:
+
+RazorpayGateway
+
+StripeGateway
+
+-------------------------------------------------
+📌 ADAPTER vs FACTORY
+-------------------------------------------------
+
+Factory
+
+Problem:
+
+Which object should I create?
+
+Example:
+
+Car or Bike
+
+-----------------------------
+
+Adapter
+
+Problem:
+
+How can two incompatible
+systems work together?
+
+Example:
+
+US Charger + Indian Socket
+
+-------------------------------------------------
+📌 ADAPTER vs BRIDGE
+-------------------------------------------------
+
+Adapter
+
+Fixes Existing Incompatibility.
+
+Example:
+
+pay() vs makePayment()
+
+-----------------------------
+
+Bridge
+
+Separates two dimensions
+to avoid class explosion.
+
+Example:
+
+Remote + TV
+
+Remote + Radio
+
+-------------------------------------------------
+🧠 MEMORY TRICK
+-------------------------------------------------
+
+Singleton
+→ One Object
+
+Factory
+→ Create Object
+
+Abstract Factory
+→ Create Product Family
+
+Builder
+→ Build Object
+
+Prototype
+→ Copy Object
+
+Adapter
+→ Convert Interface
+
+-------------------------------------------------
+🎯 INTERVIEW QUESTIONS
+-------------------------------------------------
+
+Q. What is Adapter Pattern?
+
+Allows incompatible interfaces to
+work together.
+
+---------------------------------
+
+Q. Why use Adapter Pattern?
+
+To integrate legacy systems,
+third-party APIs, or incompatible
+interfaces without modifying them.
+
+---------------------------------
+
+Q. Real-life example?
+
+Mobile Charger Adapter.
+
+---------------------------------
+
+Q. Adapter vs Factory?
+
+Factory creates objects.
+
+Adapter connects incompatible objects.
+
+---------------------------------
+
+Q. Adapter vs Bridge?
+
+Adapter fixes incompatibility.
+
+Bridge prevents class explosion.
+
+-------------------------------------------------
+🔥 INTERVIEW ANSWER
+-------------------------------------------------
+
+Adapter Pattern is a Structural Design Pattern
+that allows two incompatible interfaces to work
+together by introducing an adapter that converts
+one interface into another expected by the client.
+
+-------------------------------------------------
+🧠 ONE-LINE REVISION
+-------------------------------------------------
+
+Adapter = Translator
+
+OR
+
+Adapter = Make Incompatible Things
+Work Together
+📘 ADAPTER PATTERN
+=================================================
+
+📌 CATEGORY
+
+Structural Design Pattern
+
+-------------------------------------------------
+📌 DEFINITION
+-------------------------------------------------
+
+Adapter Pattern is a Structural Design Pattern
+that allows two incompatible interfaces to
+work together.
+
+It acts as a translator between two systems.
+
+-------------------------------------------------
+📌 SIMPLE UNDERSTANDING
+-------------------------------------------------
+
+System A speaks English.
+
+System B speaks Hindi.
+
+They cannot communicate directly.
+
+Need:
+
+Translator
+
+English
+    |
+Translator
+    |
+Hindi
+
+Translator = Adapter
+
+
+
+=================================================
+📘 BRIDGE PATTERN
+=================================================
+
+📌 CATEGORY
+
+Structural Design Pattern
+
+-------------------------------------------------
+📌 DEFINITION
+-------------------------------------------------
+
+Bridge Pattern is a Structural Design Pattern
+that separates an abstraction from its
+implementation so that both can evolve
+independently.
+
+Simple Rule:
+
+Bridge = Separate Two Independent Dimensions
+
+-------------------------------------------------
+📌 WHY DO WE NEED IT?
+-------------------------------------------------
+
+Sometimes a system has two things that can
+change independently.
+
+Example:
+
+Remote Types
+
+✔ Basic Remote
+✔ Advanced Remote
+
+Device Types
+
+✔ TV
+✔ Radio
+✔ AC
+
+If every Remote is combined with every Device,
+the number of classes increases rapidly.
+
+-------------------------------------------------
+❌ WITHOUT BRIDGE
+-------------------------------------------------
+
+BasicTVRemote
+
+AdvancedTVRemote
+
+BasicRadioRemote
+
+AdvancedRadioRemote
+
+BasicACRemote
+
+AdvancedACRemote
+
+Now add:
+
+VoiceRemote
+
+Need:
+
+VoiceTVRemote
+
+VoiceRadioRemote
+
+VoiceACRemote
+
+Classes keep increasing.
+
+Problem:
+
+❌ Too Many Classes
+
+❌ Difficult To Maintain
+
+❌ Code Duplication
+
+❌ Class Explosion
+
+-------------------------------------------------
+✅ WITH BRIDGE
+-------------------------------------------------
+
+Separate:
+
+Remote
+
+and
+
+Device
+
+Connect both using composition.
+
+Remote
+      |
+      v
+Device
+
+Now both can grow independently.
+
+-------------------------------------------------
+📌 CORE IDEA
+-------------------------------------------------
+
+Bridge Pattern is used when:
+
+Two dimensions vary independently.
+
+Examples:
+
+Remote + Device
+
+Shape + Color
+
+Payment + Bank
+
+Notification + Channel
+
+Vehicle + Engine
+
+Instead of creating a class for every
+combination, separate both dimensions.
+
+-------------------------------------------------
+📌 STORY 1 - REMOTE + DEVICE
+-------------------------------------------------
+
+Suppose a company manufactures:
+
+Devices
+
+✔ TV
+✔ Radio
+✔ AC
+
+and
+
+Remotes
+
+✔ Basic Remote
+✔ Advanced Remote
+
+-------------------------------------------------
+❌ WITHOUT BRIDGE
+-------------------------------------------------
+
+BasicTVRemote
+
+AdvancedTVRemote
+
+BasicRadioRemote
+
+AdvancedRadioRemote
+
+BasicACRemote
+
+AdvancedACRemote
+
+-------------------------------------------------
+✅ WITH BRIDGE
+-------------------------------------------------
+
+Device Hierarchy
+
+Device
+ |
+ +---- TV
+ |
+ +---- Radio
+ |
+ +---- AC
+
+---------------------------------
+
+Remote Hierarchy
+
+Remote
+ |
+ +---- BasicRemote
+ |
+ +---- AdvancedRemote
+
+---------------------------------
+
+Bridge
+
+Remote
+      |
+      v
+Device
+
+-------------------------------------------------
+📌 COMPLETE EXAMPLE
+-------------------------------------------------
+
+STEP 1
+
+Device Interface
+
+interface Device {
+
+    void on();
+
+    void off();
+}
+
+---------------------------------
+
+STEP 2
+
+Concrete Devices
+
+class TV implements Device {
+
+    public void on() {
+
+        System.out.println("TV ON");
+    }
+
+    public void off() {
+
+        System.out.println("TV OFF");
+    }
+}
+
+---------------------------------
+
+class Radio implements Device {
+
+    public void on() {
+
+        System.out.println("Radio ON");
+    }
+
+    public void off() {
+
+        System.out.println("Radio OFF");
+    }
+}
+
+---------------------------------
+
+STEP 3
+
+Abstraction
+
+abstract class Remote {
+
+    protected Device device;
+
+    public Remote(Device device) {
+
+        this.device = device;
+    }
+
+    abstract void power();
+}
+
+---------------------------------
+
+STEP 4
+
+Refined Abstraction
+
+class BasicRemote
+extends Remote {
+
+    public BasicRemote(Device device) {
+
+        super(device);
+    }
+
+    public void power() {
+
+        device.on();
+    }
+}
+
+---------------------------------
+
+STEP 5
+
+Usage
+
+Device tv = new TV();
+
+Remote remote =
+        new BasicRemote(tv);
+
+remote.power();
+
+Output:
+
+TV ON
+
+-------------------------------------------------
+📊 VISUALIZATION
+-------------------------------------------------
+
+             Remote
+                |
+      -------------------
+      |                 |
+      |                 |
+ BasicRemote     AdvancedRemote
+
+                |
+                v
+
+              Device
+      ----------------------
+      |          |         |
+      |          |         |
+      TV       Radio       AC
+
+-------------------------------------------------
+📌 EXAMPLE 1 - TV REMOTE
+-------------------------------------------------
+
+Remote Types
+
+✔ Basic Remote
+✔ Advanced Remote
+
+Device Types
+
+✔ TV
+✔ Radio
+
+Without Bridge:
+
+BasicTVRemote
+
+AdvancedTVRemote
+
+BasicRadioRemote
+
+AdvancedRadioRemote
+
+With Bridge:
+
+Remote
+      |
+      v
+Device
+
+-------------------------------------------------
+📌 EXAMPLE 2 - SHAPE + COLOR
+-------------------------------------------------
+
+Shapes
+
+✔ Circle
+✔ Rectangle
+
+Colors
+
+✔ Red
+✔ Blue
+✔ Green
+
+---------------------------------
+
+❌ WITHOUT BRIDGE
+
+RedCircle
+
+BlueCircle
+
+GreenCircle
+
+RedRectangle
+
+BlueRectangle
+
+GreenRectangle
+
+---------------------------------
+
+✅ WITH BRIDGE
+
+Shape
+   |
+   v
+Color
+
+Classes:
+
+Circle
+
+Rectangle
+
+Red
+
+Blue
+
+Green
+
+-------------------------------------------------
+📌 EXAMPLE 3 - PAYMENT + BANK
+-------------------------------------------------
+
+Payments
+
+✔ UPI
+✔ Card
+
+Banks
+
+✔ HDFC
+✔ ICICI
+✔ SBI
+
+---------------------------------
+
+❌ WITHOUT BRIDGE
+
+HdfcUpiPayment
+
+HdfcCardPayment
+
+IciciUpiPayment
+
+IciciCardPayment
+
+SbiUpiPayment
+
+SbiCardPayment
+
+---------------------------------
+
+✅ WITH BRIDGE
+
+Payment
+      |
+      v
+Bank
+
+Any Payment can work
+with any Bank.
+
+-------------------------------------------------
+📌 EXAMPLE 4 - NOTIFICATION + CHANNEL
+-------------------------------------------------
+
+Notifications
+
+✔ Alert
+✔ Reminder
+✔ Promotion
+
+Channels
+
+✔ Email
+✔ SMS
+✔ WhatsApp
+
+---------------------------------
+
+❌ WITHOUT BRIDGE
+
+AlertEmail
+
+AlertSMS
+
+AlertWhatsApp
+
+ReminderEmail
+
+ReminderSMS
+
+ReminderWhatsApp
+
+PromotionEmail
+
+PromotionSMS
+
+PromotionWhatsApp
+
+---------------------------------
+
+✅ WITH BRIDGE
+
+Notification
+        |
+        v
+Channel
+
+-------------------------------------------------
+📌 EXAMPLE 5 - VEHICLE + ENGINE
+-------------------------------------------------
+
+Vehicles
+
+✔ Car
+✔ Truck
+
+Engines
+
+✔ Petrol
+✔ Diesel
+✔ Electric
+
+---------------------------------
+
+❌ WITHOUT BRIDGE
+
+PetrolCar
+
+DieselCar
+
+ElectricCar
+
+PetrolTruck
+
+DieselTruck
+
+ElectricTruck
+
+---------------------------------
+
+✅ WITH BRIDGE
+
+Vehicle
+      |
+      v
+Engine
+
+-------------------------------------------------
+📌 EXAMPLE 6 - REPORT + FORMAT
+-------------------------------------------------
+
+Reports
+
+✔ Employee Report
+✔ Sales Report
+
+Formats
+
+✔ PDF
+✔ Excel
+✔ CSV
+
+---------------------------------
+
+❌ WITHOUT BRIDGE
+
+EmployeePDFReport
+
+EmployeeExcelReport
+
+EmployeeCSVReport
+
+SalesPDFReport
+
+SalesExcelReport
+
+SalesCSVReport
+
+---------------------------------
+
+✅ WITH BRIDGE
+
+Report
+    |
+    v
+ExportFormat
+
+-------------------------------------------------
+📌 EXAMPLE 7 - FOOD APP + DELIVERY PARTNER
+-------------------------------------------------
+
+Food Platforms
+
+✔ Swiggy
+✔ Zomato
+
+Delivery Partners
+
+✔ Dunzo
+✔ Shadowfax
+
+---------------------------------
+
+❌ WITHOUT BRIDGE
+
+SwiggyDunzo
+
+SwiggyShadowfax
+
+ZomatoDunzo
+
+ZomatoShadowfax
+
+---------------------------------
+
+✅ WITH BRIDGE
+
+FoodPlatform
+        |
+        v
+DeliveryPartner
+
+-------------------------------------------------
+📌 ADVANTAGES
+-------------------------------------------------
+
+✔ Prevents Class Explosion
+
+✔ Loose Coupling
+
+✔ Better Maintainability
+
+✔ Easy Extension
+
+✔ Independent Development
+
+✔ Composition Over Inheritance
+
+-------------------------------------------------
+📌 DISADVANTAGES
+-------------------------------------------------
+
+❌ More Classes
+
+❌ More Complexity
+
+❌ Harder To Understand Initially
+
+-------------------------------------------------
+📌 WHEN TO USE
+-------------------------------------------------
+
+Use Bridge When:
+
+✔ Two Dimensions Exist
+
+✔ Both Change Independently
+
+✔ Too Many Class Combinations Exist
+
+✔ Composition Is Preferred
+
+Examples:
+
+Remote + Device
+
+Shape + Color
+
+Payment + Bank
+
+Notification + Channel
+
+Vehicle + Engine
+
+-------------------------------------------------
+📌 WHEN NOT TO USE
+-------------------------------------------------
+
+Simple Hierarchy.
+
+Example:
+
+Vehicle
+ |
+ +---- Car
+ |
+ +---- Bike
+
+No second dimension exists.
+
+Bridge is not required.
+
+-------------------------------------------------
+📌 SOLID PRINCIPLES USED
+-------------------------------------------------
+
+✅ OCP
+
+Add new Devices without
+changing existing Remotes.
+
+---------------------------------
+
+✅ DIP
+
+Remote depends on Device
+abstraction.
+
+Not on:
+
+TV
+
+Radio
+
+AC
+
+---------------------------------
+
+✅ Composition Over Inheritance
+
+Core principle behind Bridge Pattern.
+
+-------------------------------------------------
+📌 ADAPTER vs BRIDGE
+-------------------------------------------------
+
+ADAPTER
+
+Problem:
+
+Two systems are incompatible.
+
+Example:
+
+pay()
+
+makePayment()
+
+Solution:
+
+Translator
+
+---------------------------------
+
+BRIDGE
+
+Problem:
+
+Too many combinations.
+
+Example:
+
+Remote + Device
+
+Solution:
+
+Separate Dimensions
+
+-------------------------------------------------
+🧠 MEMORY TRICK
+-------------------------------------------------
+
+Factory
+→ Create Object
+
+Prototype
+→ Copy Object
+
+Adapter
+→ Convert Interface
+
+Bridge
+→ Separate Dimensions
+
+---------------------------------
+
+Adapter
+→ Translator
+
+Bridge
+→ Connector
+
+---------------------------------
+
+Adapter
+→ Fix Compatibility Problem
+
+Bridge
+→ Fix Class Explosion Problem
+
+-------------------------------------------------
+🎯 INTERVIEW QUESTIONS
+-------------------------------------------------
+
+Q. What problem does Bridge solve?
+
+Class Explosion.
+
+---------------------------------
+
+Q. Real-Life Example?
+
+TV Remote And TV.
+
+---------------------------------
+
+Q. When Should Bridge Be Used?
+
+When two dimensions vary independently.
+
+---------------------------------
+
+Q. Difference Between Adapter And Bridge?
+
+Adapter:
+
+Connects incompatible systems.
+
+Bridge:
+
+Separates two dimensions to avoid
+too many subclasses.
+
+-------------------------------------------------
+🔥 INTERVIEW ANSWER
+-------------------------------------------------
+
+Bridge Pattern is a Structural Design Pattern
+that separates abstraction from implementation
+so that both can evolve independently. It is
+used to avoid class explosion when multiple
+dimensions of a system vary separately.
+
+-------------------------------------------------
+🧠 ONE-LINE REVISION
+-------------------------------------------------
+
+Bridge Pattern
+
+→ Separate Two Independent Dimensions
+  To Avoid Too Many Classes

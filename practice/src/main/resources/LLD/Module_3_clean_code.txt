@@ -1,0 +1,863 @@
+=================================================
+📘 MODULE 3 - CLEAN CODE
+=================================================
+
+#################################################
+📌 TOPIC 1 - NAMING
+#################################################
+
+📖 Definition
+
+Choose meaningful names that clearly explain intent.
+
+Good code should be understandable without extra explanation.
+
+-------------------------------------------------
+❌ EXAMPLE 1
+-------------------------------------------------
+
+int a;
+int b;
+int c;
+
+✅ FIX
+
+int employeeAge;
+int employeeSalary;
+int employeeId;
+
+-------------------------------------------------
+❌ EXAMPLE 2
+-------------------------------------------------
+
+class Mgr {}
+
+✅ FIX
+
+class EmployeeManager {}
+
+-------------------------------------------------
+❌ EXAMPLE 3
+-------------------------------------------------
+
+boolean status;
+
+✅ FIX
+
+boolean isActive;
+
+-------------------------------------------------
+❌ EXAMPLE 4
+-------------------------------------------------
+
+void run();
+
+✅ FIX
+
+void generateMonthlyReport();
+
+-------------------------------------------------
+❌ EXAMPLE 5
+-------------------------------------------------
+
+List<User> u;
+
+✅ FIX
+
+List<User> activeUsers;
+
+-------------------------------------------------
+✅ NAMING RULES
+-------------------------------------------------
+
+Class Names
+-------------
+Use Nouns
+
+✅ Employee
+✅ User
+✅ PaymentService
+
+Method Names
+-------------
+Use Verbs
+
+✅ calculateSalary()
+✅ sendEmail()
+✅ generateInvoice()
+
+Variable Names
+--------------
+Use meaningful names
+
+✅ totalOrderAmount
+✅ employeeName
+✅ customerAddress
+
+Boolean Names
+-------------
+Start with:
+
+✅ is
+✅ has
+✅ can
+
+Examples:
+
+✅ isActive
+✅ hasPermission
+✅ canWithdraw
+
+Constants
+----------
+Use UPPER_CASE
+
+✅ MAX_RETRY_COUNT
+✅ DEFAULT_TIMEOUT
+
+-------------------------------------------------
+🎯 INTERVIEW TIPS
+-------------------------------------------------
+
+Bad:
+amount
+
+Better:
+totalOrderAmount
+
+Bad:
+data
+
+Better:
+employeeData
+
+Bad:
+flag
+
+Better:
+isPaymentSuccessful
+
+-------------------------------------------------
+✅ BENEFITS
+-------------------------------------------------
+
+✔ Easy to Read
+✔ Easy to Maintain
+✔ Easy Debugging
+✔ Better Collaboration
+
+-------------------------------------------------
+🔥 SHORTCUT
+-------------------------------------------------
+
+Code should explain itself.
+
+Meaningful names reduce comments.
+
+
+
+#################################################
+📌 TOPIC 2 - METHODS
+#################################################
+
+📖 Definition
+
+A method should do one thing and do it well.
+
+-------------------------------------------------
+✅ GOLDEN RULE
+-------------------------------------------------
+
+One Method
+=
+One Responsibility
+
+-------------------------------------------------
+❌ EXAMPLE 1
+-------------------------------------------------
+
+void processOrder() {
+
+    calculatePrice();
+
+    saveOrder();
+
+    sendEmail();
+
+    generateInvoice();
+
+    updateInventory();
+}
+
+🚨 Problem
+
+Too many responsibilities.
+
+✅ FIX
+
+void processOrder() {
+
+    calculatePrice();
+
+    placeOrder();
+}
+
+void placeOrder() {
+
+    saveOrder();
+
+    sendEmail();
+
+    updateInventory();
+}
+
+-------------------------------------------------
+❌ EXAMPLE 2
+-------------------------------------------------
+
+void generateReport() {
+
+    // 100+ lines
+}
+
+🚨 Problem
+
+Difficult to understand
+Hard to maintain
+
+✅ FIX
+
+void generateReport() {
+
+    fetchData();
+
+    processData();
+
+    formatData();
+
+    printReport();
+}
+
+-------------------------------------------------
+❌ EXAMPLE 3
+-------------------------------------------------
+
+createEmployee(
+    String name,
+    String email,
+    String phone,
+    String address,
+    String department,
+    double salary
+);
+
+🚨 Problem
+
+Too many parameters
+
+✅ FIX
+
+class EmployeeRequest {
+
+    String name;
+    String email;
+    String phone;
+    String address;
+    String department;
+    double salary;
+}
+
+createEmployee(EmployeeRequest request);
+
+-------------------------------------------------
+❌ EXAMPLE 4
+-------------------------------------------------
+
+generateReport(true);
+
+🚨 Problem
+
+Nobody knows what true means.
+
+✅ FIX
+
+generatePdfReport();
+
+generateExcelReport();
+
+-------------------------------------------------
+❌ EXAMPLE 5
+-------------------------------------------------
+
+void registerUser() {
+
+    validateUser();
+
+    saveUser();
+
+    sendEmail();
+
+    generateToken();
+
+    logActivity();
+}
+
+🚨 Problem
+
+Multiple responsibilities
+
+✅ FIX
+
+void registerUser() {
+
+    validateUser();
+
+    createUser();
+}
+
+void createUser() {
+
+    saveUser();
+
+    generateToken();
+
+    notifyUser();
+}
+
+-------------------------------------------------
+❌ EXAMPLE 6
+-------------------------------------------------
+
+void process(User user) {
+
+    if(user != null) {
+
+        if(user.isActive()) {
+
+            // process
+        }
+    }
+}
+
+🚨 Problem
+
+Deep nesting
+
+✅ FIX
+
+void process(User user) {
+
+    if(user == null)
+        return;
+
+    if(!user.isActive())
+        return;
+
+    // process
+}
+
+-------------------------------------------------
+❌ EXAMPLE 7
+-------------------------------------------------
+
+if(a) {
+    if(b) {
+        if(c) {
+
+        }
+    }
+}
+
+✅ FIX
+
+if(!a) return;
+
+if(!b) return;
+
+if(!c) return;
+
+// business logic
+
+-------------------------------------------------
+✅ METHOD RULES
+-------------------------------------------------
+
+✔ Small Methods
+
+✔ One Responsibility
+
+✔ Meaningful Names
+
+✔ Fewer Parameters
+
+✔ Return Early
+
+✔ Avoid Deep Nesting
+
+✔ Easy to Test
+
+✔ Easy to Read
+
+-------------------------------------------------
+🎯 INTERVIEW TIPS
+-------------------------------------------------
+
+Bad:
+
+saveUserAndSendEmailAndGenerateReport();
+
+Good:
+
+saveUser();
+sendEmail();
+generateReport();
+
+-------------------------
+
+Bad:
+
+process(true);
+
+Good:
+
+processOnlinePayment();
+
+processOfflinePayment();
+
+-------------------------------------------------
+✅ BENEFITS
+-------------------------------------------------
+
+✔ Better Readability
+
+✔ Better Testing
+
+✔ Better Maintainability
+
+✔ Easier Refactoring
+
+✔ Less Bugs
+
+-------------------------------------------------
+🔥 SHORTCUT
+-------------------------------------------------
+
+Method = Mini SRP
+
+One Method
+One Responsibility
+
+
+#################################################
+📌 TOPIC 4 - CODE SMELLS
+#################################################
+
+📖 Definition
+
+A Code Smell is not a bug.
+
+A Code Smell is a warning sign that tells us
+the code may become difficult to maintain,
+extend, test, or understand in the future.
+
+Think of code smells as:
+
+🚨 "Something feels wrong here."
+
+-------------------------------------------------
+📌 SIMPLE UNDERSTANDING
+-------------------------------------------------
+
+Code works ✅
+
+But design is poor ❌
+
+This is called a Code Smell.
+
+-------------------------------------------------
+❌ EXAMPLE 1 - LONG METHOD
+-------------------------------------------------
+
+void generateInvoice() {
+
+    // 200 lines of code
+
+}
+
+🚨 Problem
+
+✔ Hard to read
+✔ Hard to test
+✔ Hard to debug
+
+✅ FIX
+
+void generateInvoice() {
+
+    fetchOrder();
+
+    calculatePrice();
+
+    applyTax();
+
+    generatePdf();
+}
+
+-------------------------------------------------
+❌ EXAMPLE 2 - LARGE CLASS
+-------------------------------------------------
+
+class Employee {
+
+    calculateSalary();
+
+    saveToDatabase();
+
+    sendEmail();
+
+    generateReport();
+
+    printReport();
+
+    createPayslip();
+}
+
+🚨 Problem
+
+Class doing too many things.
+
+Violates SRP.
+
+✅ FIX
+
+class Employee {}
+
+class SalaryCalculator {}
+
+class EmployeeRepository {}
+
+class EmailService {}
+
+class ReportService {}
+
+-------------------------------------------------
+❌ EXAMPLE 3 - DUPLICATE CODE
+-------------------------------------------------
+
+double calculateGST() {
+    return amount * 0.18;
+}
+
+double calculateTax() {
+    return amount * 0.18;
+}
+
+🚨 Problem
+
+Same logic repeated.
+
+✅ FIX
+
+double calculateTax(double amount) {
+    return amount * 0.18;
+}
+
+-------------------------------------------------
+❌ EXAMPLE 4 - LONG PARAMETER LIST
+-------------------------------------------------
+
+createEmployee(
+    name,
+    email,
+    phone,
+    address,
+    salary,
+    department,
+    manager
+);
+
+🚨 Problem
+
+Too many parameters.
+
+✅ FIX
+
+createEmployee(EmployeeRequest request);
+
+-------------------------------------------------
+❌ EXAMPLE 5 - MAGIC NUMBERS
+-------------------------------------------------
+
+if(age > 18) {}
+
+if(retryCount == 3) {}
+
+🚨 Problem
+
+Nobody knows why 18 or 3.
+
+✅ FIX
+
+private static final int ADULT_AGE = 18;
+
+private static final int MAX_RETRY = 3;
+
+if(age > ADULT_AGE) {}
+
+-------------------------------------------------
+❌ EXAMPLE 6 - SWITCH/IF EXPLOSION
+-------------------------------------------------
+
+if(paymentType.equals("CARD")) {}
+
+else if(paymentType.equals("UPI")) {}
+
+else if(paymentType.equals("NETBANKING")) {}
+
+else if(paymentType.equals("PAYPAL")) {}
+
+🚨 Problem
+
+Violates OCP.
+
+✅ FIX
+
+interface PaymentMethod {
+    void pay();
+}
+
+class CardPayment
+implements PaymentMethod {}
+
+
+#################################################
+📌 TOPIC 5 - MAGIC NUMBERS & CONSTANTS
+#################################################
+
+📖 Definition
+
+Magic Numbers are hardcoded values that appear
+directly in code without explaining their meaning.
+
+These values make code difficult to understand
+and maintain.
+
+✅ Solution:
+Replace Magic Numbers with meaningful constants.
+
+-------------------------------------------------
+📌 SIMPLE UNDERSTANDING
+-------------------------------------------------
+
+❌ Bad
+
+if(age >= 18)
+
+What is 18?
+
+Why not 17?
+Why not 21?
+
+Nobody knows.
+
+✅ Good
+
+if(age >= ADULT_AGE)
+
+Now the meaning is clear.
+
+-------------------------------------------------
+❌ EXAMPLE 1 - AGE VALIDATION
+-------------------------------------------------
+
+if(age >= 18) {
+    vote();
+}
+
+🚨 Problem
+
+Meaning of 18 is not obvious.
+
+✅ FIX
+
+private static final int ADULT_AGE = 18;
+
+if(age >= ADULT_AGE) {
+    vote();
+}
+
+-------------------------------------------------
+❌ EXAMPLE 2 - RETRY COUNT
+-------------------------------------------------
+
+if(retryCount == 3) {
+    stop();
+}
+
+🚨 Problem
+
+Why 3?
+
+✅ FIX
+
+private static final int MAX_RETRY_COUNT = 3;
+
+if(retryCount == MAX_RETRY_COUNT) {
+    stop();
+}
+
+-------------------------------------------------
+❌ EXAMPLE 3 - DISCOUNT
+-------------------------------------------------
+
+double discount = amount * 0.10;
+
+🚨 Problem
+
+What does 0.10 represent?
+
+✅ FIX
+
+private static final double
+DEFAULT_DISCOUNT = 0.10;
+
+double discount =
+    amount * DEFAULT_DISCOUNT;
+
+-------------------------------------------------
+❌ EXAMPLE 4 - CACHE EXPIRY
+-------------------------------------------------
+
+cache.setExpiry(300);
+
+🚨 Problem
+
+300 seconds?
+300 minutes?
+
+Nobody knows.
+
+✅ FIX
+
+private static final int
+CACHE_EXPIRY_SECONDS = 300;
+
+cache.setExpiry(
+    CACHE_EXPIRY_SECONDS
+);
+
+-------------------------------------------------
+❌ EXAMPLE 5 - MAX LOGIN ATTEMPTS
+-------------------------------------------------
+
+if(loginAttempts > 5) {
+    blockUser();
+}
+
+🚨 Problem
+
+Why 5?
+
+✅ FIX
+
+private static final int
+MAX_LOGIN_ATTEMPTS = 5;
+
+if(loginAttempts >
+    MAX_LOGIN_ATTEMPTS) {
+
+    blockUser();
+}
+
+-------------------------------------------------
+❌ EXAMPLE 6 - TAX RATE
+-------------------------------------------------
+
+double tax = amount * 0.18;
+
+🚨 Problem
+
+What is 0.18?
+
+GST?
+Service Tax?
+
+✅ FIX
+
+private static final double
+GST_RATE = 0.18;
+
+double tax = amount * GST_RATE;
+
+-------------------------------------------------
+❌ EXAMPLE 7 - ORDER LIMIT
+-------------------------------------------------
+
+if(orderCount > 100) {
+    rejectOrder();
+}
+
+✅ FIX
+
+private static final int
+MAX_ORDER_LIMIT = 100;
+
+if(orderCount > MAX_ORDER_LIMIT) {
+    rejectOrder();
+}
+
+-------------------------------------------------
+📌 CONSTANT NAMING RULES
+-------------------------------------------------
+
+Use:
+
+UPPER_CASE_WITH_UNDERSCORES
+
+✅ Examples
+
+MAX_RETRY_COUNT
+
+ADULT_AGE
+
+DEFAULT_TIMEOUT
+
+GST_RATE
+
+CACHE_EXPIRY_SECONDS
+
+MAX_LOGIN_ATTEMPTS
+
+-------------------------------------------------
+❌ BAD CONSTANT NAMES
+-------------------------------------------------
+
+x
+
+temp
+
+count
+
+data
+
+num
+
+-------------------------------------------------
+✅ GOOD CONSTANT NAMES
+-------------------------------------------------
+
+MAX_ALLOWED_USERS
+
+MIN_PASSWORD_LENGTH
+
+DEFAULT_DISCOUNT_RATE
+
+MAX_ORDER_SIZE
+
+-------------------------------------------------
+📌 WHERE TO DECLARE CONSTANTS
+-------------------------------------------------
+
+Local to class:
+
+
