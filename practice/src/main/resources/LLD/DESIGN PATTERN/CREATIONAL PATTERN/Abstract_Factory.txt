@@ -1,0 +1,569 @@
+📘 ABSTRACT FACTORY PATTERN
+=================================================
+
+📌 DEFINITION
+
+Abstract Factory is a Creational Design Pattern
+that provides an interface for creating FAMILIES
+of related objects without specifying their
+concrete classes.
+
+-------------------------------------------------
+📌 SIMPLE UNDERSTANDING
+-------------------------------------------------
+
+Factory Pattern
+
+Creates ONE object.
+
+Example:
+
+FoodFactory
+    |
+    └── Pizza
+
+-----------------------------------
+
+Abstract Factory Pattern
+
+Creates a FAMILY of related objects.
+
+Example:
+
+AppleFactory
+    |
+    ├── iPhone
+    └── MacBook
+
+-------------------------------------------------
+📌 WHEN TO USE
+-------------------------------------------------
+
+Use when:
+
+✔ Multiple related objects must be created together
+
+✔ Product families exist
+
+✔ Client should not know object creation details
+
+-------------------------------------------------
+📌 STORY 1 - PAYMENT SYSTEM
+-------------------------------------------------
+
+Suppose our application supports:
+
+1. Razorpay
+2. Paypal
+
+Each provider offers multiple payment types.
+
+Razorpay Family
+
+✔ Razorpay UPI
+✔ Razorpay Card
+
+Paypal Family
+
+✔ Paypal Wallet
+✔ Paypal Card
+
+We want the client to select a provider and
+get all related payment products.
+
+-------------------------------------------------
+❌ WITHOUT ABSTRACT FACTORY
+-------------------------------------------------
+
+if(provider.equals("RAZORPAY")) {
+
+    upi = new RazorpayUpiPayment();
+
+    card = new RazorpayCardPayment();
+}
+else if(provider.equals("PAYPAL")) {
+
+    upi = new PaypalWalletPayment();
+
+    card = new PaypalCardPayment();
+}
+
+Problems:
+
+❌ Huge if-else
+
+❌ Tight Coupling
+
+❌ Difficult to add new provider
+
+❌ Violates OCP
+
+-------------------------------------------------
+✅ SOLUTION
+-------------------------------------------------
+
+STEP 1 - Product Interfaces
+
+interface UpiPayment {
+
+    void pay();
+}
+
+interface CardPayment {
+
+    void pay();
+}
+
+-------------------------------------------------
+STEP 2 - Razorpay Products
+-------------------------------------------------
+
+class RazorpayUpiPayment
+implements UpiPayment {
+
+    public void pay() {
+
+        System.out.println(
+            "Razorpay UPI Payment"
+        );
+    }
+}
+
+class RazorpayCardPayment
+implements CardPayment {
+
+    public void pay() {
+
+        System.out.println(
+            "Razorpay Card Payment"
+        );
+    }
+}
+
+-------------------------------------------------
+STEP 3 - Paypal Products
+-------------------------------------------------
+
+class PaypalWalletPayment
+implements UpiPayment {
+
+    public void pay() {
+
+        System.out.println(
+            "Paypal Wallet Payment"
+        );
+    }
+}
+
+class PaypalCardPayment
+implements CardPayment {
+
+    public void pay() {
+
+        System.out.println(
+            "Paypal Card Payment"
+        );
+    }
+}
+
+-------------------------------------------------
+STEP 4 - Abstract Factory
+-------------------------------------------------
+
+interface PaymentFactory {
+
+    UpiPayment createUpiPayment();
+
+    CardPayment createCardPayment();
+}
+
+-------------------------------------------------
+STEP 5 - Concrete Factories
+-------------------------------------------------
+
+class RazorpayFactory
+implements PaymentFactory {
+
+    public UpiPayment createUpiPayment() {
+
+        return new RazorpayUpiPayment();
+    }
+
+    public CardPayment createCardPayment() {
+
+        return new RazorpayCardPayment();
+    }
+}
+
+-----------------------------------
+
+class PaypalFactory
+implements PaymentFactory {
+
+    public UpiPayment createUpiPayment() {
+
+        return new PaypalWalletPayment();
+    }
+
+    public CardPayment createCardPayment() {
+
+        return new PaypalCardPayment();
+    }
+}
+
+-------------------------------------------------
+STEP 6 - Client Usage
+-------------------------------------------------
+
+PaymentFactory factory =
+        new RazorpayFactory();
+
+UpiPayment upi =
+        factory.createUpiPayment();
+
+CardPayment card =
+        factory.createCardPayment();
+
+upi.pay();
+
+card.pay();
+
+-------------------------------------------------
+VISUALIZATION
+-------------------------------------------------
+
+            PaymentFactory
+                   |
+      ---------------------------
+      |                         |
+      |                         |
+ RazorpayFactory         PaypalFactory
+      |                         |
+  ----------               ----------
+  |        |               |        |
+UPI      Card           Wallet    Card
+
+-------------------------------------------------
+📌 STORY 2 - FOOD RESTAURANT
+-------------------------------------------------
+
+Restaurant supports:
+
+1. Indian Menu
+2. Italian Menu
+
+Indian Family
+
+✔ Biryani
+✔ Naan
+
+Italian Family
+
+✔ Pizza
+✔ Pasta
+
+Each menu should provide related dishes.
+
+-------------------------------------------------
+❌ WITHOUT ABSTRACT FACTORY
+-------------------------------------------------
+
+if(menu.equals("INDIAN")) {
+
+    food1 = new Biryani();
+
+    food2 = new Naan();
+}
+else if(menu.equals("ITALIAN")) {
+
+    food1 = new Pizza();
+
+    food2 = new Pasta();
+}
+
+Problems:
+
+❌ Tight Coupling
+
+❌ Difficult to add Chinese Menu
+
+❌ Large if-else blocks
+
+-------------------------------------------------
+✅ SOLUTION
+-------------------------------------------------
+
+STEP 1 - Product Interfaces
+
+interface MainCourse {
+
+    void prepare();
+}
+
+interface SideDish {
+
+    void prepare();
+}
+
+-------------------------------------------------
+STEP 2 - Indian Products
+-------------------------------------------------
+
+class Biryani
+implements MainCourse {
+
+    public void prepare() {
+
+        System.out.println(
+            "Preparing Biryani"
+        );
+    }
+}
+
+class Naan
+implements SideDish {
+
+    public void prepare() {
+
+        System.out.println(
+            "Preparing Naan"
+        );
+    }
+}
+
+-------------------------------------------------
+STEP 3 - Italian Products
+-------------------------------------------------
+
+class Pizza
+implements MainCourse {
+
+    public void prepare() {
+
+        System.out.println(
+            "Preparing Pizza"
+        );
+    }
+}
+
+class Pasta
+implements SideDish {
+
+    public void prepare() {
+
+        System.out.println(
+            "Preparing Pasta"
+        );
+    }
+}
+
+-------------------------------------------------
+STEP 4 - Abstract Factory
+-------------------------------------------------
+
+interface FoodFactory {
+
+    MainCourse createMainCourse();
+
+    SideDish createSideDish();
+}
+
+-------------------------------------------------
+STEP 5 - Concrete Factories
+-------------------------------------------------
+
+class IndianFoodFactory
+implements FoodFactory {
+
+    public MainCourse createMainCourse() {
+
+        return new Biryani();
+    }
+
+    public SideDish createSideDish() {
+
+        return new Naan();
+    }
+}
+
+-----------------------------------
+
+class ItalianFoodFactory
+implements FoodFactory {
+
+    public MainCourse createMainCourse() {
+
+        return new Pizza();
+    }
+
+    public SideDish createSideDish() {
+
+        return new Pasta();
+    }
+}
+
+-------------------------------------------------
+STEP 6 - Client Usage
+-------------------------------------------------
+
+FoodFactory factory =
+        new IndianFoodFactory();
+
+MainCourse main =
+        factory.createMainCourse();
+
+SideDish side =
+        factory.createSideDish();
+
+main.prepare();
+
+side.prepare();
+
+-------------------------------------------------
+VISUALIZATION
+-------------------------------------------------
+
+               FoodFactory
+                    |
+       ----------------------------
+       |                          |
+       |                          |
+IndianFoodFactory      ItalianFoodFactory
+       |                          |
+  ------------               ------------
+  |          |               |          |
+Biryani    Naan           Pizza      Pasta
+
+-------------------------------------------------
+📌 ADVANTAGES
+-------------------------------------------------
+
+✔ Groups related objects
+
+✔ Loose Coupling
+
+✔ Easy to add new families
+
+✔ Supports OCP
+
+✔ Keeps client code clean
+
+-------------------------------------------------
+📌 DISADVANTAGES
+-------------------------------------------------
+
+❌ More classes
+
+❌ More complexity
+
+❌ Harder to understand initially
+
+-------------------------------------------------
+📌 FACTORY vs ABSTRACT FACTORY
+-------------------------------------------------
+
+Factory Method
+
+Creates ONE object.
+
+Example:
+
+FoodFactory
+    |
+    └── Pizza
+
+-----------------------------------
+
+Abstract Factory
+
+Creates MULTIPLE RELATED OBJECTS.
+
+Example:
+
+IndianFoodFactory
+    |
+    ├── Biryani
+    └── Naan
+
+-------------------------------------------------
+📌 SOLID PRINCIPLES USED
+-------------------------------------------------
+
+✅ OCP
+
+New family can be added without
+changing existing client code.
+
+Example:
+
+ChineseFoodFactory
+
+GooglePayFactory
+
+-----------------------------------
+
+✅ DIP
+
+Client depends on:
+
+FoodFactory
+
+PaymentFactory
+
+Not on concrete classes.
+
+-------------------------------------------------
+🧠 MEMORY TRICK
+-------------------------------------------------
+
+Factory
+
+One Product
+
+Example:
+
+Pizza Factory
+    |
+    └── Pizza
+
+-----------------------------------
+
+Abstract Factory
+
+Product Family
+
+Example:
+
+Indian Menu
+    |
+    ├── Biryani
+    └── Naan
+
+Paypal Family
+    |
+    ├── Wallet
+    └── Card
+
+Family Of Products
+= Abstract Factory
+
+-------------------------------------------------
+🎯 INTERVIEW ANSWER
+-------------------------------------------------
+
+Abstract Factory is a Creational Design Pattern
+used to create families of related objects
+without exposing their concrete implementations.
+It helps maintain consistency among related
+products while keeping client code loosely coupled.
+
+
+
+
+
+
+
+
+
+
+=================================================

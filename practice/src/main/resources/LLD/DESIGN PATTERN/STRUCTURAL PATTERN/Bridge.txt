@@ -1,0 +1,426 @@
+=================================================
+📘 BRIDGE PATTERN - COMPLETE NOTES
+=================================================
+
+CATEGORY
+
+Structural Design Pattern
+
+=================================================
+DEFINITION
+=================================================
+
+Bridge Pattern is a Structural Design Pattern
+that separates Abstraction from Implementation
+so that both can evolve independently.
+
+Simple Rule:
+
+Bridge = Separate Two Dimensions
+
+=================================================
+WHY DO WE NEED IT?
+=================================================
+
+Suppose a system has two independently changing
+parts.
+
+Example:
+
+Remote Types
+✔ Basic Remote
+✔ Advanced Remote
+✔ Smart Remote
+
+Device Types
+✔ TV
+✔ Radio
+✔ AC
+
+If every remote is combined with every device,
+classes grow rapidly.
+
+This leads to Class Explosion.
+
+=================================================
+CORE IDEA
+=================================================
+
+Abstraction
+      |
+      HAS-A
+      |
+Implementation
+
+Examples:
+
+Remote HAS-A Device
+Shape HAS-A Color
+Payment HAS-A Bank
+Vehicle HAS-A Engine
+
+=================================================
+EXAMPLE 1 - REMOTE + DEVICE
+=================================================
+
+Abstraction
+------------
+Remote
+
+Implementation
+------------
+Device
+
+Java Implementation
+
+interface Device {
+    void on();
+    void off();
+}
+
+class TV implements Device {}
+class Radio implements Device {}
+
+abstract class Remote {
+
+    protected Device device;
+
+    public Remote(Device device) {
+        this.device = device;
+    }
+
+    abstract void power();
+}
+
+class BasicRemote
+extends Remote {
+
+    public BasicRemote(Device d) {
+        super(d);
+    }
+
+    void power() {
+        device.on();
+    }
+}
+
+Usage
+
+Remote remote =
+    new BasicRemote(new TV());
+
+=================================================
+EXAMPLE 2 - SHAPE + COLOR
+=================================================
+
+Abstraction
+------------
+Shape
+
+Implementation
+------------
+Color
+
+Java Implementation
+
+interface Color {
+    String name();
+}
+
+class RedColor implements Color {}
+class BlueColor implements Color {}
+
+abstract class Shape {
+
+    protected Color color;
+
+    public Shape(Color color){
+        this.color = color;
+    }
+
+    abstract void draw();
+}
+
+class Circle extends Shape {
+    public Circle(Color color) {
+        super(color);
+    }
+
+    void draw() {}
+}
+
+=================================================
+EXAMPLE 3 - PAYMENT + BANK
+=================================================
+
+Abstraction
+------------
+Payment
+
+Implementation
+------------
+Bank
+
+Java Implementation
+
+interface Bank {
+    void transfer(double amount);
+}
+
+class HdfcBank implements Bank {}
+class IciciBank implements Bank {}
+
+abstract class Payment {
+
+    protected Bank bank;
+
+    public Payment(Bank bank) {
+        this.bank = bank;
+    }
+
+    abstract void pay(double amount);
+}
+
+class UpiPayment
+extends Payment {
+
+    public UpiPayment(Bank bank) {
+        super(bank);
+    }
+
+    void pay(double amount) {}
+}
+
+=================================================
+EXAMPLE 4 - NOTIFICATION + CHANNEL
+=================================================
+
+Abstraction
+------------
+Notification
+
+Implementation
+------------
+MessageSender
+
+Java Implementation
+
+interface MessageSender {
+    void send(String message);
+}
+
+class EmailSender implements MessageSender {}
+class SmsSender implements MessageSender {}
+
+abstract class Notification {
+
+    protected MessageSender sender;
+
+    public Notification(
+        MessageSender sender) {
+        this.sender = sender;
+    }
+}
+
+class AlertNotification
+extends Notification {
+
+    public AlertNotification(
+            MessageSender sender) {
+        super(sender);
+    }
+}
+
+=================================================
+EXAMPLE 5 - VEHICLE + ENGINE
+=================================================
+
+Abstraction
+------------
+Vehicle
+
+Implementation
+------------
+Engine
+
+Java Implementation
+
+interface Engine {
+    void start();
+}
+
+class PetrolEngine implements Engine {}
+class ElectricEngine implements Engine {}
+
+abstract class Vehicle {
+
+    protected Engine engine;
+
+    public Vehicle(Engine engine) {
+        this.engine = engine;
+    }
+}
+
+class Car extends Vehicle {
+
+    public Car(Engine engine) {
+        super(engine);
+    }
+}
+
+=================================================
+EXAMPLE 6 - REPORT + FORMAT
+=================================================
+
+Abstraction
+------------
+Report
+
+Implementation
+------------
+ExportFormat
+
+Java Implementation
+
+interface ExportFormat {
+    void export(String data);
+}
+
+class PdfFormat implements ExportFormat {}
+class ExcelFormat implements ExportFormat {}
+
+abstract class Report {
+
+    protected ExportFormat format;
+
+    public Report(
+        ExportFormat format) {
+        this.format = format;
+    }
+}
+
+class SalesReport
+extends Report {
+
+    public SalesReport(
+        ExportFormat format) {
+        super(format);
+    }
+}
+
+=================================================
+EXAMPLE 7 - FOOD PLATFORM + DELIVERY PARTNER
+=================================================
+
+Abstraction
+------------
+FoodPlatform
+
+Implementation
+------------
+DeliveryPartner
+
+Java Implementation
+
+interface DeliveryPartner {
+    void deliver(String item);
+}
+
+class Dunzo implements DeliveryPartner {}
+class Porter implements DeliveryPartner {}
+
+abstract class FoodPlatform {
+
+    protected DeliveryPartner partner;
+
+    public FoodPlatform(
+        DeliveryPartner partner) {
+        this.partner = partner;
+    }
+}
+
+class Swiggy
+extends FoodPlatform {
+
+    public Swiggy(
+        DeliveryPartner partner) {
+        super(partner);
+    }
+}
+
+=================================================
+ADVANTAGES
+=================================================
+
+✔ Prevents Class Explosion
+✔ Loose Coupling
+✔ Better Maintainability
+✔ Composition Over Inheritance
+✔ Easy Extension
+
+=================================================
+DISADVANTAGES
+=================================================
+
+❌ More Classes
+❌ More Complexity
+❌ Harder To Understand Initially
+
+=================================================
+WHEN TO USE
+=================================================
+
+✔ Two Dimensions Exist
+✔ Both Change Independently
+✔ Many Combinations Exist
+
+Examples:
+
+Remote + Device
+Shape + Color
+Payment + Bank
+Notification + Channel
+Vehicle + Engine
+
+=================================================
+INTERVIEW QUESTIONS
+=================================================
+
+Q. What problem does Bridge solve?
+
+Class Explosion.
+
+Q. Real-world example?
+
+TV Remote And TV.
+
+Q. Adapter vs Bridge?
+
+Adapter
+→ Fixes Incompatibility
+
+Bridge
+→ Separates Dimensions
+
+=================================================
+MEMORY TRICK
+=================================================
+
+Adapter
+→ Translator
+
+Bridge
+→ Connector
+
+Remote HAS-A Device
+Shape HAS-A Color
+Payment HAS-A Bank
+
+=================================================
+ONE-LINE REVISION
+=================================================
+
+Bridge Pattern
+
+→ Separate Two Independent Dimensions
+   To Avoid Too Many Classes

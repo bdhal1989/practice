@@ -3535,3 +3535,1604 @@ Bridge Pattern
 
 → Separate Two Independent Dimensions
   To Avoid Too Many Classes
+  
+  
+  
+  =================================================
+📘 COMPOSITE PATTERN - COMPLETE NOTES
+=================================================
+
+CATEGORY
+
+Structural Design Pattern
+
+=================================================
+DEFINITION
+=================================================
+
+Composite Pattern is a Structural Design Pattern
+that allows individual objects and groups of
+objects to be treated in the same way.
+
+Simple Rule:
+
+Composite = Tree Structure
+
+Examples:
+
+✔ Company Hierarchy
+✔ Folder Structure
+✔ Menu System
+✔ HTML DOM
+✔ Organization Chart
+
+=================================================
+WHY DO WE NEED IT?
+=================================================
+
+Suppose we have:
+
+CEO
+ |
+ +---- Manager
+         |
+         +---- Developer
+
+We want to call:
+
+showDetails()
+
+on:
+
+✔ Developer
+
+and
+
+✔ Manager
+
+using the same interface.
+
+Composite Pattern allows us to treat
+both individual objects and groups
+of objects uniformly.
+
+=================================================
+COMPONENTS OF COMPOSITE PATTERN
+=================================================
+
+1. Component
+
+Common interface shared by all objects.
+
+---------------------------------
+
+2. Leaf
+
+Individual object.
+
+Cannot contain children.
+
+---------------------------------
+
+3. Composite
+
+Group object.
+
+Can contain children.
+
+---------------------------------
+
+Structure
+
+Component
+    |
+ -------------------
+ |                 |
+Leaf         Composite
+
+=================================================
+EXAMPLE 1 - COMPANY HIERARCHY
+=================================================
+
+SCENARIO
+
+CEO
+ |
+ +---- Manager A
+ |        |
+ |        +---- Developer 1
+ |        +---- Developer 2
+ |
+ +---- Manager B
+          |
+          +---- Developer 3
+          +---- Developer 4
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+Employee
+
+Leaf
+
+Developer
+
+Composite
+
+Manager
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Employee {
+
+    void showDetails();
+}
+
+-------------------------------------------------
+
+class Developer
+implements Employee {
+
+    private String name;
+
+    public Developer(String name) {
+
+        this.name = name;
+    }
+
+    @Override
+    public void showDetails() {
+
+        System.out.println(
+                "Developer : " + name);
+    }
+}
+
+-------------------------------------------------
+
+class Manager
+implements Employee {
+
+    private String name;
+
+    private List<Employee>
+            employees =
+            new ArrayList<>();
+
+    public Manager(String name) {
+
+        this.name = name;
+    }
+
+    public void addEmployee(
+            Employee employee) {
+
+        employees.add(employee);
+    }
+
+    @Override
+    public void showDetails() {
+
+        System.out.println(
+                "Manager : " + name);
+
+        for(Employee employee :
+                employees) {
+
+            employee.showDetails();
+        }
+    }
+}
+
+-------------------------------------------------
+
+USAGE
+
+Manager manager =
+        new Manager("Suyash");
+
+manager.addEmployee(
+        new Developer("Amit"));
+
+manager.addEmployee(
+        new Developer("Rahul"));
+
+manager.showDetails();
+
+=================================================
+EXAMPLE 2 - FILE SYSTEM
+=================================================
+
+SCENARIO
+
+C:
+ |
+ +---- Documents
+ |       |
+ |       +---- Resume.pdf
+ |       +---- Notes.txt
+ |
+ +---- Images
+         |
+         +---- Photo.jpg
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+FileSystemItem
+
+Leaf
+
+FileItem
+
+Composite
+
+Folder
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface FileSystemItem {
+
+    void show();
+}
+
+-------------------------------------------------
+
+class FileItem
+implements FileSystemItem {
+
+    private String name;
+
+    public FileItem(String name) {
+
+        this.name = name;
+    }
+
+    @Override
+    public void show() {
+
+        System.out.println(
+                "File : " + name);
+    }
+}
+
+-------------------------------------------------
+
+class Folder
+implements FileSystemItem {
+
+    private String name;
+
+    private List<FileSystemItem>
+            items =
+            new ArrayList<>();
+
+    public Folder(String name) {
+
+        this.name = name;
+    }
+
+    public void add(
+            FileSystemItem item) {
+
+        items.add(item);
+    }
+
+    @Override
+    public void show() {
+
+        System.out.println(
+                "Folder : " + name);
+
+        for(FileSystemItem item :
+                items) {
+
+            item.show();
+        }
+    }
+}
+
+=================================================
+EXAMPLE 3 - MENU SYSTEM
+=================================================
+
+SCENARIO
+
+Main Menu
+ |
+ +---- File
+ |       |
+ |       +---- Open
+ |       +---- Save
+ |
+ +---- Edit
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+MenuComponent
+
+Leaf
+
+MenuItem
+
+Composite
+
+Menu
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface MenuComponent {
+
+    void display();
+}
+
+-------------------------------------------------
+
+class MenuItem
+implements MenuComponent {
+
+    private String name;
+
+    public MenuItem(String name) {
+
+        this.name = name;
+    }
+
+    @Override
+    public void display() {
+
+        System.out.println(name);
+    }
+}
+
+-------------------------------------------------
+
+class Menu
+implements MenuComponent {
+
+    private String name;
+
+    private List<MenuComponent>
+            items =
+            new ArrayList<>();
+
+    public Menu(String name) {
+
+        this.name = name;
+    }
+
+    public void add(
+            MenuComponent item) {
+
+        items.add(item);
+    }
+
+    @Override
+    public void display() {
+
+        System.out.println(name);
+
+        for(MenuComponent item :
+                items) {
+
+            item.display();
+        }
+    }
+}
+
+=================================================
+EXAMPLE 4 - ORGANIZATION CHART
+=================================================
+
+SCENARIO
+
+CEO
+ |
+ +---- VP
+ |      |
+ |      +---- Manager
+ |               |
+ |               +---- Developer
+ |
+ +---- HR Head
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+StaffMember
+
+Leaf
+
+Employee
+
+Composite
+
+Manager
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface StaffMember {
+
+    void printStructure();
+}
+
+-------------------------------------------------
+
+class Employee
+implements StaffMember {
+
+    private String name;
+
+    public Employee(String name) {
+
+        this.name = name;
+    }
+
+    @Override
+    public void printStructure() {
+
+        System.out.println(
+                "Employee : " + name);
+    }
+}
+
+-------------------------------------------------
+
+class TeamLead
+implements StaffMember {
+
+    private String name;
+
+    private List<StaffMember>
+            members =
+            new ArrayList<>();
+
+    public TeamLead(String name) {
+
+        this.name = name;
+    }
+
+    public void addMember(
+            StaffMember member) {
+
+        members.add(member);
+    }
+
+    @Override
+    public void printStructure() {
+
+        System.out.println(
+                "Lead : " + name);
+
+        for(StaffMember member :
+                members) {
+
+            member.printStructure();
+        }
+    }
+}
+
+=================================================
+EXAMPLE 5 - HTML DOM TREE
+=================================================
+
+SCENARIO
+
+<html>
+  <body>
+      <div>
+          <p>Hello</p>
+      </div>
+  </body>
+</html>
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+HtmlElement
+
+Leaf
+
+TextNode
+
+Composite
+
+ContainerElement
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface HtmlElement {
+
+    void render();
+}
+
+-------------------------------------------------
+
+class TextNode
+implements HtmlElement {
+
+    private String text;
+
+    public TextNode(String text) {
+
+        this.text = text;
+    }
+
+    @Override
+    public void render() {
+
+        System.out.println(text);
+    }
+}
+
+-------------------------------------------------
+
+class ContainerElement
+implements HtmlElement {
+
+    private String tag;
+
+    private List<HtmlElement>
+            children =
+            new ArrayList<>();
+
+    public ContainerElement(
+            String tag) {
+
+        this.tag = tag;
+    }
+
+    public void add(
+            HtmlElement element) {
+
+        children.add(element);
+    }
+
+    @Override
+    public void render() {
+
+        System.out.println(
+                "<" + tag + ">");
+
+        for(HtmlElement element :
+                children) {
+
+            element.render();
+        }
+
+        System.out.println(
+                "</" + tag + ">");
+    }
+}
+
+=================================================
+COMMON TEMPLATE
+=================================================
+
+interface Component {
+
+    void operation();
+}
+
+-------------------------------------------------
+
+class Leaf
+implements Component {
+
+    @Override
+    public void operation() {
+
+        System.out.println(
+                "Leaf");
+    }
+}
+
+-------------------------------------------------
+
+class Composite
+implements Component {
+
+    private List<Component>
+            children =
+            new ArrayList<>();
+
+    public void add(
+            Component component) {
+
+        children.add(component);
+    }
+
+    @Override
+    public void operation() {
+
+        for(Component component :
+                children) {
+
+            component.operation();
+        }
+    }
+}
+
+=================================================
+ADVANTAGES
+=================================================
+
+✔ Represents Tree Structures Easily
+
+✔ Uniform Treatment
+
+✔ Recursive Processing
+
+✔ Easy Extension
+
+✔ Cleaner Client Code
+
+✔ Supports Open Closed Principle
+
+=================================================
+DISADVANTAGES
+=================================================
+
+❌ Increased Complexity
+
+❌ More Classes
+
+❌ Difficult To Restrict Tree Structure
+
+=================================================
+WHEN TO USE
+=================================================
+
+Use Composite When:
+
+✔ Tree Structure Exists
+
+✔ Parent Child Relationship Exists
+
+✔ Individual And Group Objects
+  Must Be Treated Uniformly
+
+Examples:
+
+✔ Company Hierarchy
+✔ File System
+✔ Menu System
+✔ HTML DOM
+✔ Organization Chart
+
+=================================================
+INTERVIEW QUESTIONS
+=================================================
+
+Q. What problem does Composite solve?
+
+Tree Structure Problem.
+
+---------------------------------
+
+Q. What are the three participants?
+
+Component
+
+Leaf
+
+Composite
+
+---------------------------------
+
+Q. Real World Example?
+
+Folder Structure
+
+Company Hierarchy
+
+HTML DOM
+
+---------------------------------
+
+Q. Difference Between Leaf And Composite?
+
+Leaf
+
+Cannot Contain Children
+
+Composite
+
+Can Contain Children
+
+=================================================
+MEMORY TRICK
+=================================================
+
+Adapter
+→ Translator
+
+Bridge
+→ Separate Dimensions
+
+Composite
+→ Tree Structure
+
+Think:
+
+Folder
+   |
+   +---- Folder
+   |       |
+   |       +---- Folder
+   |               |
+   |               +---- File
+
+Tree Structure
+
+✅ Composite Pattern
+
+=================================================
+ONE-LINE REVISION
+=================================================
+
+Composite Pattern
+
+→ Treat Individual Objects And Groups
+   Uniformly In A Tree Structure
+   
+   
+   
+   
+   =================================================
+📘 DECORATOR PATTERN - COMPLETE NOTES
+=================================================
+
+CATEGORY
+
+Structural Design Pattern
+
+=================================================
+DEFINITION
+=================================================
+
+Decorator Pattern is a Structural Design Pattern
+that allows us to add new functionality to an
+object dynamically without modifying its code.
+
+Simple Rule:
+
+Decorator = Add Features Dynamically
+
+=================================================
+WHY DO WE NEED IT?
+=================================================
+
+Suppose we have:
+
+Coffee
+
+Customer wants:
+
+Coffee + Milk
+
+Coffee + Sugar
+
+Coffee + Milk + Sugar
+
+Coffee + Milk + Sugar + Cream
+
+-------------------------------------------------
+
+WITHOUT DECORATOR
+
+Coffee
+
+CoffeeWithMilk
+
+CoffeeWithSugar
+
+CoffeeWithMilkAndSugar
+
+CoffeeWithMilkSugarCream
+
+Problem:
+
+❌ Too Many Classes
+
+❌ Class Explosion
+
+-------------------------------------------------
+
+WITH DECORATOR
+
+Coffee
+  |
+MilkDecorator
+  |
+SugarDecorator
+  |
+CreamDecorator
+
+Features added dynamically.
+
+=================================================
+STRUCTURE
+=================================================
+
+Component
+    |
+Concrete Component
+    |
+Decorator
+    |
+Concrete Decorators
+
+=================================================
+EXAMPLE 1 - COFFEE SHOP
+=================================================
+
+SCENARIO
+
+Base Product
+
+Coffee
+
+Add-ons
+
+✔ Milk
+✔ Sugar
+✔ Cream
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+Coffee
+
+---------------------------------
+
+Concrete Component
+
+SimpleCoffee
+
+---------------------------------
+
+Decorator
+
+CoffeeDecorator
+
+---------------------------------
+
+Concrete Decorators
+
+MilkDecorator
+
+SugarDecorator
+
+CreamDecorator
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Coffee {
+
+    String getDescription();
+
+    double getCost();
+}
+
+-------------------------------------------------
+
+class SimpleCoffee
+implements Coffee {
+
+    @Override
+    public String getDescription() {
+
+        return "Coffee";
+    }
+
+    @Override
+    public double getCost() {
+
+        return 100;
+    }
+}
+
+-------------------------------------------------
+
+abstract class CoffeeDecorator
+implements Coffee {
+
+    protected Coffee coffee;
+
+    public CoffeeDecorator(
+            Coffee coffee) {
+
+        this.coffee = coffee;
+    }
+}
+
+-------------------------------------------------
+
+class MilkDecorator
+extends CoffeeDecorator {
+
+    public MilkDecorator(
+            Coffee coffee) {
+
+        super(coffee);
+    }
+
+    @Override
+    public String getDescription() {
+
+        return coffee.getDescription()
+                + " + Milk";
+    }
+
+    @Override
+    public double getCost() {
+
+        return coffee.getCost() + 20;
+    }
+}
+
+-------------------------------------------------
+
+USAGE
+
+Coffee coffee =
+    new MilkDecorator(
+        new SimpleCoffee()
+    );
+
+=================================================
+EXAMPLE 2 - PIZZA TOPPINGS
+=================================================
+
+SCENARIO
+
+Base Pizza
+
+Optional Toppings
+
+✔ Cheese
+✔ Mushroom
+✔ Olive
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+Pizza
+
+Concrete Component
+
+BasicPizza
+
+Decorator
+
+PizzaDecorator
+
+Concrete Decorators
+
+CheeseDecorator
+
+MushroomDecorator
+
+OliveDecorator
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Pizza {
+
+    String description();
+
+    double cost();
+}
+
+-------------------------------------------------
+
+class BasicPizza
+implements Pizza {
+
+    public String description() {
+
+        return "Basic Pizza";
+    }
+
+    public double cost() {
+
+        return 200;
+    }
+}
+
+-------------------------------------------------
+
+abstract class PizzaDecorator
+implements Pizza {
+
+    protected Pizza pizza;
+
+    public PizzaDecorator(
+            Pizza pizza) {
+
+        this.pizza = pizza;
+    }
+}
+
+-------------------------------------------------
+
+class CheeseDecorator
+extends PizzaDecorator {
+
+    public CheeseDecorator(
+            Pizza pizza) {
+
+        super(pizza);
+    }
+
+    public String description() {
+
+        return pizza.description()
+                + " + Cheese";
+    }
+
+    public double cost() {
+
+        return pizza.cost() + 50;
+    }
+}
+
+-------------------------------------------------
+
+USAGE
+
+Pizza pizza =
+    new CheeseDecorator(
+        new BasicPizza()
+    );
+
+=================================================
+EXAMPLE 3 - NOTIFICATION SYSTEM
+=================================================
+
+SCENARIO
+
+Base Notification
+
+Email
+
+Additional Features
+
+✔ SMS
+✔ WhatsApp
+✔ Push Notification
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+Notification
+
+Concrete Component
+
+EmailNotification
+
+Decorator
+
+NotificationDecorator
+
+Concrete Decorators
+
+SmsDecorator
+
+WhatsappDecorator
+
+PushDecorator
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Notification {
+
+    void send();
+}
+
+-------------------------------------------------
+
+class EmailNotification
+implements Notification {
+
+    public void send() {
+
+        System.out.println(
+                "Sending Email");
+    }
+}
+
+-------------------------------------------------
+
+abstract class NotificationDecorator
+implements Notification {
+
+    protected Notification
+            notification;
+
+    public NotificationDecorator(
+            Notification notification) {
+
+        this.notification =
+                notification;
+    }
+}
+
+-------------------------------------------------
+
+class SmsDecorator
+extends NotificationDecorator {
+
+    public SmsDecorator(
+            Notification notification) {
+
+        super(notification);
+    }
+
+    public void send() {
+
+        notification.send();
+
+        System.out.println(
+                "Sending SMS");
+    }
+}
+
+-------------------------------------------------
+
+USAGE
+
+Notification notification =
+    new SmsDecorator(
+        new EmailNotification()
+    );
+
+notification.send();
+
+=================================================
+EXAMPLE 4 - CAR FEATURES
+=================================================
+
+SCENARIO
+
+Base Car
+
+Optional Features
+
+✔ GPS
+✔ Music System
+✔ Sunroof
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+Car
+
+Concrete Component
+
+BasicCar
+
+Decorator
+
+CarDecorator
+
+Concrete Decorators
+
+GpsDecorator
+
+SunroofDecorator
+
+MusicDecorator
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Car {
+
+    String features();
+}
+
+-------------------------------------------------
+
+class BasicCar
+implements Car {
+
+    public String features() {
+
+        return "Basic Car";
+    }
+}
+
+-------------------------------------------------
+
+abstract class CarDecorator
+implements Car {
+
+    protected Car car;
+
+    public CarDecorator(
+            Car car) {
+
+        this.car = car;
+    }
+}
+
+-------------------------------------------------
+
+class GpsDecorator
+extends CarDecorator {
+
+    public GpsDecorator(
+            Car car) {
+
+        super(car);
+    }
+
+    public String features() {
+
+        return car.features()
+                + " + GPS";
+    }
+}
+
+-------------------------------------------------
+
+USAGE
+
+Car car =
+    new GpsDecorator(
+        new BasicCar()
+    );
+
+=================================================
+EXAMPLE 5 - JAVA IO STREAMS
+=================================================
+
+SCENARIO
+
+File Reading System
+
+Features Required
+
+✔ Buffering
+
+✔ Data Reading
+
+✔ Performance Optimization
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+InputStream
+
+---------------------------------
+
+Concrete Component
+
+FileInputStream
+
+---------------------------------
+
+Decorator
+
+FilterInputStream
+
+---------------------------------
+
+Concrete Decorators
+
+BufferedInputStream
+
+DataInputStream
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+InputStream input =
+    new BufferedInputStream(
+        new FileInputStream(
+            "data.txt"
+        )
+    );
+
+-------------------------------------------------
+
+Another Example
+
+DataInputStream input =
+    new DataInputStream(
+        new BufferedInputStream(
+            new FileInputStream(
+                "emp.dat"
+            )
+        )
+    );
+
+-------------------------------------------------
+
+Actual Java Decorator Chain
+
+FileInputStream
+       |
+BufferedInputStream
+       |
+DataInputStream
+
+=================================================
+COMMON TEMPLATE
+=================================================
+
+interface Component {
+
+    void operation();
+}
+
+-------------------------------------------------
+
+class ConcreteComponent
+implements Component {
+
+    public void operation() {
+
+        System.out.println(
+                "Base Behavior");
+    }
+}
+
+-------------------------------------------------
+
+abstract class Decorator
+implements Component {
+
+    protected Component component;
+
+    public Decorator(
+            Component component) {
+
+        this.component =
+                component;
+    }
+}
+
+-------------------------------------------------
+
+class ConcreteDecorator
+extends Decorator {
+
+    public ConcreteDecorator(
+            Component component) {
+
+        super(component);
+    }
+
+    public void operation() {
+
+        component.operation();
+
+        System.out.println(
+                "Extra Behavior");
+    }
+}
+
+=================================================
+ADVANTAGES
+=================================================
+
+✔ Add Functionality Dynamically
+
+✔ Follows Open Closed Principle
+
+✔ Avoids Class Explosion
+
+✔ Flexible Design
+
+✔ Reusable Components
+
+✔ Runtime Behavior Changes
+
+=================================================
+DISADVANTAGES
+=================================================
+
+❌ More Objects
+
+❌ More Complexity
+
+❌ Harder Debugging
+
+❌ Long Decorator Chains
+
+=================================================
+WHEN TO USE
+=================================================
+
+Use Decorator When:
+
+✔ Features Are Optional
+
+✔ Features Can Be Combined
+
+✔ Behavior Added Dynamically
+
+✔ Subclass Explosion Exists
+
+Examples:
+
+Coffee Shop
+
+Pizza Toppings
+
+Notifications
+
+Car Features
+
+Java IO Streams
+
+=================================================
+DECORATOR vs COMPOSITE
+=================================================
+
+COMPOSITE
+
+Problem:
+
+Tree Structure
+
+Example:
+
+Folder → File
+
+Manager → Employee
+
+Purpose:
+
+Treat Individuals And Groups
+Uniformly
+
+---------------------------------
+
+DECORATOR
+
+Problem:
+
+Add Features Dynamically
+
+Example:
+
+Coffee + Milk + Sugar
+
+Purpose:
+
+Add Extra Functionality
+
+=================================================
+INTERVIEW QUESTIONS
+=================================================
+
+Q. What is Decorator Pattern?
+
+Adds functionality to objects
+without modifying their code.
+
+---------------------------------
+
+Q. Real-world example?
+
+Coffee Shop.
+
+---------------------------------
+
+Q. Why not inheritance?
+
+Too many subclasses get created.
+
+---------------------------------
+
+Q. Java example?
+
+BufferedInputStream
+
+DataInputStream
+
+FilterInputStream
+
+=================================================
+MEMORY TRICK
+=================================================
+
+Adapter
+→ Translator
+
+Bridge
+→ Separate Dimensions
+
+Composite
+→ Tree Structure
+
+Decorator
+→ Add Features
+
+Think:
+
+Coffee
+
++ Milk
+
++ Sugar
+
++ Cream
+
+Every extra layer
+
+✅ Decorator
+
+=================================================
+INTERVIEW ANSWER
+=================================================
+
+Decorator Pattern is a Structural Design Pattern
+that allows additional behavior to be attached
+to an object dynamically by wrapping it inside
+decorator objects. It avoids subclass explosion
+and follows the Open Closed Principle.
+
+=================================================
+ONE-LINE REVISION
+=================================================
+
+Decorator Pattern
+
+→ Add New Behavior Dynamically
+   Using Wrapper Objects
+  
+  

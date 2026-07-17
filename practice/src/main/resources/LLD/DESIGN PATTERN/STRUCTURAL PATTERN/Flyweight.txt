@@ -1,0 +1,1057 @@
+=================================================
+📘 FLYWEIGHT PATTERN - COMPLETE NOTES
+=================================================
+
+CATEGORY
+
+Structural Design Pattern
+
+=================================================
+DEFINITION
+=================================================
+
+Flyweight Pattern is a Structural Design Pattern
+used to minimize memory usage by sharing
+common objects instead of creating duplicate
+objects.
+
+Simple Rule:
+
+Flyweight = Share Objects
+
+OR
+
+Flyweight = Reuse Common Data
+
+=================================================
+WHY DO WE NEED IT?
+=================================================
+
+Suppose a game contains:
+
+100,000 Soldiers
+
+Every Soldier has:
+
+✔ Gun Type = AK47
+
+✔ Health = 100
+
+✔ Uniform = Army
+
+✔ Armor = Level 5
+
+Only position changes.
+
+-------------------------------------------------
+
+WITHOUT FLYWEIGHT
+
+100,000 Objects
+
+Each stores:
+
+Gun
+
+Uniform
+
+Armor
+
+Health
+
+Position
+
+-------------------------------------------------
+
+Memory Waste
+
+-------------------------------------------------
+
+WITH FLYWEIGHT
+
+Store common data once.
+
+Store changing data separately.
+
+Result:
+
+Huge Memory Savings
+
+=================================================
+CORE IDEA
+=================================================
+
+Separate object state into:
+
+1. Intrinsic State
+
+Shared Data
+
+Stored Inside Flyweight
+
+---------------------------------
+
+2. Extrinsic State
+
+Unique Data
+
+Provided By Client
+
+=================================================
+📘 FLYWEIGHT PATTERN
+📘 INTRINSIC vs EXTRINSIC STATE
+=================================================
+
+The most important concept in Flyweight Pattern
+is separating data into:
+
+1. Intrinsic State
+
+2. Extrinsic State
+
+=================================================
+📌 INTRINSIC STATE
+=================================================
+
+Definition
+
+Intrinsic State is the data that is:
+
+✔ Common
+
+✔ Shared
+
+✔ Reusable
+
+✔ Stored inside Flyweight
+
+✔ Independent of Client
+
+✔ Does not change frequently
+
+-------------------------------------------------
+
+Simple Rule
+
+Can this data be shared
+between multiple objects?
+
+YES
+
+→ Intrinsic State
+
+=================================================
+📌 EXTRINSIC STATE
+=================================================
+
+Definition
+
+Extrinsic State is the data that is:
+
+✔ Unique
+
+✔ Not Shared
+
+✔ Supplied by Client
+
+✔ Changes Frequently
+
+✔ Stored Outside Flyweight
+
+-------------------------------------------------
+
+Simple Rule
+
+Is this data unique for every object?
+
+YES
+
+
+
+=================================================
+EXAMPLE
+=================================================
+
+Game Soldier
+
+Intrinsic State
+
+✔ Gun
+
+✔ Uniform
+
+✔ Armor
+
+---------------------------------
+
+Extrinsic State
+
+✔ X Coordinate
+
+✔ Y Coordinate
+
+✔ Direction
+
+=================================================
+VISUALIZATION
+=================================================
+
+              SoldierFlyweight
+                    |
+    -----------------------------------
+    |                                 |
+Gun = AK47                    Uniform = Army
+
+Shared By
+
+Soldier 1
+
+Soldier 2
+
+Soldier 3
+
+Soldier 4
+
+Soldier 100000
+
+=================================================
+EXAMPLE 1 - GAME SOLDIERS
+=================================================
+
+SCENARIO
+
+Game Has:
+
+100000 Soldiers
+
+Same:
+
+✔ Gun
+
+✔ Uniform
+
+✔ Armor
+
+Different:
+
+✔ Position
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Flyweight
+
+Soldier
+
+---------------------------------
+
+Flyweight Factory
+
+SoldierFactory
+
+---------------------------------
+
+Intrinsic State
+
+Gun
+
+Uniform
+
+Armor
+
+---------------------------------
+
+Extrinsic State
+
+Position
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Soldier {
+
+    void display(
+            int x,
+            int y);
+}
+
+-------------------------------------------------
+
+class ArmySoldier
+implements Soldier {
+
+    private String gun =
+            "AK47";
+
+    private String uniform =
+            "Army";
+
+    @Override
+    public void display(
+            int x,
+            int y) {
+
+        System.out.println(
+            gun + " "
+            + uniform
+            + " Position: "
+            + x + "," + y);
+    }
+}
+
+-------------------------------------------------
+
+class SoldierFactory {
+
+    private static
+    final Map<String,Soldier>
+            cache =
+            new HashMap<>();
+
+    public static Soldier
+    getSoldier() {
+
+        return cache.computeIfAbsent(
+            "ARMY",
+            k -> new ArmySoldier()
+        );
+    }
+}
+
+-------------------------------------------------
+
+USAGE
+
+Soldier soldier =
+        SoldierFactory
+        .getSoldier();
+
+soldier.display(10,20);
+
+=================================================
+EXAMPLE 2 - TEXT EDITOR CHARACTERS
+=================================================
+
+SCENARIO
+
+A document contains:
+
+100000 Characters
+
+Many characters repeat.
+
+Examples:
+
+A
+
+B
+
+C
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Flyweight
+
+Character
+
+---------------------------------
+
+Factory
+
+CharacterFactory
+
+---------------------------------
+
+Intrinsic State
+
+Character Symbol
+
+---------------------------------
+
+Extrinsic State
+
+Position
+
+Font Size
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+class CharacterFlyweight {
+
+    private char value;
+
+    public CharacterFlyweight(
+            char value) {
+
+        this.value = value;
+    }
+
+    public void draw(
+            int x,
+            int y) {
+
+        System.out.println(
+                value +
+                " at "
+                + x + "," + y);
+    }
+}
+
+=================================================
+EXAMPLE 3 - FOREST GAME
+=================================================
+
+SCENARIO
+
+Game Contains
+
+100000 Trees
+
+Same:
+
+✔ Tree Type
+
+✔ Color
+
+✔ Texture
+
+Different:
+
+✔ Location
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Flyweight
+
+TreeType
+
+---------------------------------
+
+Factory
+
+TreeFactory
+
+---------------------------------
+
+Intrinsic State
+
+Texture
+
+Color
+
+Tree Name
+
+---------------------------------
+
+Extrinsic State
+
+Coordinates
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+class TreeType {
+
+    private String name;
+
+    private String color;
+
+    private String texture;
+
+    public TreeType(
+        String name,
+        String color,
+        String texture) {
+
+        this.name = name;
+        this.color = color;
+        this.texture = texture;
+    }
+}
+
+-------------------------------------------------
+
+class TreeFactory {
+
+    private static
+    Map<String,TreeType>
+            trees =
+            new HashMap<>();
+
+    public static TreeType
+    getTreeType(
+            String name) {
+
+        return trees.computeIfAbsent(
+            name,
+            n -> new TreeType(
+                n,
+                "Green",
+                "Oak")
+        );
+    }
+}
+
+=================================================
+EXAMPLE 4 - ICON MANAGEMENT
+=================================================
+
+SCENARIO
+
+Operating System Has:
+
+1000 Folder Icons
+
+All folder icons are same.
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Flyweight
+
+FolderIcon
+
+---------------------------------
+
+Factory
+
+IconFactory
+
+---------------------------------
+
+Intrinsic State
+
+Image
+
+Color
+
+Size
+
+---------------------------------
+
+Extrinsic State
+
+Screen Position
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+class FolderIcon {
+
+    public void draw(
+            int x,
+            int y) {
+
+        System.out.println(
+                "Folder Icon at "
+                + x + "," + y);
+    }
+}
+
+=================================================
+EXAMPLE 5 - CAR SHOWROOM
+=================================================
+
+SCENARIO
+
+1000 Cars
+
+Same:
+
+✔ Brand
+
+✔ Engine
+
+✔ Model
+
+Different:
+
+✔ Owner
+
+✔ Registration Number
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Flyweight
+
+CarModel
+
+---------------------------------
+
+Factory
+
+CarFactory
+
+---------------------------------
+
+Intrinsic State
+
+Brand
+
+Engine
+
+Model
+
+---------------------------------
+
+Extrinsic State
+
+Owner
+
+Registration Number
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+class CarModel {
+
+    private String model;
+
+    private String engine;
+
+    public CarModel(
+            String model,
+            String engine) {
+
+        this.model = model;
+        this.engine = engine;
+    }
+}
+
+=================================================
+EXAMPLE 6 - PRODUCT CATALOG
+=================================================
+
+SCENARIO
+
+E-Commerce
+
+100000 Products
+
+Many products share:
+
+✔ Color
+
+✔ Category
+
+✔ Brand
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Flyweight
+
+ProductMetadata
+
+---------------------------------
+
+Factory
+
+MetadataFactory
+
+---------------------------------
+
+Intrinsic State
+
+Category
+
+Brand
+
+Color
+
+---------------------------------
+
+Extrinsic State
+
+Product Id
+
+Price
+
+Stock
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+class ProductMetadata {
+
+    private String brand;
+
+    private String category;
+}
+
+=================================================
+EXAMPLE 7 - STRING CONSTANT POOL
+=================================================
+
+SCENARIO
+
+Java String Pool
+
+-------------------------------------------------
+
+String s1 = "Hello";
+
+String s2 = "Hello";
+
+-------------------------------------------------
+
+Without Flyweight
+
+Two Objects
+
+-------------------------------------------------
+
+Actual Java Behavior
+
+One Object Shared
+
+-------------------------------------------------
+
+USAGE
+
+String s1 = "Java";
+
+String s2 = "Java";
+
+System.out.println(
+        s1 == s2);
+
+Output
+
+true
+
+-------------------------------------------------
+
+Java String Pool is one of the most
+famous Flyweight examples.
+
+=================================================
+COMPONENTS OF FLYWEIGHT
+=================================================
+
+1. Flyweight
+
+Shared Object
+
+---------------------------------
+
+2. Concrete Flyweight
+
+Actual Shared Instance
+
+---------------------------------
+
+3. Flyweight Factory
+
+Creates and Reuses Objects
+
+---------------------------------
+
+4. Client
+
+Provides Extrinsic State
+
+=================================================
+COMMON TEMPLATE
+=================================================
+
+interface Flyweight {
+
+    void operation(
+            String extrinsicState);
+}
+
+-------------------------------------------------
+
+class ConcreteFlyweight
+implements Flyweight {
+
+    private String
+            intrinsicState;
+
+    public ConcreteFlyweight(
+            String state) {
+
+        this.intrinsicState =
+                state;
+    }
+
+    @Override
+    public void operation(
+            String extrinsicState) {
+
+        System.out.println(
+            intrinsicState
+            + extrinsicState);
+    }
+}
+
+-------------------------------------------------
+
+class FlyweightFactory {
+
+    private Map<String,
+                Flyweight>
+                cache =
+                new HashMap<>();
+
+    public Flyweight
+    getFlyweight(
+            String key) {
+
+        return cache.computeIfAbsent(
+            key,
+            k -> new ConcreteFlyweight(
+                    k)
+        );
+    }
+}
+
+=================================================
+ADVANTAGES
+=================================================
+
+✔ Huge Memory Savings
+
+✔ Reuses Existing Objects
+
+✔ Better Performance
+
+✔ Reduced Object Creation
+
+✔ Useful For Large Scale Systems
+
+=================================================
+DISADVANTAGES
+=================================================
+
+❌ More Complex Design
+
+❌ State Separation Required
+
+❌ Harder Debugging
+
+=================================================
+WHEN TO USE
+=================================================
+
+Use Flyweight When:
+
+✔ Large Number Of Similar Objects
+
+✔ Memory Consumption Is High
+
+✔ State Can Be Shared
+
+Examples:
+
+Soldiers
+
+Trees
+
+Characters
+
+Icons
+
+Products
+
+Cars
+
+=================================================
+WHEN NOT TO USE
+=================================================
+
+Small Applications
+
+Few Objects
+
+No Shared State
+
+Example:
+
+User
+
+Customer
+
+Order
+
+Invoice
+
+=================================================
+SOLID PRINCIPLES USED
+=================================================
+
+✅ OCP
+
+New Flyweights Added
+Without Changing Clients.
+
+---------------------------------
+
+✅ SRP
+
+Shared State And Unique State
+Clearly Separated.
+
+=================================================
+FLYWEIGHT vs SINGLETON
+=================================================
+
+SINGLETON
+
+One Object For Entire Application
+
+Example:
+
+ConfigurationManager
+
+-------------------------------------------------
+
+FLYWEIGHT
+
+Many Shared Objects
+
+Example:
+
+Character Pool
+
+Tree Pool
+
+=================================================
+FLYWEIGHT vs PROXY
+=================================================
+
+PROXY
+
+Controls Access
+
+Example:
+
+Bank Account Proxy
+
+-------------------------------------------------
+
+FLYWEIGHT
+
+Shares Objects
+
+Example:
+
+TreeFactory
+
+=================================================
+INTERVIEW QUESTIONS
+=================================================
+
+Q. What problem does Flyweight solve?
+
+Memory Consumption Problem.
+
+---------------------------------
+
+Q. What is Intrinsic State?
+
+Shared State.
+
+Example:
+
+Tree Color
+
+Gun Type
+
+Character Value
+
+---------------------------------
+
+Q. What is Extrinsic State?
+
+Unique State.
+
+Example:
+
+Position
+
+Coordinates
+
+Owner
+
+---------------------------------
+
+Q. Real Java Example?
+
+String Constant Pool.
+
+=================================================
+MEMORY TRICK
+=================================================
+
+Adapter
+→ Translator
+
+Bridge
+→ Separate Dimensions
+
+Composite
+→ Tree Structure
+
+Decorator
+→ Add Features
+
+Facade
+→ Simplify System
+
+Proxy
+→ Control Access
+
+Flyweight
+→ Share Objects
+
+-------------------------------------------------
+
+One Tree Design
+
+Shared By
+
+100000 Trees
+
+✅ Flyweight
+
+=================================================
+INTERVIEW ANSWER
+=================================================
+
+Flyweight Pattern is a Structural Design
+Pattern used to reduce memory consumption
+by sharing common parts of object state
+among multiple objects. It separates
+intrinsic state from extrinsic state and
+reuses shared objects through a factory.
+
+=================================================
+ONE-LINE REVISION
+=================================================
+
+Flyweight Pattern
+
+→ Share Common Objects
+   To Save Memory
+
+OR
+
+Flyweight = Object Sharing

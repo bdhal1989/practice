@@ -1,0 +1,282 @@
+📘 SINGLETON PATTERN
+=================================================
+
+📌 Intent
+
+Ensure only ONE instance of a class exists
+and provide a global access point to it.
+
+-------------------------------------------------
+🏦 REAL WORLD PROBLEM
+-------------------------------------------------
+
+Banking Application
+
+Services:
+
+✔ AccountService
+✔ PaymentService
+✔ LoanService
+
+All need DatabaseConnection.
+
+Without Singleton:
+
+new DatabaseConnection();
+new DatabaseConnection();
+new DatabaseConnection();
+
+Many unnecessary objects created.
+
+-------------------------------------------------
+✅ SOLUTION
+-------------------------------------------------
+
+Allow only ONE object.
+
+-------------------------------------------------
+📌 EAGER INITIALIZATION
+-------------------------------------------------
+
+Definition:
+
+Object is created immediately when
+class is loaded.
+
+✅ Complete Example
+
+class DatabaseConnection {
+
+    private static final DatabaseConnection INSTANCE =
+            new DatabaseConnection();
+
+    private DatabaseConnection() {
+    }
+
+    public static DatabaseConnection getInstance() {
+        return INSTANCE;
+    }
+}
+
+-------------------------------------------------
+USAGE
+-------------------------------------------------
+
+DatabaseConnection db1 =
+    DatabaseConnection.getInstance();
+
+DatabaseConnection db2 =
+    DatabaseConnection.getInstance();
+
+System.out.println(db1 == db2);
+
+Output:
+
+true
+
+-------------------------------------------------
+ADVANTAGES
+-------------------------------------------------
+
+✔ Simple
+
+✔ Thread Safe
+
+✔ Easy Implementation
+
+-------------------------------------------------
+DISADVANTAGES
+-------------------------------------------------
+
+❌ Object created even if never used
+
+❌ Memory may be wasted
+
+-------------------------------------------------
+📌 LAZY INITIALIZATION
+-------------------------------------------------
+
+Definition:
+
+Object is created only when needed.
+
+✅ Complete Example
+
+class DatabaseConnection {
+
+    private static DatabaseConnection instance;
+
+    private DatabaseConnection() {
+    }
+
+    public static DatabaseConnection getInstance() {
+
+        if(instance == null) {
+            instance =
+                new DatabaseConnection();
+        }
+
+        return instance;
+    }
+}
+
+-------------------------------------------------
+USAGE
+-------------------------------------------------
+
+DatabaseConnection db1 =
+    DatabaseConnection.getInstance();
+
+DatabaseConnection db2 =
+    DatabaseConnection.getInstance();
+
+System.out.println(db1 == db2);
+
+Output:
+
+true
+
+-------------------------------------------------
+ADVANTAGES
+-------------------------------------------------
+
+✔ Memory Efficient
+
+✔ Object created on demand
+
+-------------------------------------------------
+DISADVANTAGES
+-------------------------------------------------
+
+❌ Not Thread Safe
+
+-------------------------------------------------
+📌 THREAD SAFETY PROBLEM
+-------------------------------------------------
+
+Thread 1 calls getInstance()
+
+Thread 2 calls getInstance()
+
+At same time
+
+Possible:
+
+Thread 1 → creates Object A
+
+Thread 2 → creates Object B
+
+❌ Singleton broken
+
+-------------------------------------------------
+✅ THREAD SAFE VERSION
+-------------------------------------------------
+
+class DatabaseConnection {
+
+    private static DatabaseConnection instance;
+
+    private DatabaseConnection() {
+    }
+
+    public static synchronized
+    DatabaseConnection getInstance() {
+
+        if(instance == null) {
+            instance =
+                new DatabaseConnection();
+        }
+
+        return instance;
+    }
+}
+
+-------------------------------------------------
+ADVANTAGES
+-------------------------------------------------
+
+✔ Thread Safe
+
+✔ Single Object Guaranteed
+
+-------------------------------------------------
+DISADVANTAGES
+-------------------------------------------------
+
+❌ Slight performance overhead
+
+-------------------------------------------------
+📌 REAL WORLD EXAMPLES
+-------------------------------------------------
+
+✔ Spring Beans (default singleton scope)
+
+✔ Logger
+
+✔ Configuration Manager
+
+✔ Cache Manager
+
+✔ Printer Manager
+
+-------------------------------------------------
+📌 WHEN TO USE
+-------------------------------------------------
+
+Use when only ONE object is needed.
+
+Examples:
+
+DatabaseConnection
+
+Logger
+
+CacheManager
+
+ConfigurationManager
+
+-------------------------------------------------
+📌 WHEN NOT TO USE
+-------------------------------------------------
+
+Customer
+
+Order
+
+Book
+
+Employee
+
+Transaction
+
+These require multiple objects.
+
+-------------------------------------------------
+🧠 MEMORY TRICK
+-------------------------------------------------
+
+One Country
+→ One Prime Minister
+
+One Company
+→ One CEO
+
+One Application
+→ One Configuration Manager
+
+-------------------------------------------------
+🎯 INTERVIEW ANSWER
+-------------------------------------------------
+
+Singleton is a creational design pattern
+that ensures only one instance of a class
+exists and provides a global access point
+to that instance.
+
+
+
+
+
+
+
+=================================================

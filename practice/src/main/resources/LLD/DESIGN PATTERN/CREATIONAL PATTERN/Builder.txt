@@ -1,0 +1,688 @@
+📘 BUILDER PATTERN
+=================================================
+
+📌 DEFINITION
+
+Builder Pattern is a Creational Design Pattern
+used to create complex objects step-by-step.
+
+It is useful when an object has:
+
+✔ Many fields
+✔ Optional fields
+✔ Large constructors
+
+-------------------------------------------------
+📌 PROBLEM
+-------------------------------------------------
+
+Suppose we have an Employee class.
+
+Fields:
+
+name
+email
+department
+salary
+phone
+address
+manager
+
+-------------------------------------------------
+❌ WITHOUT BUILDER
+-------------------------------------------------
+
+class Employee {
+
+    private String name;
+    private String email;
+    private String department;
+    private double salary;
+    private String phone;
+    private String address;
+    private String manager;
+
+    public Employee(
+        String name,
+        String email,
+        String department,
+        double salary,
+        String phone,
+        String address,
+        String manager) {
+
+        this.name = name;
+        this.email = email;
+        this.department = department;
+        this.salary = salary;
+        this.phone = phone;
+        this.address = address;
+        this.manager = manager;
+    }
+}
+
+Usage:
+
+Employee employee =
+    new Employee(
+        "Bikash",
+        "bikash@gmail.com",
+        "Technology",
+        100000,
+        "9999999999",
+        "Kolkata",
+        "Suyash"
+    );
+
+-------------------------------------------------
+🚨 PROBLEMS
+-------------------------------------------------
+
+❌ Constructor becomes huge
+
+❌ Hard to remember parameter order
+
+❌ Difficult to read
+
+❌ Difficult to maintain
+
+❌ Adding new field requires new constructor
+
+-------------------------------------------------
+✅ BUILDER SOLUTION
+-------------------------------------------------
+
+class Employee {
+
+    private String name;
+    private String email;
+    private String department;
+    private double salary;
+    private String phone;
+    private String address;
+    private String manager;
+
+    private Employee(Builder builder) {
+
+        this.name = builder.name;
+        this.email = builder.email;
+        this.department = builder.department;
+        this.salary = builder.salary;
+        this.phone = builder.phone;
+        this.address = builder.address;
+        this.manager = builder.manager;
+    }
+
+    public static class Builder {
+
+        private String name;
+        private String email;
+        private String department;
+        private double salary;
+        private String phone;
+        private String address;
+        private String manager;
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder department(
+                String department) {
+
+            this.department = department;
+            return this;
+        }
+
+        public Builder salary(double salary) {
+
+            this.salary = salary;
+            return this;
+        }
+
+        public Builder phone(String phone) {
+
+            this.phone = phone;
+            return this;
+        }
+
+        public Builder address(String address) {
+
+            this.address = address;
+            return this;
+        }
+
+        public Builder manager(String manager) {
+
+            this.manager = manager;
+            return this;
+        }
+
+        public Employee build() {
+
+            return new Employee(this);
+        }
+    }
+}
+
+-------------------------------------------------
+✅ USAGE
+-------------------------------------------------
+
+Employee employee =
+    new Employee.Builder()
+        .name("Bikash")
+        .email("bikash@gmail.com")
+        .department("Technology")
+        .salary(100000)
+        .phone("9999999999")
+        .address("Kolkata")
+        .manager("Suyash")
+        .build();
+
+-------------------------------------------------
+📊 VISUALIZATION
+-------------------------------------------------
+
+Without Builder
+
+Client
+  |
+Huge Constructor
+  |
+Employee
+
+---------------------------------
+
+With Builder
+
+Client
+  |
+Builder
+  |
+Add Fields One By One
+  |
+build()
+  |
+Employee
+
+-------------------------------------------------
+📌 REAL WORLD EXAMPLE 1
+-------------------------------------------------
+
+Food Order
+
+Customer selects:
+
+✔ Burger
+✔ Extra Cheese
+✔ Coke
+✔ French Fries
+
+Builder creates final order.
+
+FoodOrder order =
+    new FoodOrderBuilder()
+        .addBurger()
+        .addCheese()
+        .addCoke()
+        .build();
+
+-------------------------------------------------
+📌 REAL WORLD EXAMPLE 2
+-------------------------------------------------
+
+House Construction
+
+House house =
+    new HouseBuilder()
+        .addBedroom()
+        .addKitchen()
+        .addParking()
+        .build();
+
+Not every house has all features.
+
+-------------------------------------------------
+📌 REAL WORLD EXAMPLE 3
+-------------------------------------------------
+
+Lombok Builder
+
+@Builder
+public class Employee {}
+
+Usage:
+
+Employee employee =
+    Employee.builder()
+        .name("Bikash")
+        .email("bikash@gmail.com")
+        .build();
+
+-------------------------------------------------
+📌 FACTORY vs BUILDER
+-------------------------------------------------
+
+Factory
+
+Creates Object In One Step.
+
+Example:
+
+Vehicle vehicle =
+    VehicleFactory.getVehicle(
+        "CAR"
+    );
+
+---------------------------------
+
+Builder
+
+Creates Object Step By Step.
+
+Example:
+
+Employee employee =
+    new Employee.Builder()
+        .name("Bikash")
+        .email("bikash@gmail.com")
+        .salary(100000)
+        .build();
+
+-------------------------------------------------
+📌 ADVANTAGES
+-------------------------------------------------
+
+✔ Readable Code
+
+✔ No Huge Constructors
+
+✔ Supports Optional Fields
+
+✔ Easy Maintenance
+
+✔ Better Object Creation
+
+-------------------------------------------------
+📌 DISADVANTAGES
+-------------------------------------------------
+
+❌ Extra Builder Class
+
+❌ More Code
+
+❌ Overkill For Small Objects
+
+-------------------------------------------------
+📌 WHEN TO USE
+-------------------------------------------------
+
+Use Builder When:
+
+✔ Object has many fields
+
+✔ Many optional parameters exist
+
+✔ Constructor becomes too large
+
+Examples:
+
+Employee
+
+User
+
+Order
+
+API Request
+
+Configuration Object
+
+-------------------------------------------------
+🧠 MEMORY TRICK
+-------------------------------------------------
+
+Factory
+
+Order Pizza
+
+Receive Pizza
+
+One Step
+
+---------------------------------
+
+Builder
+
+Build Your Burger
+
+Cheese ✅
+
+Sauce ✅
+
+Fries ✅
+
+Drink ✅
+
+Build Step By Step
+
+-------------------------------------------------
+🎯 INTERVIEW ANSWER
+-------------------------------------------------
+
+Builder Pattern is a Creational Design Pattern
+used to construct complex objects step-by-step.
+It improves readability, handles optional
+parameters effectively, and avoids large
+constructors.
+
+
+
+=================================================
+📘 FACTORY vs BUILDER PATTERN
+=================================================
+
+Many people get confused between:
+
+✔ Factory Pattern
+✔ Builder Pattern
+
+The easiest way to understand:
+
+Factory = WHAT object to create
+
+Builder = HOW to create complex object
+
+=================================================
+📌 FACTORY PATTERN
+=================================================
+
+Purpose:
+
+Create different types of objects.
+
+Factory decides WHICH object to create.
+
+-------------------------------------------------
+EXAMPLE
+-------------------------------------------------
+
+Vehicle vehicle =
+    VehicleFactory.getVehicle("CAR");
+
+Factory internally decides:
+
+if(type.equals("CAR")) {
+    return new Car();
+}
+
+if(type.equals("BIKE")) {
+    return new Bike();
+}
+
+-------------------------------------------------
+KEY IDEA
+-------------------------------------------------
+
+One request
+
+→ One object returned
+
+Client does not care how object is created.
+
+=================================================
+📌 BUILDER PATTERN
+=================================================
+
+Purpose:
+
+Create a complex object step-by-step.
+
+Builder decides HOW object is constructed.
+
+-------------------------------------------------
+EXAMPLE
+-------------------------------------------------
+
+Employee employee =
+    new Employee.Builder()
+        .name("Bikash")
+        .email("bikash@gmail.com")
+        .salary(100000)
+        .department("Technology")
+        .build();
+
+-------------------------------------------------
+KEY IDEA
+-------------------------------------------------
+
+Object is built gradually.
+
+Field by field.
+
+=================================================
+📌 REAL WORLD ANALOGY
+=================================================
+
+FACTORY
+
+You enter a car showroom.
+
+You say:
+
+"Give me a BMW."
+
+Showroom gives BMW.
+
+You don't care how it was made.
+
+-----------------------------------------
+
+BUILDER
+
+You order a burger.
+
+Choose:
+
+✔ Cheese
+
+✔ Sauce
+
+✔ Fries
+
+✔ Coke
+
+Burger is assembled step-by-step.
+
+=================================================
+📌 FACTORY EXAMPLE
+=================================================
+
+interface Vehicle {}
+
+class Car implements Vehicle {}
+
+class Bike implements Vehicle {}
+
+class VehicleFactory {
+
+    static Vehicle getVehicle(
+            String type) {
+
+        if(type.equals("CAR")) {
+            return new Car();
+        }
+
+        return new Bike();
+    }
+}
+
+Usage:
+
+Vehicle vehicle =
+    VehicleFactory.getVehicle(
+        "CAR"
+    );
+
+=================================================
+📌 BUILDER EXAMPLE
+=================================================
+
+Employee employee =
+    new Employee.Builder()
+        .name("Bikash")
+        .email("bikash@gmail.com")
+        .salary(100000)
+        .build();
+
+=================================================
+📌 DIFFERENCES
+=================================================
+
+Factory Pattern
+
+✔ Creates different object types
+
+✔ Object created in one step
+
+✔ Focus on object selection
+
+✔ Returns ready-made object
+
+Example:
+Car or Bike
+
+-----------------------------------------
+
+Builder Pattern
+
+✔ Creates complex object
+
+✔ Object created step-by-step
+
+✔ Focus on object construction
+
+✔ Useful for many optional fields
+
+Example:
+Employee, Order, Request
+
+=================================================
+📌 INTERVIEW EXAMPLE
+=================================================
+
+Factory
+
+Question:
+
+Which payment type?
+
+Answer:
+
+✔ UPI
+✔ Card
+✔ Wallet
+
+Factory chooses object.
+
+-----------------------------------------
+
+Builder
+
+Question:
+
+How should Employee be created?
+
+Name?
+Email?
+Salary?
+Department?
+
+Builder constructs object.
+
+=================================================
+📌 WHEN TO USE FACTORY
+=================================================
+
+✔ Multiple object types exist
+
+✔ Client should not know creation logic
+
+Examples:
+
+Vehicle
+
+Payment
+
+Notification
+
+Food
+
+=================================================
+📌 WHEN TO USE BUILDER
+=================================================
+
+✔ Object has many fields
+
+✔ Many optional fields
+
+✔ Constructor becomes huge
+
+Examples:
+
+Employee
+
+User
+
+Order
+
+House
+
+API Request
+
+=================================================
+🧠 MEMORY TRICK
+=================================================
+
+Factory
+
+"Which object?"
+
+CAR or BIKE
+
+-----------------------------------------
+
+Builder
+
+"Build the object"
+
+Name ✅
+
+Email ✅
+
+Salary ✅
+
+Department ✅
+
+build()
+
+=================================================
+🎯 INTERVIEW ANSWER
+=================================================
+
+Factory Pattern is used to create and return
+different types of objects while hiding creation
+logic.
+
+Builder Pattern is used to construct a complex
+object step-by-step, especially when the object
+contains many fields or optional parameters.
+
+
+=================================================

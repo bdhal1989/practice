@@ -1,0 +1,262 @@
+📘 FACTORY METHOD PATTERN
+=================================================
+
+📌 Story
+
+Swiggy Application
+
+Customer orders:
+
+Pizza
+Burger
+Pasta
+
+-------------------------------------------------
+📌 Problem
+-------------------------------------------------
+
+Client creates objects directly.
+
+Food food;
+
+if(type.equals("PIZZA")) {
+    food = new Pizza();
+}
+else if(type.equals("BURGER")) {
+    food = new Burger();
+}
+
+Problems:
+
+❌ Tight Coupling
+❌ Huge if-else chains
+❌ Difficult to add new types
+❌ Violates OCP
+
+-------------------------------------------------
+📌 Pattern Intent
+-------------------------------------------------
+
+Encapsulate object creation logic into
+a dedicated Factory class.
+
+Client requests objects from Factory
+instead of creating them directly.
+
+-------------------------------------------------
+📌 Complete Example
+-------------------------------------------------
+
+interface Food {
+
+    void prepare();
+}
+
+class Pizza implements Food {
+
+    public void prepare() {
+        System.out.println("Preparing Pizza");
+    }
+}
+
+class Burger implements Food {
+
+    public void prepare() {
+        System.out.println("Preparing Burger");
+    }
+}
+
+class Pasta implements Food {
+
+    public void prepare() {
+        System.out.println("Preparing Pasta");
+    }
+}
+
+class FoodFactory {
+
+    public static Food getFood(
+            String type) {
+
+        if(type.equals("PIZZA")) {
+            return new Pizza();
+        }
+
+        if(type.equals("BURGER")) {
+            return new Burger();
+        }
+
+        if(type.equals("PASTA")) {
+            return new Pasta();
+        }
+
+        throw new IllegalArgumentException(
+            "Invalid Food Type"
+        );
+    }
+}
+
+-------------------------------------------------
+📌 Usage
+-------------------------------------------------
+
+Food food =
+    FoodFactory.getFood("PIZZA");
+
+food.prepare();
+
+Output:
+
+Preparing Pizza
+
+-------------------------------------------------
+📌 Visualization
+-------------------------------------------------
+
+Without Factory
+
+Client
+ ├── new Pizza()
+ ├── new Burger()
+ └── new Pasta()
+
+-----------------------------------
+
+With Factory
+
+Client
+   |
+   v
+FoodFactory
+   |
+   +---- Pizza
+   |
+   +---- Burger
+   |
+   +---- Pasta
+
+-------------------------------------------------
+📌 Real World Examples
+-------------------------------------------------
+
+✔ Spring ApplicationContext
+
+✔ LoggerFactory
+
+✔ DriverManager
+
+✔ Payment Gateway
+
+✔ Vehicle Factory
+
+-------------------------------------------------
+📌 Advantages
+-------------------------------------------------
+
+✔ Loose Coupling
+
+✔ Centralized Creation Logic
+
+✔ Better Maintainability
+
+✔ Supports OCP
+
+✔ Easier Testing
+
+-------------------------------------------------
+📌 Disadvantages
+-------------------------------------------------
+
+❌ More Classes
+
+❌ Factory Can Become Large
+
+-------------------------------------------------
+📌 When To Use
+-------------------------------------------------
+
+✔ Multiple object types exist
+
+✔ Complex creation logic
+
+✔ Client should not know creation details
+
+Examples:
+
+Payment System
+
+Notification System
+
+Vehicle System
+
+Food Ordering System
+
+-------------------------------------------------
+📌 When Not To Use
+-------------------------------------------------
+
+Simple object creation.
+
+Example:
+
+User user = new User();
+
+No Factory needed.
+
+-------------------------------------------------
+📌 SOLID Principles Used
+-------------------------------------------------
+
+✅ OCP
+
+New products added without changing
+client logic.
+
+✅ DIP
+
+Client depends on abstraction
+(Food interface).
+
+-------------------------------------------------
+📌 Interview Questions
+-------------------------------------------------
+
+Q. What problem does Factory solve?
+
+Object creation complexity and
+tight coupling.
+
+-----------------------------------
+
+Q. Difference between Factory and Singleton?
+
+Singleton:
+Controls number of objects.
+
+Factory:
+Controls object creation.
+
+-------------------------------------------------
+🧠 Memory Trick
+-------------------------------------------------
+
+Customer Orders Food
+
+Kitchen Decides What To Create
+
+Kitchen = Factory
+
+-------------------------------------------------
+🔥 Interview Answer
+-------------------------------------------------
+
+Factory Method Pattern provides a way
+to create objects without exposing
+creation logic to the client. It
+centralizes object creation and
+reduces coupling between client code
+and concrete implementations.
+
+
+
+=================================================

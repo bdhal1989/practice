@@ -1,0 +1,939 @@
+=================================================
+📘 FACADE PATTERN - COMPLETE NOTES
+=================================================
+
+CATEGORY
+
+Structural Design Pattern
+
+=================================================
+DEFINITION
+=================================================
+
+Facade Pattern is a Structural Design Pattern
+that provides a simplified interface to a
+complex subsystem.
+
+Simple Rule:
+
+Facade = One Entry Point To A Complex System
+
+OR
+
+Facade = Simplified Interface
+
+=================================================
+WHY DO WE NEED IT?
+=================================================
+
+Suppose a customer wants to watch a movie.
+
+Without Facade:
+
+TV.turnOn();
+
+SoundSystem.turnOn();
+
+SoundSystem.setVolume();
+
+StreamingDevice.turnOn();
+
+StreamingDevice.playMovie();
+
+Lights.dim();
+
+-------------------------------------------------
+
+Client must understand every subsystem.
+
+Problem:
+
+❌ Too Many Objects
+
+❌ Too Much Complexity
+
+❌ Tight Coupling
+
+❌ Difficult To Use
+
+-------------------------------------------------
+
+Solution:
+
+MovieFacade.watchMovie();
+
+Single method call.
+
+=================================================
+CORE IDEA
+=================================================
+
+Facade sits in front of a complex system.
+
+Client
+   |
+   v
+Facade
+   |
+   v
+
+Subsystem A
+
+Subsystem B
+
+Subsystem C
+
+Subsystem D
+
+Client talks only to Facade.
+
+=================================================
+COMPONENTS
+=================================================
+
+1. Client
+
+Uses the facade.
+
+---------------------------------
+
+2. Facade
+
+Simplified interface.
+
+---------------------------------
+
+3. Subsystems
+
+Actual business logic classes.
+
+=================================================
+EXAMPLE 1 - HOME THEATER SYSTEM
+=================================================
+
+SCENARIO
+
+To watch a movie we need:
+
+✔ TV
+
+✔ Sound System
+
+✔ Streaming Device
+
+✔ Lights
+
+-------------------------------------------------
+WITHOUT FACADE
+-------------------------------------------------
+
+tv.on();
+
+soundSystem.on();
+
+soundSystem.setVolume(50);
+
+streamingDevice.on();
+
+streamingDevice.playMovie();
+
+lights.dim();
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Facade
+
+HomeTheaterFacade
+
+---------------------------------
+
+Subsystems
+
+TV
+
+SoundSystem
+
+StreamingDevice
+
+Lights
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+class TV {
+
+    public void on() {
+
+        System.out.println(
+            "TV ON");
+    }
+}
+
+-------------------------------------------------
+
+class SoundSystem {
+
+    public void on() {
+
+        System.out.println(
+            "Sound System ON");
+    }
+}
+
+-------------------------------------------------
+
+class StreamingDevice {
+
+    public void playMovie() {
+
+        System.out.println(
+            "Playing Movie");
+    }
+}
+
+-------------------------------------------------
+
+class HomeTheaterFacade {
+
+    private TV tv =
+            new TV();
+
+    private SoundSystem sound =
+            new SoundSystem();
+
+    private StreamingDevice device =
+            new StreamingDevice();
+
+    public void watchMovie() {
+
+        tv.on();
+
+        sound.on();
+
+        device.playMovie();
+    }
+}
+
+-------------------------------------------------
+
+USAGE
+
+HomeTheaterFacade facade =
+        new HomeTheaterFacade();
+
+facade.watchMovie();
+
+=================================================
+EXAMPLE 2 - FOOD ORDERING SYSTEM
+=================================================
+
+SCENARIO
+
+Ordering food requires:
+
+✔ Restaurant Service
+
+✔ Payment Service
+
+✔ Delivery Service
+
+✔ Notification Service
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Facade
+
+FoodOrderFacade
+
+---------------------------------
+
+Subsystems
+
+RestaurantService
+
+PaymentService
+
+DeliveryService
+
+NotificationService
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+class RestaurantService {
+
+    public void prepareFood() {
+
+        System.out.println(
+            "Preparing Food");
+    }
+}
+
+-------------------------------------------------
+
+class PaymentService {
+
+    public void pay() {
+
+        System.out.println(
+            "Payment Done");
+    }
+}
+
+-------------------------------------------------
+
+class DeliveryService {
+
+    public void deliver() {
+
+        System.out.println(
+            "Food Delivered");
+    }
+}
+
+-------------------------------------------------
+
+class FoodOrderFacade {
+
+    private RestaurantService restaurant =
+            new RestaurantService();
+
+    private PaymentService payment =
+            new PaymentService();
+
+    private DeliveryService delivery =
+            new DeliveryService();
+
+    public void placeOrder() {
+
+        payment.pay();
+
+        restaurant.prepareFood();
+
+        delivery.deliver();
+    }
+}
+
+=================================================
+EXAMPLE 3 - ONLINE SHOPPING
+=================================================
+
+SCENARIO
+
+Buying a product requires:
+
+✔ Inventory Check
+
+✔ Payment
+
+✔ Packaging
+
+✔ Shipping
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Facade
+
+ShoppingFacade
+
+---------------------------------
+
+Subsystems
+
+InventoryService
+
+PaymentService
+
+PackagingService
+
+ShippingService
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+class ShoppingFacade {
+
+    public void buyProduct() {
+
+        System.out.println(
+            "Inventory Checked");
+
+        System.out.println(
+            "Payment Done");
+
+        System.out.println(
+            "Product Packed");
+
+        System.out.println(
+            "Product Shipped");
+    }
+}
+
+=================================================
+EXAMPLE 4 - BANKING SYSTEM
+=================================================
+
+SCENARIO
+
+Money Transfer Requires:
+
+✔ Account Validation
+
+✔ Balance Check
+
+✔ Fraud Check
+
+✔ Transfer Money
+
+✔ Notification
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Facade
+
+BankingFacade
+
+---------------------------------
+
+Subsystems
+
+AccountService
+
+FraudService
+
+TransferService
+
+NotificationService
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+class BankingFacade {
+
+    public void transferMoney() {
+
+        System.out.println(
+            "Account Validated");
+
+        System.out.println(
+            "Fraud Check Done");
+
+        System.out.println(
+            "Money Transferred");
+
+        System.out.println(
+            "Notification Sent");
+    }
+}
+
+=================================================
+EXAMPLE 5 - COMPUTER STARTUP
+=================================================
+
+SCENARIO
+
+Computer Startup Requires:
+
+✔ CPU Start
+
+✔ Memory Load
+
+✔ Disk Read
+
+✔ OS Boot
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Facade
+
+ComputerFacade
+
+---------------------------------
+
+Subsystems
+
+CPU
+
+Memory
+
+HardDisk
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+class CPU {
+
+    void start() {
+
+        System.out.println(
+            "CPU Started");
+    }
+}
+
+-------------------------------------------------
+
+class Memory {
+
+    void load() {
+
+        System.out.println(
+            "Memory Loaded");
+    }
+}
+
+-------------------------------------------------
+
+class HardDisk {
+
+    void read() {
+
+        System.out.println(
+            "Disk Read");
+    }
+}
+
+-------------------------------------------------
+
+class ComputerFacade {
+
+    private CPU cpu =
+            new CPU();
+
+    private Memory memory =
+            new Memory();
+
+    private HardDisk disk =
+            new HardDisk();
+
+    public void startComputer() {
+
+        cpu.start();
+
+        memory.load();
+
+        disk.read();
+    }
+}
+
+=================================================
+EXAMPLE 6 - SPRING BOOT SERVICE LAYER
+=================================================
+
+SCENARIO
+
+Controller needs:
+
+✔ UserRepository
+
+✔ EmailService
+
+✔ AuditService
+
+✔ ValidationService
+
+-------------------------------------------------
+
+Instead of calling all directly:
+
+Use
+
+UserFacade
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Facade
+
+UserFacade
+
+---------------------------------
+
+Subsystems
+
+UserRepository
+
+EmailService
+
+AuditService
+
+ValidationService
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+class UserFacade {
+
+    public void registerUser() {
+
+        System.out.println(
+            "Validate User");
+
+        System.out.println(
+            "Save User");
+
+        System.out.println(
+            "Send Email");
+
+        System.out.println(
+            "Write Audit Log");
+    }
+}
+
+=================================================
+EXAMPLE 7 - TRAVEL BOOKING SYSTEM
+=================================================
+
+SCENARIO
+
+Travel Booking Needs
+
+✔ Flight Booking
+
+✔ Hotel Booking
+
+✔ Cab Booking
+
+✔ Payment
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Facade
+
+TravelFacade
+
+---------------------------------
+
+Subsystems
+
+FlightService
+
+HotelService
+
+CabService
+
+PaymentService
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+class TravelFacade {
+
+    public void bookTrip() {
+
+        System.out.println(
+            "Flight Booked");
+
+        System.out.println(
+            "Hotel Booked");
+
+        System.out.println(
+            "Cab Booked");
+
+        System.out.println(
+            "Payment Completed");
+    }
+}
+
+=================================================
+COMMON TEMPLATE
+=================================================
+
+Subsystem A
+
+class SubsystemA {
+
+    void actionA() {
+
+    }
+}
+
+-------------------------------------------------
+
+Subsystem B
+
+class SubsystemB {
+
+    void actionB() {
+
+    }
+}
+
+-------------------------------------------------
+
+Facade
+
+class Facade {
+
+    private SubsystemA a =
+            new SubsystemA();
+
+    private SubsystemB b =
+            new SubsystemB();
+
+    public void operation() {
+
+        a.actionA();
+
+        b.actionB();
+    }
+}
+
+=================================================
+VISUALIZATION
+=================================================
+
+Client
+   |
+   v
+
+Facade
+   |
+   +------ Subsystem A
+
+   +------ Subsystem B
+
+   +------ Subsystem C
+
+   +------ Subsystem D
+
+=================================================
+ADVANTAGES
+=================================================
+
+✔ Simplifies Complex Systems
+
+✔ Reduces Coupling
+
+✔ Improves Readability
+
+✔ Easier Maintenance
+
+✔ Hides Internal Complexity
+
+✔ Cleaner Client Code
+
+=================================================
+DISADVANTAGES
+=================================================
+
+❌ Facade Can Become Large
+
+❌ May Hide Useful Features
+
+❌ Extra Layer Of Abstraction
+
+=================================================
+WHEN TO USE
+=================================================
+
+Use Facade When:
+
+✔ Complex Subsystems Exist
+
+✔ Client Uses Multiple Objects
+
+✔ Need Simple API
+
+Examples:
+
+Home Theater
+
+Food Ordering
+
+Banking
+
+Travel Booking
+
+E-Commerce
+
+Spring Service Layer
+
+=================================================
+WHEN NOT TO USE
+=================================================
+
+Simple Systems
+
+Example:
+
+User user = new User();
+
+No Facade Needed.
+
+=================================================
+SOLID PRINCIPLES USED
+=================================================
+
+✅ OCP
+
+New Subsystems Can Be Added
+Without Affecting Clients.
+
+---------------------------------
+
+✅ DIP
+
+Clients Depend On Facade
+
+Not On Internal Classes.
+
+=================================================
+FACADE vs ADAPTER
+=================================================
+
+ADAPTER
+
+Problem:
+
+Interfaces Are Incompatible
+
+Example:
+
+pay()
+
+makePayment()
+
+Purpose:
+
+Translator
+
+---------------------------------
+
+FACADE
+
+Problem:
+
+System Is Too Complex
+
+Purpose:
+
+Simplified Interface
+
+=================================================
+FACADE vs DECORATOR
+=================================================
+
+DECORATOR
+
+Adds New Behavior
+
+Example:
+
+Coffee + Milk
+
+---------------------------------
+
+FACADE
+
+Simplifies Existing System
+
+Example:
+
+Home Theater
+
+=================================================
+INTERVIEW QUESTIONS
+=================================================
+
+Q. What is Facade Pattern?
+
+Provides a simple interface
+to a complex subsystem.
+
+---------------------------------
+
+Q. Real-world example?
+
+Home Theater Remote.
+
+---------------------------------
+
+Q. Spring Boot example?
+
+Service Layer / UserFacade.
+
+---------------------------------
+
+Q. Facade vs Adapter?
+
+Adapter fixes incompatibility.
+
+Facade hides complexity.
+
+=================================================
+MEMORY TRICK
+=================================================
+
+Adapter
+→ Translator
+
+Bridge
+→ Separate Dimensions
+
+Composite
+→ Tree Structure
+
+Decorator
+→ Add Features
+
+Facade
+→ Simplify Complexity
+
+-------------------------------------------------
+
+One Remote
+
+Controls
+
+TV
+
+Sound
+
+Lights
+
+Streaming Device
+
+✅ Facade
+
+=================================================
+INTERVIEW ANSWER
+=================================================
+
+Facade Pattern is a Structural Design Pattern
+that provides a unified and simplified interface
+to a set of interfaces in a subsystem. It hides
+the complexity of the subsystem and makes it
+easier for clients to use.
+
+=================================================
+ONE-LINE REVISION
+=================================================
+
+Facade Pattern
+
+→ Provide A Simple Interface
+   To A Complex System
+
+OR
+
+Facade = Simplified Interface

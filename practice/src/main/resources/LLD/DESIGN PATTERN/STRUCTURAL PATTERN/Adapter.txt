@@ -1,0 +1,959 @@
+=================================================
+📘 ADAPTER PATTERN - COMPLETE NOTES
+=================================================
+
+CATEGORY
+
+Structural Design Pattern
+
+=================================================
+DEFINITION
+=================================================
+
+Adapter Pattern is a Structural Design Pattern
+that allows two incompatible interfaces to
+work together.
+
+It acts as a translator between two systems.
+
+Simple Rule:
+
+Adapter = Convert Interface
+
+OR
+
+Adapter = Translator
+
+=================================================
+WHY DO WE NEED IT?
+=================================================
+
+Suppose:
+
+Our Application expects:
+
+pay()
+
+But Third Party API provides:
+
+makePayment()
+
+Interfaces are incompatible.
+
+Application cannot directly use
+the Third Party API.
+
+-------------------------------------------------
+
+Problem:
+
+Application
+      |
+      X
+      |
+Third Party Library
+
+-------------------------------------------------
+
+Solution:
+
+Application
+      |
+      v
+Adapter
+      |
+      v
+Third Party Library
+
+=================================================
+CORE IDEA
+=================================================
+
+Client talks to Adapter.
+
+Adapter talks to Existing System.
+
+Adapter converts one interface
+into another.
+
+=================================================
+COMPONENTS
+=================================================
+
+1. Client
+
+Uses Target Interface.
+
+---------------------------------
+
+2. Target
+
+Expected Interface.
+
+Example:
+
+PaymentProcessor
+
+---------------------------------
+
+3. Adaptee
+
+Existing System
+
+Example:
+
+RazorpayGateway
+
+---------------------------------
+
+4. Adapter
+
+Converts Target Interface
+to Adaptee Interface.
+
+=================================================
+EXAMPLE 1 - PAYMENT GATEWAY
+=================================================
+
+SCENARIO
+
+Application expects:
+
+pay()
+
+Third Party API provides:
+
+makePayment()
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Client
+
+PaymentService
+
+---------------------------------
+
+Target
+
+PaymentProcessor
+
+---------------------------------
+
+Adaptee
+
+RazorpayGateway
+
+---------------------------------
+
+Adapter
+
+RazorpayAdapter
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface PaymentProcessor {
+
+    void pay();
+}
+
+-------------------------------------------------
+
+class RazorpayGateway {
+
+    public void makePayment() {
+
+        System.out.println(
+                "Payment Successful");
+    }
+}
+
+-------------------------------------------------
+
+class RazorpayAdapter
+implements PaymentProcessor {
+
+    private RazorpayGateway
+            gateway =
+            new RazorpayGateway();
+
+    @Override
+    public void pay() {
+
+        gateway.makePayment();
+    }
+}
+
+-------------------------------------------------
+
+USAGE
+
+PaymentProcessor processor =
+        new RazorpayAdapter();
+
+processor.pay();
+
+OUTPUT
+
+Payment Successful
+
+=================================================
+EXAMPLE 2 - MOBILE CHARGER
+=================================================
+
+SCENARIO
+
+US Charger
+
+2 Pin
+
+---------------------------------
+
+Indian Socket
+
+3 Pin
+
+---------------------------------
+
+Need Adapter
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Client
+
+IndianSocket
+
+---------------------------------
+
+Target
+
+IndianPlug
+
+---------------------------------
+
+Adaptee
+
+USCharger
+
+---------------------------------
+
+Adapter
+
+USChargerAdapter
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface IndianPlug {
+
+    void connect();
+}
+
+-------------------------------------------------
+
+class USCharger {
+
+    public void connectTwoPin() {
+
+        System.out.println(
+                "US Charger Connected");
+    }
+}
+
+-------------------------------------------------
+
+class USChargerAdapter
+implements IndianPlug {
+
+    private USCharger charger =
+            new USCharger();
+
+    @Override
+    public void connect() {
+
+        charger.connectTwoPin();
+    }
+}
+
+=================================================
+EXAMPLE 3 - FOOD DELIVERY API
+=================================================
+
+SCENARIO
+
+Application expects:
+
+deliver()
+
+---------------------------------
+
+Swiggy API provides:
+
+shipFood()
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Client
+
+FoodService
+
+---------------------------------
+
+Target
+
+FoodDelivery
+
+---------------------------------
+
+Adaptee
+
+SwiggyApi
+
+---------------------------------
+
+Adapter
+
+SwiggyAdapter
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface FoodDelivery {
+
+    void deliver();
+}
+
+-------------------------------------------------
+
+class SwiggyApi {
+
+    public void shipFood() {
+
+        System.out.println(
+                "Food Delivered");
+    }
+}
+
+-------------------------------------------------
+
+class SwiggyAdapter
+implements FoodDelivery {
+
+    private SwiggyApi api =
+            new SwiggyApi();
+
+    @Override
+    public void deliver() {
+
+        api.shipFood();
+    }
+}
+
+=================================================
+EXAMPLE 4 - XML TO JSON
+=================================================
+
+SCENARIO
+
+Application understands:
+
+JSON
+
+---------------------------------
+
+Legacy system sends:
+
+XML
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Client
+
+Application
+
+---------------------------------
+
+Target
+
+JsonData
+
+---------------------------------
+
+Adaptee
+
+XmlData
+
+---------------------------------
+
+Adapter
+
+XmlToJsonAdapter
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface JsonData {
+
+    String getJson();
+}
+
+-------------------------------------------------
+
+class XmlData {
+
+    public String getXml() {
+
+        return "<name>Bikash</name>";
+    }
+}
+
+-------------------------------------------------
+
+class XmlToJsonAdapter
+implements JsonData {
+
+    private XmlData xmlData =
+            new XmlData();
+
+    @Override
+    public String getJson() {
+
+        String xml =
+                xmlData.getXml();
+
+        return "{name:'Bikash'}";
+    }
+}
+
+=================================================
+EXAMPLE 5 - OLD PRINTER SYSTEM
+=================================================
+
+SCENARIO
+
+New Application expects:
+
+print()
+
+---------------------------------
+
+Old Printer provides:
+
+printOld()
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Client
+
+Modern Application
+
+---------------------------------
+
+Target
+
+Printer
+
+---------------------------------
+
+Adaptee
+
+LegacyPrinter
+
+---------------------------------
+
+Adapter
+
+PrinterAdapter
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Printer {
+
+    void print();
+}
+
+-------------------------------------------------
+
+class LegacyPrinter {
+
+    public void printOld() {
+
+        System.out.println(
+                "Printing Using Old Printer");
+    }
+}
+
+-------------------------------------------------
+
+class PrinterAdapter
+implements Printer {
+
+    private LegacyPrinter printer =
+            new LegacyPrinter();
+
+    @Override
+    public void print() {
+
+        printer.printOld();
+    }
+}
+
+=================================================
+EXAMPLE 6 - EMAIL NOTIFICATION
+=================================================
+
+SCENARIO
+
+Application expects:
+
+sendNotification()
+
+---------------------------------
+
+Third Party Service provides:
+
+sendEmail()
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Target
+
+Notification
+
+---------------------------------
+
+Adaptee
+
+EmailService
+
+---------------------------------
+
+Adapter
+
+EmailAdapter
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Notification {
+
+    void sendNotification();
+}
+
+-------------------------------------------------
+
+class EmailService {
+
+    public void sendEmail() {
+
+        System.out.println(
+                "Email Sent");
+    }
+}
+
+-------------------------------------------------
+
+class EmailAdapter
+implements Notification {
+
+    private EmailService service =
+            new EmailService();
+
+    @Override
+    public void sendNotification() {
+
+        service.sendEmail();
+    }
+}
+
+=================================================
+EXAMPLE 7 - PAYMENT PROVIDER SWITCH
+=================================================
+
+SCENARIO
+
+Current Provider
+
+Razorpay
+
+makePayment()
+
+---------------------------------
+
+New Provider
+
+Stripe
+
+processPayment()
+
+---------------------------------
+
+Application always wants:
+
+pay()
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Target
+
+PaymentProcessor
+
+---------------------------------
+
+Adaptee
+
+StripeGateway
+
+---------------------------------
+
+Adapter
+
+StripeAdapter
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface PaymentProcessor {
+
+    void pay();
+}
+
+-------------------------------------------------
+
+class StripeGateway {
+
+    public void processPayment() {
+
+        System.out.println(
+                "Stripe Payment");
+    }
+}
+
+-------------------------------------------------
+
+class StripeAdapter
+implements PaymentProcessor {
+
+    private StripeGateway
+            gateway =
+            new StripeGateway();
+
+    @Override
+    public void pay() {
+
+        gateway.processPayment();
+    }
+}
+
+=================================================
+COMMON TEMPLATE
+=================================================
+
+Target Interface
+
+interface Target {
+
+    void request();
+}
+
+-------------------------------------------------
+
+Existing Class
+
+class Adaptee {
+
+    void specificRequest() {
+
+    }
+}
+
+-------------------------------------------------
+
+Adapter
+
+class Adapter
+implements Target {
+
+    private Adaptee adaptee =
+            new Adaptee();
+
+    @Override
+    public void request() {
+
+        adaptee.specificRequest();
+    }
+}
+
+=================================================
+VISUALIZATION
+=================================================
+
+Client
+   |
+   v
+
+Target
+   |
+   v
+
+Adapter
+   |
+   v
+
+Adaptee
+
+=================================================
+ADVANTAGES
+=================================================
+
+✔ Reuses Existing Code
+
+✔ No Changes To Legacy System
+
+✔ Loose Coupling
+
+✔ Easy Third Party Integration
+
+✔ Supports Open Closed Principle
+
+✔ Cleaner Client Code
+
+=================================================
+DISADVANTAGES
+=================================================
+
+❌ Extra Classes
+
+❌ Additional Layer
+
+❌ More Complexity
+
+=================================================
+WHEN TO USE
+=================================================
+
+Use Adapter When:
+
+✔ Two Interfaces Are Incompatible
+
+✔ Legacy Systems Must Be Reused
+
+✔ Third Party APIs Need Integration
+
+✔ Data Format Conversion Is Required
+
+Examples:
+
+Payment Gateway
+
+Food Delivery API
+
+XML To JSON
+
+Printer Systems
+
+Email Providers
+
+=================================================
+WHEN NOT TO USE
+=================================================
+
+When interfaces already match.
+
+Example:
+
+interface PaymentProcessor
+
+class StripePayment
+implements PaymentProcessor
+
+No Adapter Required.
+
+=================================================
+SOLID PRINCIPLES USED
+=================================================
+
+✅ OCP
+
+Add New Adapters Without
+Changing Existing Client Code.
+
+Example:
+
+RazorpayAdapter
+
+PaypalAdapter
+
+StripeAdapter
+
+---------------------------------
+
+✅ DIP
+
+Client Depends On Interface.
+
+Not On Concrete Implementations.
+
+=================================================
+ADAPTER vs FACTORY
+=================================================
+
+FACTORY
+
+Problem:
+
+Which Object To Create?
+
+Example:
+
+Car Or Bike
+
+---------------------------------
+
+ADAPTER
+
+Problem:
+
+How To Connect Incompatible Systems?
+
+Example:
+
+US Charger + Indian Socket
+
+=================================================
+ADAPTER vs BRIDGE
+=================================================
+
+ADAPTER
+
+Fixes Existing Incompatibility
+
+Example:
+
+pay()
+
+makePayment()
+
+---------------------------------
+
+BRIDGE
+
+Prevents Class Explosion
+
+Example:
+
+Remote + Device
+
+=================================================
+INTERVIEW QUESTIONS
+=================================================
+
+Q. What is Adapter Pattern?
+
+Allows incompatible interfaces
+to work together.
+
+---------------------------------
+
+Q. Why use Adapter Pattern?
+
+Reuse legacy systems and
+integrate third-party APIs.
+
+---------------------------------
+
+Q. Real-world example?
+
+Mobile Charger Adapter.
+
+---------------------------------
+
+Q. Adapter vs Factory?
+
+Factory creates objects.
+
+Adapter connects objects.
+
+---------------------------------
+
+Q. Adapter vs Bridge?
+
+Adapter fixes incompatibility.
+
+Bridge separates dimensions.
+
+=================================================
+MEMORY TRICK
+=================================================
+
+Singleton
+→ One Object
+
+Factory
+→ Create Object
+
+Abstract Factory
+→ Product Family
+
+Builder
+→ Build Object
+
+Prototype
+→ Copy Object
+
+Adapter
+→ Convert Interface
+
+-------------------------------------------------
+
+English
+     |
+Translator
+     |
+Hindi
+
+Translator = Adapter
+
+=================================================
+INTERVIEW ANSWER
+=================================================
+
+Adapter Pattern is a Structural Design Pattern
+that allows two incompatible interfaces to work
+together by introducing an Adapter that converts
+one interface into another expected by the client.
+
+=================================================
+ONE-LINE REVISION
+=================================================
+
+Adapter Pattern
+
+→ Make Incompatible Things
+   Work Together
+
+OR
+
+Adapter = Translator

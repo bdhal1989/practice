@@ -1,0 +1,913 @@
+=================================================
+📘 BRIDGE PATTERN - EXAMPLES WITH IMPLEMENTATION
+=================================================
+
+DEFINITION
+
+Bridge Pattern is a Structural Design Pattern
+that separates Abstraction from Implementation
+so both can change independently.
+
+=================================================
+EXAMPLE 1 - REMOTE + DEVICE
+=================================================
+
+REAL WORLD
+
+Remote
+✔ Basic Remote
+✔ Advanced Remote
+
+Device
+✔ TV
+✔ Radio
+✔ AC
+
+IMPLEMENTATION MAPPING
+
+Abstraction
+------------
+Remote
+
+Refined Abstractions
+------------
+BasicRemote
+AdvancedRemote
+
+Implementation
+------------
+Device
+
+Concrete Implementations
+------------
+TV
+Radio
+AC
+
+STRUCTURE
+
+Remote
+   |
+   +---- BasicRemote
+   |
+   +---- AdvancedRemote
+
+             |
+             v
+
+Device
+   |
+   +---- TV
+   +---- Radio
+   +---- AC
+
+=================================================
+EXAMPLE 2 - SHAPE + COLOR
+=================================================
+
+REAL WORLD
+
+Shape
+✔ Circle
+✔ Rectangle
+
+Color
+✔ Red
+✔ Blue
+✔ Green
+
+IMPLEMENTATION MAPPING
+
+Abstraction
+------------
+Shape
+
+Refined Abstractions
+------------
+Circle
+Rectangle
+
+Implementation
+------------
+Color
+
+Concrete Implementations
+------------
+RedColor
+BlueColor
+GreenColor
+
+STRUCTURE
+
+Shape
+   |
+   +---- Circle
+   +---- Rectangle
+
+             |
+             v
+
+Color
+   |
+   +---- RedColor
+   +---- BlueColor
+   +---- GreenColor
+
+=================================================
+EXAMPLE 3 - NOTIFICATION + CHANNEL
+=================================================
+
+REAL WORLD
+
+Notification
+✔ Alert
+✔ Reminder
+✔ Promotion
+
+Channel
+✔ Email
+✔ SMS
+✔ WhatsApp
+
+IMPLEMENTATION MAPPING
+
+Abstraction
+------------
+Notification
+
+Refined Abstractions
+------------
+AlertNotification
+ReminderNotification
+PromotionNotification
+
+Implementation
+------------
+MessageSender
+
+Concrete Implementations
+------------
+EmailSender
+SmsSender
+WhatsappSender
+
+=================================================
+EXAMPLE 4 - PAYMENT + BANK
+=================================================
+
+REAL WORLD
+
+Payment
+✔ UPI
+✔ Card
+✔ Net Banking
+
+Bank
+✔ HDFC
+✔ ICICI
+✔ SBI
+
+IMPLEMENTATION MAPPING
+
+Abstraction
+------------
+Payment
+
+Refined Abstractions
+------------
+UpiPayment
+CardPayment
+NetBankingPayment
+
+Implementation
+------------
+Bank
+
+Concrete Implementations
+------------
+HdfcBank
+IciciBank
+SbiBank
+
+=================================================
+EXAMPLE 5 - VEHICLE + ENGINE
+=================================================
+
+REAL WORLD
+
+Vehicle
+✔ Car
+✔ Bike
+✔ Truck
+
+Engine
+✔ Petrol
+✔ Diesel
+✔ Electric
+
+IMPLEMENTATION MAPPING
+
+Abstraction
+------------
+Vehicle
+
+Refined Abstractions
+------------
+Car
+Bike
+Truck
+
+Implementation
+------------
+Engine
+
+Concrete Implementations
+------------
+PetrolEngine
+DieselEngine
+ElectricEngine
+
+=================================================
+EXAMPLE 6 - REPORT + EXPORT FORMAT
+=================================================
+
+REAL WORLD
+
+Report
+✔ Sales Report
+✔ Employee Report
+✔ Audit Report
+
+Format
+✔ PDF
+✔ Excel
+✔ CSV
+
+IMPLEMENTATION MAPPING
+
+Abstraction
+------------
+Report
+
+Refined Abstractions
+------------
+SalesReport
+EmployeeReport
+AuditReport
+
+Implementation
+------------
+ExportFormat
+
+Concrete Implementations
+------------
+PdfFormat
+ExcelFormat
+CsvFormat
+
+=================================================
+EXAMPLE 7 - FOOD PLATFORM + DELIVERY PARTNER
+=================================================
+
+REAL WORLD
+
+Food Platform
+✔ Swiggy
+✔ Zomato
+
+Delivery Partner
+✔ Dunzo
+✔ Porter
+✔ Shadowfax
+
+IMPLEMENTATION MAPPING
+
+Abstraction
+------------
+FoodPlatform
+
+Refined Abstractions
+------------
+Swiggy
+Zomato
+
+Implementation
+------------
+DeliveryPartner
+
+Concrete Implementations
+------------
+Dunzo
+Porter
+Shadowfax
+
+=================================================
+INTERVIEW RECOGNITION FORMULA
+=================================================
+
+If you find:
+
+Dimension A
++
+Dimension B
+
+Both changing independently
+
+Then:
+
+Dimension A -> Abstraction
+Dimension B -> Implementation
+
+Think:
+
+✅ BRIDGE PATTERN
+
+Examples:
+
+Remote + Device
+Shape + Color
+Notification + Channel
+Payment + Bank
+Vehicle + Engine
+Report + Format
+Food Platform + Delivery Partner
+
+=================================================
+ONE-LINE REVISION
+=================================================
+
+Bridge Pattern
+
+Abstraction
+      |
+      v
+Implementation
+
+Used To Avoid Class Explosion.
+
+=================================================
+📘 BRIDGE PATTERN - COMPLETE IMPLEMENTATION NOTES
+=================================================
+
+DEFINITION
+
+Bridge Pattern is a Structural Design Pattern
+that separates Abstraction from Implementation
+so that both can evolve independently.
+
+Formula:
+
+Abstraction
+      HAS-A
+Implementation
+
+=================================================
+EXAMPLE 1 - REMOTE + DEVICE
+=================================================
+
+Abstraction
+------------
+Remote
+
+Implementation
+------------
+Device
+
+interface Device {
+
+    void on();
+
+    void off();
+}
+
+class TV implements Device {
+
+    public void on() {
+        System.out.println("TV ON");
+    }
+
+    public void off() {
+        System.out.println("TV OFF");
+    }
+}
+
+class Radio implements Device {
+
+    public void on() {
+        System.out.println("Radio ON");
+    }
+
+    public void off() {
+        System.out.println("Radio OFF");
+    }
+}
+
+abstract class Remote {
+
+    protected Device device;
+
+    public Remote(Device device) {
+        this.device = device;
+    }
+
+    abstract void power();
+}
+
+class BasicRemote extends Remote {
+
+    public BasicRemote(Device device) {
+        super(device);
+    }
+
+    void power() {
+        device.on();
+    }
+}
+
+Usage
+
+Remote remote =
+        new BasicRemote(
+                new TV());
+
+remote.power();
+
+=================================================
+EXAMPLE 2 - SHAPE + COLOR
+=================================================
+
+Abstraction
+------------
+Shape
+
+Implementation
+------------
+Color
+
+interface Color {
+
+    String fillColor();
+}
+
+class RedColor implements Color {
+
+    public String fillColor() {
+        return "Red";
+    }
+}
+
+class BlueColor implements Color {
+
+    public String fillColor() {
+        return "Blue";
+    }
+}
+
+abstract class Shape {
+
+    protected Color color;
+
+    public Shape(Color color) {
+        this.color = color;
+    }
+
+    abstract void draw();
+}
+
+class Circle extends Shape {
+
+    public Circle(Color color) {
+        super(color);
+    }
+
+    void draw() {
+        System.out.println(
+            color.fillColor()
+            + " Circle");
+    }
+}
+
+Usage
+
+Shape shape =
+    new Circle(
+        new RedColor());
+
+shape.draw();
+
+=================================================
+EXAMPLE 3 - NOTIFICATION + CHANNEL
+=================================================
+
+Abstraction
+------------
+Notification
+
+Implementation
+------------
+MessageSender
+
+interface MessageSender {
+
+    void send(String message);
+}
+
+class EmailSender
+implements MessageSender {
+
+    public void send(String message) {
+
+        System.out.println(
+            "Email : "
+            + message);
+    }
+}
+
+class SmsSender
+implements MessageSender {
+
+    public void send(String message) {
+
+        System.out.println(
+            "SMS : "
+            + message);
+    }
+}
+
+abstract class Notification {
+
+    protected MessageSender sender;
+
+    public Notification(
+            MessageSender sender) {
+
+        this.sender = sender;
+    }
+
+    abstract void notifyUser(
+            String message);
+}
+
+class AlertNotification
+extends Notification {
+
+    public AlertNotification(
+            MessageSender sender) {
+
+        super(sender);
+    }
+
+    void notifyUser(
+            String message) {
+
+        sender.send(message);
+    }
+}
+
+Usage
+
+Notification notification =
+    new AlertNotification(
+        new EmailSender());
+
+notification.notifyUser(
+    "Server Down");
+
+=================================================
+EXAMPLE 4 - PAYMENT + BANK
+=================================================
+
+Abstraction
+------------
+Payment
+
+Implementation
+------------
+Bank
+
+interface Bank {
+
+    void transfer(
+        double amount);
+}
+
+class HdfcBank
+implements Bank {
+
+    public void transfer(
+            double amount) {
+
+        System.out.println(
+            "HDFC : "
+            + amount);
+    }
+}
+
+class IciciBank
+implements Bank {
+
+    public void transfer(
+            double amount) {
+
+        System.out.println(
+            "ICICI : "
+            + amount);
+    }
+}
+
+abstract class Payment {
+
+    protected Bank bank;
+
+    public Payment(Bank bank) {
+
+        this.bank = bank;
+    }
+
+    abstract void pay(
+            double amount);
+}
+
+class UpiPayment
+extends Payment {
+
+    public UpiPayment(
+            Bank bank) {
+
+        super(bank);
+    }
+
+    void pay(
+            double amount) {
+
+        bank.transfer(amount);
+    }
+}
+
+Usage
+
+Payment payment =
+    new UpiPayment(
+        new HdfcBank());
+
+payment.pay(5000);
+
+=================================================
+EXAMPLE 5 - VEHICLE + ENGINE
+=================================================
+
+Abstraction
+------------
+Vehicle
+
+Implementation
+------------
+Engine
+
+interface Engine {
+
+    void start();
+}
+
+class PetrolEngine
+implements Engine {
+
+    public void start() {
+
+        System.out.println(
+            "Petrol Engine Started");
+    }
+}
+
+class ElectricEngine
+implements Engine {
+
+    public void start() {
+
+        System.out.println(
+            "Electric Engine Started");
+    }
+}
+
+abstract class Vehicle {
+
+    protected Engine engine;
+
+    public Vehicle(
+            Engine engine) {
+
+        this.engine = engine;
+    }
+
+    abstract void drive();
+}
+
+class Car extends Vehicle {
+
+    public Car(
+            Engine engine) {
+
+        super(engine);
+    }
+
+    void drive() {
+
+        engine.start();
+
+        System.out.println(
+            "Car Driving");
+    }
+}
+
+Usage
+
+Vehicle car =
+    new Car(
+        new ElectricEngine());
+
+car.drive();
+
+=================================================
+EXAMPLE 6 - REPORT + FORMAT
+=================================================
+
+Abstraction
+------------
+Report
+
+Implementation
+------------
+ExportFormat
+
+interface ExportFormat {
+
+    void export(
+        String data);
+}
+
+class PdfFormat
+implements ExportFormat {
+
+    public void export(
+            String data) {
+
+        System.out.println(
+            "PDF : "
+            + data);
+    }
+}
+
+class ExcelFormat
+implements ExportFormat {
+
+    public void export(
+            String data) {
+
+        System.out.println(
+            "EXCEL : "
+            + data);
+    }
+}
+
+abstract class Report {
+
+    protected ExportFormat format;
+
+    public Report(
+            ExportFormat format) {
+
+        this.format = format;
+    }
+
+    abstract void generate();
+}
+
+class SalesReport
+extends Report {
+
+    public SalesReport(
+            ExportFormat format) {
+
+        super(format);
+    }
+
+    void generate() {
+
+        format.export(
+            "Sales Report");
+    }
+}
+
+Usage
+
+Report report =
+    new SalesReport(
+        new PdfFormat());
+
+report.generate();
+
+=================================================
+EXAMPLE 7 - FOOD PLATFORM + DELIVERY PARTNER
+=================================================
+
+Abstraction
+------------
+FoodPlatform
+
+Implementation
+------------
+DeliveryPartner
+
+interface DeliveryPartner {
+
+    void deliver(
+        String item);
+}
+
+class Dunzo
+implements DeliveryPartner {
+
+    public void deliver(
+            String item) {
+
+        System.out.println(
+            "Dunzo Delivered "
+            + item);
+    }
+}
+
+class Porter
+implements DeliveryPartner {
+
+    public void deliver(
+            String item) {
+
+        System.out.println(
+            "Porter Delivered "
+            + item);
+    }
+}
+
+abstract class FoodPlatform {
+
+    protected DeliveryPartner
+            partner;
+
+    public FoodPlatform(
+            DeliveryPartner partner) {
+
+        this.partner = partner;
+    }
+
+    abstract void placeOrder(
+            String food);
+}
+
+class Swiggy
+extends FoodPlatform {
+
+    public Swiggy(
+            DeliveryPartner partner) {
+
+        super(partner);
+    }
+
+    void placeOrder(
+            String food) {
+
+        partner.deliver(food);
+    }
+}
+
+Usage
+
+FoodPlatform swiggy =
+    new Swiggy(
+        new Dunzo());
+
+swiggy.placeOrder(
+    "Biryani");
+
+=================================================
+MEMORY TRICK
+=================================================
+
+Remote      HAS-A Device
+Shape       HAS-A Color
+Notification HAS-A Channel
+Payment     HAS-A Bank
+Vehicle     HAS-A Engine
+Report      HAS-A Format
+FoodPlatform HAS-A DeliveryPartner
+
+=================================================
+ONE-LINE REVISION
+=================================================
+
+Bridge Pattern
+
+Abstraction
+      HAS-A
+Implementation
+
+Used To Avoid Class Explosion.

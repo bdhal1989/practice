@@ -1,0 +1,986 @@
+=================================================
+📘 PROXY PATTERN - COMPLETE NOTES
+=================================================
+
+CATEGORY
+
+Structural Design Pattern
+
+=================================================
+DEFINITION
+=================================================
+
+Proxy Pattern is a Structural Design Pattern
+that provides a substitute or placeholder
+for another object to control access to it.
+
+Simple Rule:
+
+Proxy = Control Access
+
+OR
+
+Proxy = Middleman
+
+=================================================
+WHY DO WE NEED IT?
+=================================================
+
+Sometimes direct access to an object is
+not desirable.
+
+Reasons:
+
+✔ Security
+
+✔ Lazy Loading
+
+✔ Access Control
+
+✔ Logging
+
+✔ Caching
+
+✔ Remote Access
+
+-------------------------------------------------
+
+Example:
+
+User
+  |
+  v
+Bank Account
+
+Direct access may be dangerous.
+
+Instead:
+
+User
+  |
+  v
+Proxy
+  |
+  v
+Bank Account
+
+=================================================
+CORE IDEA
+=================================================
+
+Client talks to Proxy.
+
+Proxy decides:
+
+✔ Allow Access
+
+✔ Deny Access
+
+✔ Cache Data
+
+✔ Load Object Lazily
+
+✔ Log Requests
+
+Then forwards request to Real Object.
+
+=================================================
+COMPONENTS
+=================================================
+
+1. Subject
+
+Common interface.
+
+---------------------------------
+
+2. Real Subject
+
+Actual object.
+
+---------------------------------
+
+3. Proxy
+
+Controls access to Real Subject.
+
+---------------------------------
+
+4. Client
+
+Uses Subject interface.
+
+=================================================
+EXAMPLE 1 - BANK ACCOUNT SECURITY
+=================================================
+
+SCENARIO
+
+Only authorized users should access
+their bank account.
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Subject
+
+BankAccount
+
+---------------------------------
+
+Real Subject
+
+RealBankAccount
+
+---------------------------------
+
+Proxy
+
+BankAccountProxy
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface BankAccount {
+
+    void withdraw(
+            double amount);
+}
+
+-------------------------------------------------
+
+class RealBankAccount
+implements BankAccount {
+
+    @Override
+    public void withdraw(
+            double amount) {
+
+        System.out.println(
+            "Withdrawn : " + amount);
+    }
+}
+
+-------------------------------------------------
+
+class BankAccountProxy
+implements BankAccount {
+
+    private RealBankAccount account =
+            new RealBankAccount();
+
+    private boolean authorized;
+
+    public BankAccountProxy(
+            boolean authorized) {
+
+        this.authorized = authorized;
+    }
+
+    @Override
+    public void withdraw(
+            double amount) {
+
+        if(authorized) {
+
+            account.withdraw(amount);
+
+        } else {
+
+            System.out.println(
+                "Access Denied");
+        }
+    }
+}
+
+-------------------------------------------------
+
+USAGE
+
+BankAccount account =
+    new BankAccountProxy(true);
+
+account.withdraw(1000);
+
+=================================================
+EXAMPLE 2 - IMAGE LAZY LOADING
+=================================================
+
+SCENARIO
+
+Large image should load only when
+required.
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Subject
+
+Image
+
+---------------------------------
+
+Real Subject
+
+RealImage
+
+---------------------------------
+
+Proxy
+
+ImageProxy
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Image {
+
+    void display();
+}
+
+-------------------------------------------------
+
+class RealImage
+implements Image {
+
+    public RealImage(
+            String file) {
+
+        System.out.println(
+            "Loading Image...");
+    }
+
+    @Override
+    public void display() {
+
+        System.out.println(
+            "Displaying Image");
+    }
+}
+
+-------------------------------------------------
+
+class ImageProxy
+implements Image {
+
+    private RealImage image;
+
+    private String file;
+
+    public ImageProxy(
+            String file) {
+
+        this.file = file;
+    }
+
+    @Override
+    public void display() {
+
+        if(image == null) {
+
+            image =
+                new RealImage(file);
+        }
+
+        image.display();
+    }
+}
+
+=================================================
+EXAMPLE 3 - INTERNET ACCESS CONTROL
+=================================================
+
+SCENARIO
+
+Office employees should not access
+restricted websites.
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Subject
+
+Internet
+
+---------------------------------
+
+Real Subject
+
+RealInternet
+
+---------------------------------
+
+Proxy
+
+InternetProxy
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Internet {
+
+    void connect(
+            String site);
+}
+
+-------------------------------------------------
+
+class RealInternet
+implements Internet {
+
+    @Override
+    public void connect(
+            String site) {
+
+        System.out.println(
+            "Connecting To "
+            + site);
+    }
+}
+
+-------------------------------------------------
+
+class InternetProxy
+implements Internet {
+
+    private RealInternet internet =
+            new RealInternet();
+
+    @Override
+    public void connect(
+            String site) {
+
+        if(site.equals(
+                "facebook.com")) {
+
+            System.out.println(
+                "Blocked Website");
+
+            return;
+        }
+
+        internet.connect(site);
+    }
+}
+
+=================================================
+EXAMPLE 4 - DOCUMENT ACCESS
+=================================================
+
+SCENARIO
+
+Managers can access confidential
+documents.
+
+Employees cannot.
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Subject
+
+Document
+
+---------------------------------
+
+Real Subject
+
+ConfidentialDocument
+
+---------------------------------
+
+Proxy
+
+DocumentProxy
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Document {
+
+    void view();
+}
+
+-------------------------------------------------
+
+class ConfidentialDocument
+implements Document {
+
+    public void view() {
+
+        System.out.println(
+            "Displaying Document");
+    }
+}
+
+-------------------------------------------------
+
+class DocumentProxy
+implements Document {
+
+    private String role;
+
+    private Document document =
+            new ConfidentialDocument();
+
+    public DocumentProxy(
+            String role) {
+
+        this.role = role;
+    }
+
+    @Override
+    public void view() {
+
+        if(role.equals(
+                "MANAGER")) {
+
+            document.view();
+
+        } else {
+
+            System.out.println(
+                "Access Denied");
+        }
+    }
+}
+
+=================================================
+EXAMPLE 5 - CACHING PROXY
+=================================================
+
+SCENARIO
+
+Expensive database queries should be
+cached.
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Subject
+
+ProductService
+
+---------------------------------
+
+Real Subject
+
+DatabaseProductService
+
+---------------------------------
+
+Proxy
+
+CachedProductService
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface ProductService {
+
+    String getProduct(
+            int id);
+}
+
+-------------------------------------------------
+
+class DatabaseProductService
+implements ProductService {
+
+    @Override
+    public String getProduct(
+            int id) {
+
+        System.out.println(
+            "Fetching From DB");
+
+        return "Laptop";
+    }
+}
+
+-------------------------------------------------
+
+class CachedProductService
+implements ProductService {
+
+    private ProductService service =
+            new DatabaseProductService();
+
+    private String cache;
+
+    @Override
+    public String getProduct(
+            int id) {
+
+        if(cache == null) {
+
+            cache =
+                service.getProduct(id);
+        }
+
+        return cache;
+    }
+}
+
+=================================================
+EXAMPLE 6 - SPRING AOP PROXY
+=================================================
+
+SCENARIO
+
+Need:
+
+✔ Logging
+
+✔ Security
+
+✔ Transactions
+
+Without changing business code.
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Subject
+
+UserService
+
+---------------------------------
+
+Real Subject
+
+UserServiceImpl
+
+---------------------------------
+
+Proxy
+
+Spring AOP Proxy
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+@Service
+class UserServiceImpl {
+
+    public void createUser() {
+
+        System.out.println(
+            "Creating User");
+    }
+}
+
+-------------------------------------------------
+
+Spring creates:
+
+UserServiceProxy
+
+which executes:
+
+Logging
+
+Security
+
+Transaction
+
+before calling
+
+createUser()
+
+=================================================
+EXAMPLE 7 - REMOTE API ACCESS
+=================================================
+
+SCENARIO
+
+Client accesses a remote server.
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Subject
+
+PaymentGateway
+
+---------------------------------
+
+Real Subject
+
+RemotePaymentServer
+
+---------------------------------
+
+Proxy
+
+PaymentGatewayProxy
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface PaymentGateway {
+
+    void pay();
+}
+
+-------------------------------------------------
+
+class RemotePaymentServer
+implements PaymentGateway {
+
+    public void pay() {
+
+        System.out.println(
+            "Payment Processed");
+    }
+}
+
+-------------------------------------------------
+
+class PaymentGatewayProxy
+implements PaymentGateway {
+
+    private RemotePaymentServer
+            server =
+            new RemotePaymentServer();
+
+    @Override
+    public void pay() {
+
+        System.out.println(
+            "Connecting To Server");
+
+        server.pay();
+    }
+}
+
+=================================================
+COMMON TEMPLATE
+=================================================
+
+interface Subject {
+
+    void request();
+}
+
+-------------------------------------------------
+
+class RealSubject
+implements Subject {
+
+    @Override
+    public void request() {
+
+        System.out.println(
+            "Real Work");
+    }
+}
+
+-------------------------------------------------
+
+class Proxy
+implements Subject {
+
+    private RealSubject subject =
+            new RealSubject();
+
+    @Override
+    public void request() {
+
+        System.out.println(
+            "Access Check");
+
+        subject.request();
+    }
+}
+
+=================================================
+TYPES OF PROXY
+=================================================
+
+1. Virtual Proxy
+
+Lazy Loading
+
+Example:
+
+Image Loading
+
+---------------------------------
+
+2. Protection Proxy
+
+Access Control
+
+Example:
+
+Bank Account
+
+---------------------------------
+
+3. Remote Proxy
+
+Remote Object Access
+
+Example:
+
+REST APIs
+
+---------------------------------
+
+4. Caching Proxy
+
+Stores Results
+
+Example:
+
+Redis Cache
+
+=================================================
+VISUALIZATION
+=================================================
+
+Client
+   |
+   v
+
+Proxy
+   |
+   v
+
+Real Object
+
+=================================================
+ADVANTAGES
+=================================================
+
+✔ Access Control
+
+✔ Security
+
+✔ Lazy Initialization
+
+✔ Logging
+
+✔ Caching
+
+✔ Better Performance
+
+✔ Follows Open Closed Principle
+
+=================================================
+DISADVANTAGES
+=================================================
+
+❌ Additional Layer
+
+❌ More Classes
+
+❌ Slight Complexity Increase
+
+=================================================
+WHEN TO USE
+=================================================
+
+Use Proxy When:
+
+✔ Access Must Be Controlled
+
+✔ Security Is Required
+
+✔ Lazy Loading Needed
+
+✔ Caching Needed
+
+✔ Remote Calls Exist
+
+Examples:
+
+Bank Account
+
+Image Loading
+
+Spring AOP
+
+Database Caching
+
+API Gateway
+
+=================================================
+WHEN NOT TO USE
+=================================================
+
+Simple Direct Access.
+
+Example:
+
+User user = new User();
+
+No Proxy Needed.
+
+=================================================
+SOLID PRINCIPLES USED
+=================================================
+
+✅ OCP
+
+New Proxies Can Be Added
+Without Changing Clients.
+
+---------------------------------
+
+✅ DIP
+
+Client Depends On Subject.
+
+Not Real Subject.
+
+=================================================
+PROXY vs DECORATOR
+=================================================
+
+DECORATOR
+
+Adds New Behavior
+
+Example:
+
+Coffee + Milk
+
+---------------------------------
+
+PROXY
+
+Controls Access
+
+Example:
+
+Bank Account Proxy
+
+=================================================
+PROXY vs FACADE
+=================================================
+
+FACADE
+
+Simplifies Complex System
+
+Example:
+
+Home Theater
+
+---------------------------------
+
+PROXY
+
+Controls Access To Object
+
+Example:
+
+Bank Account
+
+=================================================
+INTERVIEW QUESTIONS
+=================================================
+
+Q. What is Proxy Pattern?
+
+A placeholder object that controls
+access to another object.
+
+---------------------------------
+
+Q. Real-world example?
+
+Bank ATM.
+
+---------------------------------
+
+Q. What is Virtual Proxy?
+
+Creates object lazily.
+
+---------------------------------
+
+Q. Spring example?
+
+Spring AOP Proxy.
+
+---------------------------------
+
+Q. Proxy vs Decorator?
+
+Decorator adds behavior.
+
+Proxy controls access.
+
+=================================================
+MEMORY TRICK
+=================================================
+
+Adapter
+→ Translator
+
+Bridge
+→ Separate Dimensions
+
+Composite
+→ Tree Structure
+
+Decorator
+→ Add Features
+
+Facade
+→ Simplify System
+
+Proxy
+→ Control Access
+
+-------------------------------------------------
+
+Bank Customer
+      |
+      v
+Security Guard
+      |
+      v
+Bank Vault
+
+Security Guard = Proxy
+
+=================================================
+INTERVIEW ANSWER
+=================================================
+
+Proxy Pattern is a Structural Design Pattern
+that provides a placeholder or surrogate
+for another object and controls access to it.
+It is commonly used for security, lazy loading,
+caching, logging, and remote access.
+
+=================================================
+ONE-LINE REVISION
+=================================================
+
+Proxy Pattern
+
+→ Control Access To An Object
+
+OR
+
+Proxy = Middleman Between
+Client And Real Object

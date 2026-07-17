@@ -1,0 +1,696 @@
+📘 PROTOTYPE PATTERN
+=================================================
+
+📌 DEFINITION
+
+Prototype Pattern is a Creational Design Pattern
+used to create new objects by copying (cloning)
+an existing object instead of creating it from scratch.
+
+Simple Rule:
+
+Prototype = Copy Existing Object
+
+-------------------------------------------------
+📌 WHY DO WE NEED IT?
+-------------------------------------------------
+
+Sometimes object creation is:
+
+✔ Expensive
+✔ Time Consuming
+✔ Repetitive
+
+Instead of creating the same object again
+and again using new(),
+
+we create one object and make copies of it.
+
+-------------------------------------------------
+📌 SIMPLE REAL-LIFE EXAMPLE
+-------------------------------------------------
+
+Teacher creates:
+
+1 Question Paper
+
+Need:
+
+100 Copies
+
+Options:
+
+❌ Write the same paper 100 times
+
+OR
+
+✅ Photocopy the original paper 100 times
+
+Prototype Pattern = Photocopy Machine
+
+-------------------------------------------------
+📌 STORY
+-------------------------------------------------
+
+Suppose we are building a game.
+
+Need:
+
+1000 Soldiers
+
+Every Soldier has:
+
+✔ Gun
+✔ Health = 100
+✔ Power = 50
+✔ Armor = Level 5
+
+Creating each soldier from scratch is expensive.
+
+-------------------------------------------------
+❌ WITHOUT PROTOTYPE
+-------------------------------------------------
+
+Soldier s1 = new Soldier();
+
+Soldier s2 = new Soldier();
+
+Soldier s3 = new Soldier();
+
+...
+
+1000 times
+
+Problems:
+
+❌ Expensive Initialization
+
+❌ Repeated Configuration
+
+❌ Poor Performance
+
+-------------------------------------------------
+✅ WITH PROTOTYPE
+-------------------------------------------------
+
+Create one Soldier.
+
+Soldier original =
+    new Soldier();
+
+Create copies.
+
+Soldier s2 =
+    original.clone();
+
+Soldier s3 =
+    original.clone();
+
+Soldier s4 =
+
+
+
+====================================================================================-------------------------
+📌 INTENT
+-------------------------------------------------
+
+Convert the interface of an existing class
+into another interface expected by the client.
+
+-------------------------------------------------
+📌 PROBLEM
+-------------------------------------------------
+
+Application expects:
+
+pay()
+
+But Third Party Library provides:
+
+makePayment()
+
+Interfaces don't match.
+
+Application and Library cannot work together.
+
+-------------------------------------------------
+✅ SOLUTION
+-------------------------------------------------
+
+Create an Adapter.
+
+Application
+      |
+      v
+Adapter
+      |
+      v
+Third Party Library
+
+Adapter converts:
+
+pay()
+
+to
+
+makePayment()
+
+-------------------------------------------------
+📌 COMPONENTS
+-------------------------------------------------
+
+1. Client
+
+Uses a target interface.
+
+-----------------------------
+
+2. Target
+
+Expected interface.
+
+Example:
+
+interface PaymentProcessor {
+
+    void pay();
+}
+
+-----------------------------
+
+3. Adaptee
+
+Existing class with incompatible interface.
+
+Example:
+
+class RazorpayGateway {
+
+    void makePayment();
+}
+
+-----------------------------
+
+4. Adapter
+
+Converts one interface into another.
+
+-------------------------------------------------
+📌 COMPLETE EXAMPLE
+-------------------------------------------------
+
+STEP 1
+
+Target Interface
+
+interface PaymentProcessor {
+
+    void pay();
+}
+
+-----------------------------
+
+STEP 2
+
+Existing Third Party Class
+
+class RazorpayGateway {
+
+    public void makePayment() {
+
+        System.out.println(
+            "Payment Successful"
+        );
+    }
+}
+
+-----------------------------
+
+STEP 3
+
+Adapter
+
+class RazorpayAdapter
+implements PaymentProcessor {
+
+    private RazorpayGateway gateway =
+            new RazorpayGateway();
+
+    public void pay() {
+
+        gateway.makePayment();
+    }
+}
+
+-----------------------------
+
+STEP 4
+
+Usage
+
+PaymentProcessor processor =
+        new RazorpayAdapter();
+
+processor.pay();
+
+Output:
+
+Payment Successful
+
+-------------------------------------------------
+📊 VISUALIZATION
+-------------------------------------------------
+
+Application
+      |
+      v
+PaymentProcessor
+      |
+      v
+RazorpayAdapter
+      |
+      v
+RazorpayGateway
+
+-------------------------------------------------
+📌 EXAMPLE 1 - MOBILE CHARGER
+-------------------------------------------------
+
+US Charger
+
+2 Pin
+
+Indian Socket
+
+3 Pin
+
+Problem:
+
+Cannot connect directly.
+
+-----------------------------
+
+Solution:
+
+US Charger
+      |
+   Adapter
+      |
+Indian Socket
+
+Adapter converts connection type.
+
+-------------------------------------------------
+📌 EXAMPLE 2 - PAYMENT GATEWAY
+-------------------------------------------------
+
+Application expects:
+
+pay()
+
+-----------------------------
+
+Razorpay SDK provides:
+
+makePayment()
+
+-----------------------------
+
+Adapter:
+
+pay()
+  |
+  v
+makePayment()
+
+Now application works without changes.
+
+-------------------------------------------------
+📌 EXAMPLE 3 - FOOD DELIVERY
+-------------------------------------------------
+
+Application expects:
+
+deliver()
+
+-----------------------------
+
+Swiggy API provides:
+
+shipFood()
+
+-----------------------------
+
+Adapter:
+
+deliver()
+   |
+   v
+shipFood()
+
+-------------------------------------------------
+📌 EXAMPLE 4 - XML TO JSON
+-------------------------------------------------
+
+Application understands:
+
+JSON
+
+-----------------------------
+
+Legacy System sends:
+
+XML
+
+-----------------------------
+
+Adapter:
+
+XML
+ |
+XMLToJsonAdapter
+ |
+JSON
+
+Very common in enterprise systems.
+
+-------------------------------------------------
+📌 EXAMPLE 5 - OLD PRINTER SYSTEM
+-------------------------------------------------
+
+New Application expects:
+
+print()
+
+-----------------------------
+
+Legacy Printer provides:
+
+printOld()
+
+-----------------------------
+
+Adapter:
+
+print()
+   |
+   v
+printOld()
+
+Old printer works with new system.
+
+-------------------------------------------------
+📌 EXAMPLE 6 - EMAIL NOTIFICATION
+-------------------------------------------------
+
+Application expects:
+
+sendNotification()
+
+-----------------------------
+
+Third Party Service provides:
+
+sendEmail()
+
+-----------------------------
+
+Adapter:
+
+sendNotification()
+         |
+         v
+sendEmail()
+
+-------------------------------------------------
+📌 EXAMPLE 7 - PAYMENT PROVIDER SWITCH
+-------------------------------------------------
+
+Current Provider
+
+Razorpay
+
+makePayment()
+
+-----------------------------
+
+New Provider
+
+Stripe
+
+processPayment()
+
+-----------------------------
+
+Adapter hides provider differences.
+
+Application always calls:
+
+pay()
+
+-------------------------------------------------
+📌 REAL WORLD EXAMPLES
+-------------------------------------------------
+
+✔ Mobile Charger Adapter
+
+✔ Payment Gateway Integration
+
+✔ XML To JSON Conversion
+
+✔ Legacy System Integration
+
+✔ Email Providers
+
+✔ Third Party SDK Integration
+
+✔ Printer Drivers
+
+-------------------------------------------------
+📌 ADVANTAGES
+-------------------------------------------------
+
+✔ Reuses Existing Code
+
+✔ No Changes To Legacy Code
+
+✔ Loose Coupling
+
+✔ Easy Third Party Integration
+
+✔ Supports OCP
+
+✔ Cleaner Code
+
+-------------------------------------------------
+📌 DISADVANTAGES
+-------------------------------------------------
+
+❌ Extra Classes
+
+❌ Additional Layer
+
+❌ Slight Increase In Complexity
+
+-------------------------------------------------
+📌 WHEN TO USE
+-------------------------------------------------
+
+Use Adapter When:
+
+✔ Two interfaces are incompatible
+
+✔ Legacy code must be reused
+
+✔ Third-party APIs are integrated
+
+✔ Data format conversion needed
+
+Examples:
+
+Payment Gateway
+
+Food Delivery API
+
+XML To JSON
+
+Printer Drivers
+
+-------------------------------------------------
+📌 WHEN NOT TO USE
+-------------------------------------------------
+
+Interfaces already match.
+
+Example:
+
+interface PaymentProcessor
+
+class StripePayment
+implements PaymentProcessor
+
+No adapter required.
+
+-------------------------------------------------
+📌 SOLID PRINCIPLES USED
+-------------------------------------------------
+
+✅ OCP
+
+Add new adapters without changing
+existing client code.
+
+Example:
+
+RazorpayAdapter
+
+PaypalAdapter
+
+StripeAdapter
+
+-----------------------------
+
+✅ DIP
+
+Client depends on abstraction.
+
+PaymentProcessor
+
+Instead of:
+
+RazorpayGateway
+
+StripeGateway
+
+-------------------------------------------------
+📌 ADAPTER vs FACTORY
+-------------------------------------------------
+
+Factory
+
+Problem:
+
+Which object should I create?
+
+Example:
+
+Car or Bike
+
+-----------------------------
+
+Adapter
+
+Problem:
+
+How can two incompatible
+systems work together?
+
+Example:
+
+US Charger + Indian Socket
+
+-------------------------------------------------
+📌 ADAPTER vs BRIDGE
+-------------------------------------------------
+
+Adapter
+
+Fixes Existing Incompatibility.
+
+Example:
+
+pay() vs makePayment()
+
+-----------------------------
+
+Bridge
+
+Separates two dimensions
+to avoid class explosion.
+
+Example:
+
+Remote + TV
+
+Remote + Radio
+
+-------------------------------------------------
+🧠 MEMORY TRICK
+-------------------------------------------------
+
+Singleton
+→ One Object
+
+Factory
+→ Create Object
+
+Abstract Factory
+→ Create Product Family
+
+Builder
+→ Build Object
+
+Prototype
+→ Copy Object
+
+Adapter
+→ Convert Interface
+
+-------------------------------------------------
+🎯 INTERVIEW QUESTIONS
+-------------------------------------------------
+
+Q. What is Adapter Pattern?
+
+Allows incompatible interfaces to
+work together.
+
+---------------------------------
+
+Q. Why use Adapter Pattern?
+
+To integrate legacy systems,
+third-party APIs, or incompatible
+interfaces without modifying them.
+
+---------------------------------
+
+Q. Real-life example?
+
+Mobile Charger Adapter.
+
+---------------------------------
+
+Q. Adapter vs Factory?
+
+Factory creates objects.
+
+Adapter connects incompatible objects.
+
+---------------------------------
+
+Q. Adapter vs Bridge?
+
+Adapter fixes incompatibility.
+
+Bridge prevents class explosion.
+
+-------------------------------------------------
+🔥 INTERVIEW ANSWER
+-------------------------------------------------
+
+Adapter Pattern is a Structural Design Pattern
+that allows two incompatible interfaces to work
+together by introducing an adapter that converts
+one interface into another expected by the client.
+
+-------------------------------------------------
+🧠 ONE-LINE REVISION
+-------------------------------------------------
+
+Adapter = Translator
+
+OR
+
+Adapter = Make Incompatible Things
+Work Together

@@ -1,0 +1,120 @@
+📘 DESIGN PATTERNS - INTRODUCTION
+=================================================
+
+📌 What is a Design Pattern?
+
+A Design Pattern is a reusable solution
+to a commonly occurring software design problem.
+
+Pattern ≠ Code
+
+Pattern = Solution Idea
+
+-------------------------------------------------
+📌 WHY DESIGN PATTERNS EXIST
+-------------------------------------------------
+
+Software developers face the same problems repeatedly:
+
+✔ Object Creation
+
+✔ Object Communication
+
+✔ Object Structure
+
+Design Patterns provide proven solutions.
+
+-------------------------------------------------
+📌 BENEFITS
+-------------------------------------------------
+
+✔ Reusable Solutions
+
+✔ Better Design
+
+✔ Loose Coupling
+
+✔ Maintainable Code
+
+✔ Interview Friendly
+
+-------------------------------------------------
+📌 CATEGORIES
+-------------------------------------------------
+
+1. Creational
+
+Problem:
+How objects are created?
+
+Patterns:
+
+Singleton
+Factory
+Abstract Factory
+Builder
+Prototype
+
+-------------------------------------------------
+
+2. Structural
+
+Problem:
+How objects are connected?
+
+Patterns:
+
+Adapter
+Bridge
+Composite
+Decorator
+Facade
+Proxy
+Flyweight
+
+-------------------------------------------------
+
+3. Behavioral
+
+Problem:
+How objects communicate?
+
+Patterns:
+
+Strategy
+Observer
+Command
+State
+Template Method
+Chain Of Responsibility
+Iterator
+Mediator
+Visitor
+Memento
+Interpreter
+
+-------------------------------------------------
+🧠 MEMORY TRICK
+-------------------------------------------------
+
+Create Objects
+→ Creational
+
+Connect Objects
+→ Structural
+
+Communicate Objects
+→ Behavioral
+
+-------------------------------------------------
+🔥 INTERVIEW ANSWER
+-------------------------------------------------
+
+A Design Pattern is a proven reusable solution
+to a commonly occurring software design problem.
+It provides guidance for solving design challenges
+but is not a complete implementation.
+
+
+
+=================================================

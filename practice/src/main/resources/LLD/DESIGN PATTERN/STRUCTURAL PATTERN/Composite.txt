@@ -1,0 +1,767 @@
+📘 COMPOSITE PATTERN - COMPLETE NOTES
+=================================================
+
+CATEGORY
+
+Structural Design Pattern
+
+=================================================
+DEFINITION
+=================================================
+
+Composite Pattern is a Structural Design Pattern
+that allows individual objects and groups of
+objects to be treated in the same way.
+
+Simple Rule:
+
+Composite = Tree Structure
+
+Examples:
+
+✔ Company Hierarchy
+✔ Folder Structure
+✔ Menu System
+✔ HTML DOM
+✔ Organization Chart
+
+=================================================
+WHY DO WE NEED IT?
+=================================================
+
+Suppose we have:
+
+CEO
+ |
+ +---- Manager
+         |
+         +---- Developer
+
+We want to call:
+
+showDetails()
+
+on:
+
+✔ Developer
+
+and
+
+✔ Manager
+
+using the same interface.
+
+Composite Pattern allows us to treat
+both individual objects and groups
+of objects uniformly.
+
+=================================================
+COMPONENTS OF COMPOSITE PATTERN
+=================================================
+
+1. Component
+
+Common interface shared by all objects.
+
+---------------------------------
+
+2. Leaf
+
+Individual object.
+
+Cannot contain children.
+
+---------------------------------
+
+3. Composite
+
+Group object.
+
+Can contain children.
+
+---------------------------------
+
+Structure
+
+Component
+    |
+ -------------------
+ |                 |
+Leaf         Composite
+
+=================================================
+EXAMPLE 1 - COMPANY HIERARCHY
+=================================================
+
+SCENARIO
+
+CEO
+ |
+ +---- Manager A
+ |        |
+ |        +---- Developer 1
+ |        +---- Developer 2
+ |
+ +---- Manager B
+          |
+          +---- Developer 3
+          +---- Developer 4
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+Employee
+
+Leaf
+
+Developer
+
+Composite
+
+Manager
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Employee {
+
+    void showDetails();
+}
+
+-------------------------------------------------
+
+class Developer
+implements Employee {
+
+    private String name;
+
+    public Developer(String name) {
+
+        this.name = name;
+    }
+
+    @Override
+    public void showDetails() {
+
+        System.out.println(
+                "Developer : " + name);
+    }
+}
+
+-------------------------------------------------
+
+class Manager
+implements Employee {
+
+    private String name;
+
+    private List<Employee>
+            employees =
+            new ArrayList<>();
+
+    public Manager(String name) {
+
+        this.name = name;
+    }
+
+    public void addEmployee(
+            Employee employee) {
+
+        employees.add(employee);
+    }
+
+    @Override
+    public void showDetails() {
+
+        System.out.println(
+                "Manager : " + name);
+
+        for(Employee employee :
+                employees) {
+
+            employee.showDetails();
+        }
+    }
+}
+
+-------------------------------------------------
+
+USAGE
+
+Manager manager =
+        new Manager("Suyash");
+
+manager.addEmployee(
+        new Developer("Amit"));
+
+manager.addEmployee(
+        new Developer("Rahul"));
+
+manager.showDetails();
+
+=================================================
+EXAMPLE 2 - FILE SYSTEM
+=================================================
+
+SCENARIO
+
+C:
+ |
+ +---- Documents
+ |       |
+ |       +---- Resume.pdf
+ |       +---- Notes.txt
+ |
+ +---- Images
+         |
+         +---- Photo.jpg
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+FileSystemItem
+
+Leaf
+
+FileItem
+
+Composite
+
+Folder
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface FileSystemItem {
+
+    void show();
+}
+
+-------------------------------------------------
+
+class FileItem
+implements FileSystemItem {
+
+    private String name;
+
+    public FileItem(String name) {
+
+        this.name = name;
+    }
+
+    @Override
+    public void show() {
+
+        System.out.println(
+                "File : " + name);
+    }
+}
+
+-------------------------------------------------
+
+class Folder
+implements FileSystemItem {
+
+    private String name;
+
+    private List<FileSystemItem>
+            items =
+            new ArrayList<>();
+
+    public Folder(String name) {
+
+        this.name = name;
+    }
+
+    public void add(
+            FileSystemItem item) {
+
+        items.add(item);
+    }
+
+    @Override
+    public void show() {
+
+        System.out.println(
+                "Folder : " + name);
+
+        for(FileSystemItem item :
+                items) {
+
+            item.show();
+        }
+    }
+}
+
+=================================================
+EXAMPLE 3 - MENU SYSTEM
+=================================================
+
+SCENARIO
+
+Main Menu
+ |
+ +---- File
+ |       |
+ |       +---- Open
+ |       +---- Save
+ |
+ +---- Edit
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+MenuComponent
+
+Leaf
+
+MenuItem
+
+Composite
+
+Menu
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface MenuComponent {
+
+    void display();
+}
+
+-------------------------------------------------
+
+class MenuItem
+implements MenuComponent {
+
+    private String name;
+
+    public MenuItem(String name) {
+
+        this.name = name;
+    }
+
+    @Override
+    public void display() {
+
+        System.out.println(name);
+    }
+}
+
+-------------------------------------------------
+
+class Menu
+implements MenuComponent {
+
+    private String name;
+
+    private List<MenuComponent>
+            items =
+            new ArrayList<>();
+
+    public Menu(String name) {
+
+        this.name = name;
+    }
+
+    public void add(
+            MenuComponent item) {
+
+        items.add(item);
+    }
+
+    @Override
+    public void display() {
+
+        System.out.println(name);
+
+        for(MenuComponent item :
+                items) {
+
+            item.display();
+        }
+    }
+}
+
+=================================================
+EXAMPLE 4 - ORGANIZATION CHART
+=================================================
+
+SCENARIO
+
+CEO
+ |
+ +---- VP
+ |      |
+ |      +---- Manager
+ |               |
+ |               +---- Developer
+ |
+ +---- HR Head
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+StaffMember
+
+Leaf
+
+Employee
+
+Composite
+
+Manager
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface StaffMember {
+
+    void printStructure();
+}
+
+-------------------------------------------------
+
+class Employee
+implements StaffMember {
+
+    private String name;
+
+    public Employee(String name) {
+
+        this.name = name;
+    }
+
+    @Override
+    public void printStructure() {
+
+        System.out.println(
+                "Employee : " + name);
+    }
+}
+
+-------------------------------------------------
+
+class TeamLead
+implements StaffMember {
+
+    private String name;
+
+    private List<StaffMember>
+            members =
+            new ArrayList<>();
+
+    public TeamLead(String name) {
+
+        this.name = name;
+    }
+
+    public void addMember(
+            StaffMember member) {
+
+        members.add(member);
+    }
+
+    @Override
+    public void printStructure() {
+
+        System.out.println(
+                "Lead : " + name);
+
+        for(StaffMember member :
+                members) {
+
+            member.printStructure();
+        }
+    }
+}
+
+=================================================
+EXAMPLE 5 - HTML DOM TREE
+=================================================
+
+SCENARIO
+
+<html>
+  <body>
+      <div>
+          <p>Hello</p>
+      </div>
+  </body>
+</html>
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Component
+
+HtmlElement
+
+Leaf
+
+TextNode
+
+Composite
+
+ContainerElement
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface HtmlElement {
+
+    void render();
+}
+
+-------------------------------------------------
+
+class TextNode
+implements HtmlElement {
+
+    private String text;
+
+    public TextNode(String text) {
+
+        this.text = text;
+    }
+
+    @Override
+    public void render() {
+
+        System.out.println(text);
+    }
+}
+
+-------------------------------------------------
+
+class ContainerElement
+implements HtmlElement {
+
+    private String tag;
+
+    private List<HtmlElement>
+            children =
+            new ArrayList<>();
+
+    public ContainerElement(
+            String tag) {
+
+        this.tag = tag;
+    }
+
+    public void add(
+            HtmlElement element) {
+
+        children.add(element);
+    }
+
+    @Override
+    public void render() {
+
+        System.out.println(
+                "<" + tag + ">");
+
+        for(HtmlElement element :
+                children) {
+
+            element.render();
+        }
+
+        System.out.println(
+                "</" + tag + ">");
+    }
+}
+
+=================================================
+COMMON TEMPLATE
+=================================================
+
+interface Component {
+
+    void operation();
+}
+
+-------------------------------------------------
+
+class Leaf
+implements Component {
+
+    @Override
+    public void operation() {
+
+        System.out.println(
+                "Leaf");
+    }
+}
+
+-------------------------------------------------
+
+class Composite
+implements Component {
+
+    private List<Component>
+            children =
+            new ArrayList<>();
+
+    public void add(
+            Component component) {
+
+        children.add(component);
+    }
+
+    @Override
+    public void operation() {
+
+        for(Component component :
+                children) {
+
+            component.operation();
+        }
+    }
+}
+
+=================================================
+ADVANTAGES
+=================================================
+
+✔ Represents Tree Structures Easily
+
+✔ Uniform Treatment
+
+✔ Recursive Processing
+
+✔ Easy Extension
+
+✔ Cleaner Client Code
+
+✔ Supports Open Closed Principle
+
+=================================================
+DISADVANTAGES
+=================================================
+
+❌ Increased Complexity
+
+❌ More Classes
+
+❌ Difficult To Restrict Tree Structure
+
+=================================================
+WHEN TO USE
+=================================================
+
+Use Composite When:
+
+✔ Tree Structure Exists
+
+✔ Parent Child Relationship Exists
+
+✔ Individual And Group Objects
+  Must Be Treated Uniformly
+
+Examples:
+
+✔ Company Hierarchy
+✔ File System
+✔ Menu System
+✔ HTML DOM
+✔ Organization Chart
+
+=================================================
+INTERVIEW QUESTIONS
+=================================================
+
+Q. What problem does Composite solve?
+
+Tree Structure Problem.
+
+---------------------------------
+
+Q. What are the three participants?
+
+Component
+
+Leaf
+
+Composite
+
+---------------------------------
+
+Q. Real World Example?
+
+Folder Structure
+
+Company Hierarchy
+
+HTML DOM
+
+---------------------------------
+
+Q. Difference Between Leaf And Composite?
+
+Leaf
+
+Cannot Contain Children
+
+Composite
+
+Can Contain Children
+
+=================================================
+MEMORY TRICK
+=================================================
+
+Adapter
+→ Translator
+
+Bridge
+→ Separate Dimensions
+
+Composite
+→ Tree Structure
+
+Think:
+
+Folder
+   |
+   +---- Folder
+   |       |
+   |       +---- Folder
+   |               |
+   |               +---- File
+
+Tree Structure
+
+✅ Composite Pattern
+
+=================================================
+ONE-LINE REVISION
+=================================================
+
+Composite Pattern
+
+→ Treat Individual Objects And Groups
+   Uniformly In A Tree Structure
+   
+   
+   
+   
+   =================================================
