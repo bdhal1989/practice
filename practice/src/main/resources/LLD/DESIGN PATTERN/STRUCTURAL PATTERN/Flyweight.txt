@@ -1055,3 +1055,12 @@ Flyweight Pattern
 OR
 
 Flyweight = Object Sharing
+
+
+
+Intrinsic state should ideally be immutable
+because it is shared among multiple Flyweight
+objects. Modifying it would affect all clients
+using the shared instance and defeat the purpose
+of Flyweight Pattern. Therefore intrinsic state
+is usually created once and never changed.

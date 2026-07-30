@@ -1,0 +1,14 @@
+1. Strategy      ⭐⭐⭐⭐⭐
+2. Observer      ⭐⭐⭐⭐⭐
+3. Command       ⭐⭐⭐⭐
+4. Template      ⭐⭐⭐⭐
+5. State         ⭐⭐⭐⭐
+6. Chain Of Responsibility ⭐⭐⭐⭐
+7. Iterator      ⭐⭐⭐
+
+--------------------------------
+
+8. Mediator
+9. Memento
+10. Visitor
+11. Interpreter

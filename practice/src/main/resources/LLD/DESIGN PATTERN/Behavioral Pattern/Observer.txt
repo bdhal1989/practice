@@ -1,0 +1,875 @@
+=================================================
+📘 OBSERVER PATTERN - COMPLETE NOTES
+=================================================
+
+CATEGORY
+
+Behavioral Design Pattern
+
+=================================================
+DEFINITION
+=================================================
+
+Observer Pattern is a Behavioral Design Pattern
+that defines a One-To-Many dependency between
+objects.
+
+When one object changes state, all dependent
+objects are automatically notified and updated.
+
+Simple Rule:
+
+Observer = Publish Subscribe
+
+OR
+
+Observer = One Changes, Many Get Notified
+
+=================================================
+WHY DO WE NEED IT?
+=================================================
+
+Suppose we have:
+
+YouTube Channel
+
+Subscribers
+
+-------------------------------------------------
+
+When a new video is uploaded:
+
+All subscribers should receive
+a notification.
+
+-------------------------------------------------
+
+WITHOUT OBSERVER
+
+Channel manually calls:
+
+notifyUser1();
+
+notifyUser2();
+
+notifyUser3();
+
+notifyUser4();
+
+-------------------------------------------------
+
+Problems
+
+❌ Tight Coupling
+
+❌ Difficult To Add New Subscribers
+
+❌ Difficult To Maintain
+
+❌ Violates OCP
+
+-------------------------------------------------
+
+WITH OBSERVER
+
+Channel
+    |
+    v
+
+Observers
+
+Automatically notified.
+
+=================================================
+CORE IDEA
+=================================================
+
+Subject
+   |
+   v
+
+--------------------------
+|           |            |
+Observer1 Observer2 Observer3
+
+Whenever Subject Changes
+
+All Observers Receive Updates
+
+=================================================
+COMPONENTS
+=================================================
+
+1. Subject
+
+Maintains observer list.
+
+---------------------------------
+
+2. Observer
+
+Receives notification.
+
+---------------------------------
+
+3. Concrete Subject
+
+Actual publisher.
+
+---------------------------------
+
+4. Concrete Observer
+
+Actual subscriber.
+
+=================================================
+STRUCTURE
+=================================================
+
+Subject
+    |
+-----------------------------
+|            |             |
+Observer    Observer     Observer
+
+=================================================
+EXAMPLE 1 - YOUTUBE CHANNEL
+=================================================
+
+SCENARIO
+
+YouTube Channel uploads video.
+
+Subscribers receive notification.
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Subject
+
+YouTubeChannel
+
+---------------------------------
+
+Observer
+
+Subscriber
+
+---------------------------------
+
+Concrete Subject
+
+TechChannel
+
+---------------------------------
+
+Concrete Observer
+
+UserSubscriber
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Subscriber {
+
+    void update(
+            String video);
+}
+
+-------------------------------------------------
+
+class UserSubscriber
+implements Subscriber {
+
+    private String name;
+
+    public UserSubscriber(
+            String name) {
+
+        this.name = name;
+    }
+
+    @Override
+    public void update(
+            String video) {
+
+        System.out.println(
+            name +
+            " notified for "
+            + video);
+    }
+}
+
+-------------------------------------------------
+
+class YouTubeChannel {
+
+    private List<Subscriber>
+            subscribers =
+            new ArrayList<>();
+
+    public void subscribe(
+            Subscriber s) {
+
+        subscribers.add(s);
+    }
+
+    public void uploadVideo(
+            String video) {
+
+        for(Subscriber s :
+                subscribers) {
+
+            s.update(video);
+        }
+    }
+}
+
+-------------------------------------------------
+
+USAGE
+
+YouTubeChannel channel =
+        new YouTubeChannel();
+
+channel.subscribe(
+        new UserSubscriber("Bikash"));
+
+channel.subscribe(
+        new UserSubscriber("Rahul"));
+
+channel.uploadVideo(
+        "Observer Pattern");
+
+=================================================
+EXAMPLE 2 - STOCK MARKET
+=================================================
+
+SCENARIO
+
+Stock Price Changes.
+
+All investors should be notified.
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Subject
+
+Stock
+
+---------------------------------
+
+Observer
+
+Investor
+
+---------------------------------
+
+Concrete Subject
+
+TCSStock
+
+---------------------------------
+
+Concrete Observer
+
+RetailInvestor
+
+InstitutionalInvestor
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Investor {
+
+    void update(
+            double price);
+}
+
+-------------------------------------------------
+
+class RetailInvestor
+implements Investor {
+
+    public void update(
+            double price) {
+
+        System.out.println(
+            "Stock Price = "
+            + price);
+    }
+}
+
+=================================================
+EXAMPLE 3 - WEATHER STATION
+=================================================
+
+SCENARIO
+
+Temperature changes.
+
+All displays update automatically.
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Subject
+
+WeatherStation
+
+---------------------------------
+
+Observer
+
+Display
+
+---------------------------------
+
+Concrete Observers
+
+MobileDisplay
+
+TVDisplay
+
+WebDisplay
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Display {
+
+    void update(
+            int temperature);
+}
+
+-------------------------------------------------
+
+class MobileDisplay
+implements Display {
+
+    public void update(
+            int temperature) {
+
+        System.out.println(
+            "Mobile Temperature : "
+            + temperature);
+    }
+}
+
+=================================================
+EXAMPLE 4 - ONLINE SHOPPING
+=================================================
+
+SCENARIO
+
+Product becomes available.
+
+Interested customers receive
+notification.
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Subject
+
+Product
+
+---------------------------------
+
+Observer
+
+Customer
+
+---------------------------------
+
+Concrete Subject
+
+Laptop
+
+---------------------------------
+
+Concrete Observer
+
+RegisteredCustomer
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface Customer {
+
+    void update(
+            String product);
+}
+
+-------------------------------------------------
+
+class RegisteredCustomer
+implements Customer {
+
+    public void update(
+            String product) {
+
+        System.out.println(
+            product +
+            " is available");
+    }
+}
+
+=================================================
+EXAMPLE 5 - NEWS CHANNEL
+=================================================
+
+SCENARIO
+
+Breaking news occurs.
+
+All subscribers receive updates.
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Subject
+
+NewsChannel
+
+---------------------------------
+
+Observer
+
+NewsSubscriber
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface NewsSubscriber {
+
+    void update(
+            String news);
+}
+
+-------------------------------------------------
+
+class MobileNewsSubscriber
+implements NewsSubscriber {
+
+    public void update(
+            String news) {
+
+        System.out.println(
+            "Breaking News : "
+            + news);
+    }
+}
+
+=================================================
+EXAMPLE 6 - SPRING APPLICATION EVENTS
+=================================================
+
+SCENARIO
+
+User Registers.
+
+Different listeners react.
+
+✔ Send Email
+
+✔ Generate Report
+
+✔ Audit Log
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Subject
+
+ApplicationEventPublisher
+
+---------------------------------
+
+Observer
+
+ApplicationListener
+
+-------------------------------------------------
+
+SPRING EXAMPLE
+
+@Component
+
+class UserRegistrationListener
+implements
+ApplicationListener<
+        UserCreatedEvent> {
+
+}
+
+-------------------------------------------------
+
+Publisher
+
+eventPublisher.publishEvent(
+        new UserCreatedEvent());
+
+=================================================
+EXAMPLE 7 - KAFKA MESSAGE CONSUMERS
+=================================================
+
+SCENARIO
+
+Producer publishes message.
+
+Multiple consumers receive it.
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Subject
+
+Kafka Topic
+
+---------------------------------
+
+Observer
+
+Kafka Consumer
+
+-------------------------------------------------
+
+Producer
+      |
+      v
+
+Kafka Topic
+
+      |
+-----------------------------
+|             |             |
+
+Consumer1  Consumer2  Consumer3
+
+-------------------------------------------------
+
+Kafka follows Observer-style
+Publish Subscribe communication.
+
+=================================================
+COMMON TEMPLATE
+=================================================
+
+Observer
+
+interface Observer {
+
+    void update();
+}
+
+-------------------------------------------------
+
+Concrete Observer
+
+class ConcreteObserver
+implements Observer {
+
+    public void update() {
+
+        System.out.println(
+            "Updated");
+    }
+}
+
+-------------------------------------------------
+
+Subject
+
+interface Subject {
+
+    void registerObserver(
+            Observer observer);
+
+    void removeObserver(
+            Observer observer);
+
+    void notifyObservers();
+}
+
+-------------------------------------------------
+
+Concrete Subject
+
+class ConcreteSubject
+implements Subject {
+
+    private List<Observer>
+            observers =
+            new ArrayList<>();
+
+    public void notifyObservers() {
+
+        for(Observer observer :
+                observers) {
+
+            observer.update();
+        }
+    }
+}
+
+=================================================
+VISUALIZATION
+=================================================
+
+           Subject
+               |
+      -------------------
+      |        |        |
+      |        |        |
+ Observer1 Observer2 Observer3
+
+=================================================
+ADVANTAGES
+=================================================
+
+✔ Loose Coupling
+
+✔ Supports Publish Subscribe
+
+✔ Easy To Add New Observers
+
+✔ Supports Open Closed Principle
+
+✔ Reusable Design
+
+✔ Event-Driven Architecture
+
+=================================================
+DISADVANTAGES
+=================================================
+
+❌ Too Many Notifications
+
+❌ Difficult Debugging
+
+❌ Notification Order Not Guaranteed
+
+❌ Memory Leak If Observers
+   Are Not Removed
+
+=================================================
+WHEN TO USE
+=================================================
+
+Use Observer When:
+
+✔ One Object Depends On Many
+
+✔ Automatic Notifications Required
+
+✔ Event Driven Design Needed
+
+Examples:
+
+YouTube Subscribers
+
+Stock Market
+
+Weather Updates
+
+Kafka Consumers
+
+Spring Events
+
+News Channels
+
+=================================================
+WHEN NOT TO USE
+=================================================
+
+Simple Direct Communication.
+
+Few Objects.
+
+No Subscription Needed.
+
+=================================================
+SOLID PRINCIPLES USED
+=================================================
+
+✅ OCP
+
+New Observers Can Be Added
+Without Modifying Subject.
+
+---------------------------------
+
+✅ DIP
+
+Subject Depends On Observer
+Interface.
+
+Not Concrete Classes.
+
+=================================================
+OBSERVER vs STRATEGY
+=================================================
+
+STRATEGY
+
+Changes Algorithm
+
+Example:
+
+UPI
+
+CARD
+
+PAYPAL
+
+---------------------------------
+
+OBSERVER
+
+Notifies Multiple Subscribers
+
+Example:
+
+YouTube Channel
+
+Subscribers
+
+=================================================
+OBSERVER vs MEDIATOR
+=================================================
+
+OBSERVER
+
+One To Many Communication
+
+Subject → Observers
+
+---------------------------------
+
+MEDIATOR
+
+Many To Many Communication
+
+Objects → Mediator → Objects
+
+=================================================
+INTERVIEW QUESTIONS
+=================================================
+
+Q. What is Observer Pattern?
+
+One-To-Many dependency pattern
+where observers are automatically
+notified when subject changes.
+
+---------------------------------
+
+Q. Real-world example?
+
+YouTube Subscribers.
+
+---------------------------------
+
+Q. Java example?
+
+PropertyChangeListener
+
+EventListener
+
+---------------------------------
+
+Q. Spring example?
+
+ApplicationEventPublisher
+
+ApplicationListener
+
+---------------------------------
+
+Q. Kafka example?
+
+Topic → Consumers
+
+=================================================
+MEMORY TRICK
+=================================================
+
+Adapter
+→ Translator
+
+Bridge
+→ Separate Dimensions
+
+Composite
+→ Tree Structure
+
+Decorator
+→ Add Features
+
+Facade
+→ Simplify System
+
+Proxy
+→ Control Access
+
+Flyweight
+→ Share Objects
+
+Strategy
+→ Switch Algorithms
+
+Observer
+→ Publish Subscribe
+
+-------------------------------------------------
+
+YouTube Channel
+        |
+        v
+
+Subscribers
+
+New Video Uploaded
+
+Everyone Gets Notification
+
+✅ Observer
+
+=================================================
+INTERVIEW ANSWER
+=================================================
+
+Observer Pattern is a Behavioral Design Pattern
+that defines a One-To-Many dependency between
+objects. When the Subject changes its state,
+all registered Observers are automatically
+notified and updated. It is widely used in
+event-driven systems, Spring Events,
+message brokers, and notification systems.
+
+=================================================
+ONE-LINE REVISION
+=================================================
+
+Observer Pattern
+
+→ Publish Subscribe Mechanism
+
+OR
+
+One Changes,
+Many Get Notified

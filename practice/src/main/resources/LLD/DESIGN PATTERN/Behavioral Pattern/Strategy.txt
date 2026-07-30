@@ -1,0 +1,979 @@
+=================================================
+📘 STRATEGY PATTERN - COMPLETE NOTES
+=================================================
+
+CATEGORY
+
+Behavioral Design Pattern
+
+=================================================
+DEFINITION
+=================================================
+
+Strategy Pattern is a Behavioral Design Pattern
+that defines a family of algorithms,
+encapsulates each algorithm, and allows them
+to be selected at runtime.
+
+Simple Rule:
+
+Strategy = Change Behavior Dynamically
+
+OR
+
+Strategy = Interchangeable Algorithms
+
+=================================================
+WHY DO WE NEED IT?
+=================================================
+
+Suppose an application supports:
+
+✔ UPI Payment
+
+✔ Credit Card Payment
+
+✔ PayPal Payment
+
+-------------------------------------------------
+
+WITHOUT STRATEGY
+
+if(type.equals("UPI")) {
+
+}
+
+else if(type.equals("CARD")) {
+
+}
+
+else if(type.equals("PAYPAL")) {
+
+}
+
+-------------------------------------------------
+
+Problems
+
+❌ Huge if-else blocks
+
+❌ Difficult to extend
+
+❌ Violates Open Closed Principle
+
+❌ Difficult to maintain
+
+-------------------------------------------------
+
+WITH STRATEGY
+
+PaymentStrategy
+      |
+-------------------------
+|          |            |
+UPI      CARD       PAYPAL
+
+Client chooses strategy
+at runtime.
+
+=================================================
+CORE IDEA
+=================================================
+
+Same Task
+
+Different Algorithms
+
+Choose Algorithm At Runtime
+
+=================================================
+COMPONENTS
+=================================================
+
+1. Context
+
+Uses the strategy.
+
+---------------------------------
+
+2. Strategy
+
+Common interface.
+
+---------------------------------
+
+3. Concrete Strategy
+
+Actual algorithms.
+
+=================================================
+STRUCTURE
+=================================================
+
+Context
+   |
+   v
+
+Strategy
+   |
+--------------------------------
+|             |               |
+UPI         Card           Paypal
+
+=================================================
+EXAMPLE 1 - PAYMENT SYSTEM
+=================================================
+
+SCENARIO
+
+Payment Can Be Made By:
+
+✔ UPI
+
+✔ Credit Card
+
+✔ PayPal
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Context
+
+PaymentService
+
+---------------------------------
+
+Strategy
+
+PaymentStrategy
+
+---------------------------------
+
+Concrete Strategies
+
+UpiPayment
+
+CardPayment
+
+PaypalPayment
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface PaymentStrategy {
+
+    void pay(
+            double amount);
+}
+
+-------------------------------------------------
+
+class UpiPayment
+implements PaymentStrategy {
+
+    @Override
+    public void pay(
+            double amount) {
+
+        System.out.println(
+            "UPI Payment : "
+            + amount);
+    }
+}
+
+-------------------------------------------------
+
+class CardPayment
+implements PaymentStrategy {
+
+    @Override
+    public void pay(
+            double amount) {
+
+        System.out.println(
+            "Card Payment : "
+            + amount);
+    }
+}
+
+-------------------------------------------------
+
+class PaypalPayment
+implements PaymentStrategy {
+
+    @Override
+    public void pay(
+            double amount) {
+
+        System.out.println(
+            "Paypal Payment : "
+            + amount);
+    }
+}
+
+-------------------------------------------------
+
+class PaymentService {
+
+    private PaymentStrategy
+            strategy;
+
+    public PaymentService(
+            PaymentStrategy strategy) {
+
+        this.strategy = strategy;
+    }
+
+    public void processPayment(
+            double amount) {
+
+        strategy.pay(amount);
+    }
+}
+
+-------------------------------------------------
+
+USAGE
+
+PaymentService service =
+    new PaymentService(
+        new UpiPayment());
+
+service.processPayment(1000);
+
+=================================================
+EXAMPLE 2 - NOTIFICATION SYSTEM
+=================================================
+
+SCENARIO
+
+Notifications Can Be Sent By:
+
+✔ Email
+
+✔ SMS
+
+✔ WhatsApp
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Context
+
+NotificationService
+
+---------------------------------
+
+Strategy
+
+NotificationStrategy
+
+---------------------------------
+
+Concrete Strategies
+
+EmailNotification
+
+SmsNotification
+
+WhatsappNotification
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface NotificationStrategy {
+
+    void send(
+            String message);
+}
+
+-------------------------------------------------
+
+class EmailNotification
+implements NotificationStrategy {
+
+    public void send(
+            String message) {
+
+        System.out.println(
+            "Email : "
+            + message);
+    }
+}
+
+-------------------------------------------------
+
+class SmsNotification
+implements NotificationStrategy {
+
+    public void send(
+            String message) {
+
+        System.out.println(
+            "SMS : "
+            + message);
+    }
+}
+
+=================================================
+EXAMPLE 3 - GOOGLE MAPS ROUTE
+=================================================
+
+SCENARIO
+
+Routes:
+
+✔ Car Route
+
+✔ Bike Route
+
+✔ Walk Route
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Context
+
+NavigationService
+
+---------------------------------
+
+Strategy
+
+RouteStrategy
+
+---------------------------------
+
+Concrete Strategies
+
+CarRoute
+
+BikeRoute
+
+WalkRoute
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface RouteStrategy {
+
+    void buildRoute();
+}
+
+-------------------------------------------------
+
+class CarRoute
+implements RouteStrategy {
+
+    public void buildRoute() {
+
+        System.out.println(
+            "Car Route");
+    }
+}
+
+-------------------------------------------------
+
+class BikeRoute
+implements RouteStrategy {
+
+    public void buildRoute() {
+
+        System.out.println(
+            "Bike Route");
+    }
+}
+
+-------------------------------------------------
+
+class WalkRoute
+implements RouteStrategy {
+
+    public void buildRoute() {
+
+        System.out.println(
+            "Walk Route");
+    }
+}
+
+=================================================
+EXAMPLE 4 - SORTING ALGORITHMS
+=================================================
+
+SCENARIO
+
+Application Supports:
+
+✔ Bubble Sort
+
+✔ Quick Sort
+
+✔ Merge Sort
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Context
+
+SortService
+
+---------------------------------
+
+Strategy
+
+SortingStrategy
+
+---------------------------------
+
+Concrete Strategies
+
+BubbleSort
+
+QuickSort
+
+MergeSort
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface SortingStrategy {
+
+    void sort();
+}
+
+-------------------------------------------------
+
+class BubbleSort
+implements SortingStrategy {
+
+    public void sort() {
+
+        System.out.println(
+            "Bubble Sort");
+    }
+}
+
+-------------------------------------------------
+
+class QuickSort
+implements SortingStrategy {
+
+    public void sort() {
+
+        System.out.println(
+            "Quick Sort");
+    }
+}
+
+=================================================
+EXAMPLE 5 - DISCOUNT CALCULATION
+=================================================
+
+SCENARIO
+
+Discount Types
+
+✔ Regular Customer
+
+✔ Premium Customer
+
+✔ VIP Customer
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Context
+
+DiscountCalculator
+
+---------------------------------
+
+Strategy
+
+DiscountStrategy
+
+---------------------------------
+
+Concrete Strategies
+
+RegularDiscount
+
+PremiumDiscount
+
+VipDiscount
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface DiscountStrategy {
+
+    double getDiscount(
+            double amount);
+}
+
+-------------------------------------------------
+
+class RegularDiscount
+implements DiscountStrategy {
+
+    public double getDiscount(
+            double amount) {
+
+        return amount * 0.05;
+    }
+}
+
+-------------------------------------------------
+
+class PremiumDiscount
+implements DiscountStrategy {
+
+    public double getDiscount(
+            double amount) {
+
+        return amount * 0.10;
+    }
+}
+
+=================================================
+EXAMPLE 6 - FILE COMPRESSION
+=================================================
+
+SCENARIO
+
+Compression Types
+
+✔ ZIP
+
+✔ RAR
+
+✔ 7ZIP
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Context
+
+CompressionService
+
+---------------------------------
+
+Strategy
+
+CompressionStrategy
+
+---------------------------------
+
+Concrete Strategies
+
+ZipCompression
+
+RarCompression
+
+SevenZipCompression
+
+-------------------------------------------------
+JAVA IMPLEMENTATION
+-------------------------------------------------
+
+interface CompressionStrategy {
+
+    void compress();
+}
+
+-------------------------------------------------
+
+class ZipCompression
+implements CompressionStrategy {
+
+    public void compress() {
+
+        System.out.println(
+            "ZIP Compression");
+    }
+}
+
+-------------------------------------------------
+
+class RarCompression
+implements CompressionStrategy {
+
+    public void compress() {
+
+        System.out.println(
+            "RAR Compression");
+    }
+}
+
+=================================================
+EXAMPLE 7 - SPRING SECURITY AUTHENTICATION
+=================================================
+
+SCENARIO
+
+Authentication Types
+
+✔ Username Password
+
+✔ OAuth2
+
+✔ JWT
+
+-------------------------------------------------
+IMPLEMENTATION MAPPING
+-------------------------------------------------
+
+Context
+
+AuthenticationManager
+
+---------------------------------
+
+Strategy
+
+AuthenticationProvider
+
+---------------------------------
+
+Concrete Strategies
+
+JwtAuthenticationProvider
+
+OAuthAuthenticationProvider
+
+UsernamePasswordProvider
+
+-------------------------------------------------
+
+REAL WORLD SPRING EXAMPLE
+
+AuthenticationManager
+uses different
+
+AuthenticationProvider
+strategies.
+
+=================================================
+COMMON TEMPLATE
+=================================================
+
+Strategy Interface
+
+interface Strategy {
+
+    void execute();
+}
+
+-------------------------------------------------
+
+Concrete Strategy A
+
+class StrategyA
+implements Strategy {
+
+    @Override
+    public void execute() {
+
+        System.out.println(
+            "Algorithm A");
+    }
+}
+
+-------------------------------------------------
+
+Concrete Strategy B
+
+class StrategyB
+implements Strategy {
+
+    @Override
+    public void execute() {
+
+        System.out.println(
+            "Algorithm B");
+    }
+}
+
+-------------------------------------------------
+
+Context
+
+class Context {
+
+    private Strategy strategy;
+
+    public Context(
+            Strategy strategy) {
+
+        this.strategy = strategy;
+    }
+
+    public void perform() {
+
+        strategy.execute();
+    }
+}
+
+=================================================
+VISUALIZATION
+=================================================
+
+Context
+   |
+   v
+
+Strategy
+   |
+--------------------------------
+|             |               |
+A             B               C
+
+=================================================
+ADVANTAGES
+=================================================
+
+✔ Eliminates Large if-else Blocks
+
+✔ Easy To Add New Algorithms
+
+✔ Follows Open Closed Principle
+
+✔ Runtime Behavior Change
+
+✔ Cleaner Code
+
+✔ Better Maintainability
+
+=================================================
+DISADVANTAGES
+=================================================
+
+❌ More Classes
+
+❌ Client Must Know Strategy
+
+❌ Slight Complexity Increase
+
+=================================================
+WHEN TO USE
+=================================================
+
+Use Strategy When:
+
+✔ Multiple Algorithms Exist
+
+✔ Behavior Changes At Runtime
+
+✔ Large if-else Blocks Exist
+
+Examples:
+
+Payment Methods
+
+Notification Channels
+
+Sorting Algorithms
+
+Navigation Systems
+
+Authentication Methods
+
+=================================================
+WHEN NOT TO USE
+=================================================
+
+Single Algorithm Exists
+
+No Runtime Change Needed
+
+Simple Logic
+
+=================================================
+SOLID PRINCIPLES USED
+=================================================
+
+✅ OCP
+
+Add New Strategies
+Without Changing Existing Code.
+
+---------------------------------
+
+✅ DIP
+
+Context Depends On Strategy
+Interface.
+
+Not Concrete Classes.
+
+=================================================
+STRATEGY vs STATE
+=================================================
+
+STRATEGY
+
+User Selects Algorithm
+
+Example:
+
+UPI
+
+CARD
+
+PAYPAL
+
+---------------------------------
+
+STATE
+
+Object Changes Behavior
+Based On Internal State
+
+Example:
+
+Order
+
+NEW
+
+PAID
+
+DELIVERED
+
+=================================================
+STRATEGY vs COMMAND
+=================================================
+
+STRATEGY
+
+Represents Algorithm
+
+Example:
+
+Payment Method
+
+---------------------------------
+
+COMMAND
+
+Represents Request
+
+Example:
+
+Place Order
+
+Delete File
+
+=================================================
+INTERVIEW QUESTIONS
+=================================================
+
+Q. What is Strategy Pattern?
+
+Encapsulates interchangeable
+algorithms and allows selecting
+one at runtime.
+
+---------------------------------
+
+Q. What problem does Strategy solve?
+
+Large if-else blocks.
+
+---------------------------------
+
+Q. Real-world example?
+
+Payment Methods.
+
+---------------------------------
+
+Q. Spring Boot example?
+
+Spring Security
+Authentication Providers.
+
+---------------------------------
+
+Q. Strategy vs State?
+
+Strategy = Different Algorithms
+
+State = Different States
+
+=================================================
+MEMORY TRICK
+=================================================
+
+Adapter
+→ Translator
+
+Bridge
+→ Separate Dimensions
+
+Composite
+→ Tree Structure
+
+Decorator
+→ Add Features
+
+Facade
+→ Simplify System
+
+Proxy
+→ Control Access
+
+Flyweight
+→ Share Objects
+
+Strategy
+→ Switch Algorithms
+
+-------------------------------------------------
+
+Choose Payment Method
+
+UPI ✅
+
+CARD ✅
+
+PAYPAL ✅
+
+Change Anytime
+
+✅ Strategy
+
+=================================================
+INTERVIEW ANSWER
+=================================================
+
+Strategy Pattern is a Behavioral Design Pattern
+that defines a family of algorithms, encapsulates
+each algorithm, and makes them interchangeable.
+It allows the behavior of an object to change
+dynamically at runtime without modifying the
+client code.
+
+=================================================
+ONE-LINE REVISION
+=================================================
+
+Strategy Pattern
+
+→ Encapsulate Interchangeable
+   Algorithms And Select
+   One At Runtime
+
+OR
+
+Strategy = Switch Behavior Dynamically
